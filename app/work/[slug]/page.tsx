@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getContent } from "@/lib/content";
 import type { WorkLayer } from "@/lib/types";
+import VideoWithFirstFrame from "@/components/VideoWithFirstFrame";
 
 function Layer({
   layer,
@@ -45,17 +46,32 @@ function Layer({
       style={{ marginBottom }}
     >
       {layer.type === "video" ? (
-        <video src={layer.url} controls playsInline preload="metadata" aria-label={projectName} />
+        <VideoWithFirstFrame
+          src={layer.url}
+          label={projectName}
+        />
       ) : (
-        <img src={layer.url} alt={layer.name || projectName} />
+        <img
+          src={layer.url}
+          alt={layer.name || projectName}
+        />
       )}
     </section>
   );
 }
 
-export default async function WorkLandingPage({ params }: { params: { slug: string } }) {
+export default async function WorkLandingPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
   const content = await getContent();
-  const project = content.work.find((item) => (item.slug || item.id) === params.slug || item.id === params.slug);
+
+  const project = content.work.find(
+    (item) =>
+      (item.slug || item.id) === params.slug ||
+      item.id === params.slug
+  );
 
   if (!project) notFound();
 
@@ -72,18 +88,34 @@ export default async function WorkLandingPage({ params }: { params: { slug: stri
     <main className="landing-page">
       <header className="landing-nav">
         <div className="wrap landing-nav-inner">
-          <Link className="mark" href="/">MF / NAVARRO</Link>
-          <Link className="landing-back" href="/#work">Back to work ↗</Link>
+          <Link className="mark" href="/">
+            MF / NAVARRO
+          </Link>
+
+          <Link className="landing-back" href="/#work">
+            Back to work ↗
+          </Link>
         </div>
       </header>
 
       <section className="landing-intro wrap">
-        <div className="eyebrow">{project.tag || "SELECTED WORK"}</div>
+        <div className="eyebrow">
+          {project.tag || "SELECTED WORK"}
+        </div>
+
         <div className="landing-intro-grid">
           <div>
-            <div className="landing-number">{String(content.work.findIndex((item) => item.id === project.id) + 1).padStart(2, "0")}</div>
+            <div className="landing-number">
+              {String(
+                content.work.findIndex(
+                  (item) => item.id === project.id
+                ) + 1
+              ).padStart(2, "0")}
+            </div>
+
             <h1>{project.name}</h1>
           </div>
+
           <p>{project.desc}</p>
         </div>
       </section>
@@ -93,11 +125,15 @@ export default async function WorkLandingPage({ params }: { params: { slug: stri
           project.layerGap === "none" ? (
             <div className="landing-media-unified">
               {layers.map((layer, index) => {
-                const isMedia = layer.type === "image" || layer.type === "video";
+                const isMedia =
+                  layer.type === "image" ||
+                  layer.type === "video";
+
                 const previousIsMedia =
                   index > 0 &&
                   (layers[index - 1].type === "image" ||
                     layers[index - 1].type === "video");
+
                 const nextIsMedia =
                   index < layers.length - 1 &&
                   (layers[index + 1].type === "image" ||
