@@ -80,7 +80,15 @@ export default async function Home() {
         <section>
           <div className="wrap">
             <div className="head"><div><div className="eyebrow">COLLABORATION</div><h2>Clients</h2></div><span>past &amp; present</span></div>
-            <div className="clients">{content.clients.map((c) => <div className="client" key={c}>{c}</div>)}</div>
+            <div className="clients-marquee" aria-label="Clients">
+              <div className="clients-track">
+                {[...content.clients, ...content.clients].map((client, index) => (
+                  <div className="client" key={`${client.id}-${index}`}>
+                    {client.logoUrl ? <img src={client.logoUrl} alt={client.name} /> : <span>{client.name}</span>}
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </section>
 
