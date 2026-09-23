@@ -234,9 +234,9 @@ export default function AdminPage() {
               <div className="upload-progress-list">
                 {uploadProgress[item.id].map((uploadItem, uploadIndex) => (
                   <div className="upload-progress-item" key={`${uploadItem.name}-${uploadIndex}`}>
-                    <div className="upload-progress-top">
-                      <span className="upload-progress-name">{uploadItem.name}</span>
-                      <span className={uploadItem.status === "error" ? "upload-progress-error" : "upload-progress-percent"}>
+                    <div className="upload-progress-top" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, width: "100%" }}>
+                      <span className="upload-progress-name" style={{ minWidth: 0, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{uploadItem.name}</span>
+                      <span style={{ flex: "0 0 auto", whiteSpace: "nowrap", fontVariantNumeric: "tabular-nums" }} className={uploadItem.status === "error" ? "upload-progress-error" : "upload-progress-percent"}>
                         {uploadItem.status === "error" ? "Failed" : `${uploadItem.progress}%`}
                       </span>
                     </div>
