@@ -23,6 +23,5 @@ export async function saveContent(content: SiteContent): Promise<void> {
     access: "public",
     contentType: "application/json",
     addRandomSuffix: false,
-    allowOverwrite: true,
   });
 }
