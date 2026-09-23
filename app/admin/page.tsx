@@ -322,6 +322,15 @@ export default function AdminPage() {
                 <span>{item.layers?.length ?? 0} layers</span>
               </div>
               <p className="admin-help">Build this project's own page from image, video, and text divider layers. Arrange them in the order you want, then save the site.</p>
+              <label>Space between media</label>
+              <select
+                value={item.layerGap ?? "small"}
+                onChange={(e) => updateWork(item.id, { layerGap: e.target.value as WorkItem["layerGap"] })}
+              >
+                <option value="none">None — images touch</option>
+                <option value="small">Small</option>
+                <option value="large">Large</option>
+              </select>
               <div className="layer-add-row">
                 <button className="btn btn-ghost" onClick={() => addLayer(item.id, "image")}>+ Image layer</button>
                 <button className="btn btn-ghost" onClick={() => addLayer(item.id, "video")}>+ Video layer</button>
