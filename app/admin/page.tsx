@@ -17,6 +17,7 @@ export default function AdminPage() {
   const [content, setContent] = useState<SiteContent | null>(null);
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [uploadingId, setUploadingId] = useState<string | null>(null);
+  const [uploadProgress, setUploadProgress] = useState<Record<string, { name: string; progress: number; status: "uploading" | "done" | "error" }[]>>({});
   const [uploadingClientId, setUploadingClientId] = useState<string | null>(null);
   const router = useRouter();
 
@@ -57,35 +58,77 @@ export default function AdminPage() {
   async function uploadFiles(workId: string, files: FileList | File[]) {
     const selected = Array.from(files);
     if (!selected.length) return;
+
+    const validFiles = selected.filter((file) => {
+      const isImage = file.type.startsWith("image/");
+      const isVideo = file.type.startsWith("video/");
+      return isImage || isVideo;
+    });
+
+    if (!validFiles.length) {
+      setStatus("error");
+      return;
+    }
+
     setUploadingId(workId);
+    setUploadProgress((current) => ({
+      ...current,
+      [workId]: validFiles.map((file) => ({ name: file.name, progress: 0, status: "uploading" as const })),
+    }));
 
     try {
-      const uploaded: MediaItem[] = [];
-      for (const file of selected) {
-        const blob = await upload(`${Date.now()}-${file.name}`, file, {
-          access: "public",
-          handleUploadUrl: "/api/upload",
-        });
-        uploaded.push({
-          id: newId(),
-          url: blob.url,
-          type: mediaTypeFromFile(file),
-          name: file.name,
-        });
-      }
+      for (let index = 0; index < validFiles.length; index++) {
+        const file = validFiles[index];
 
-      setContent((current) => {
-        if (!current) return current;
-        return {
-          ...current,
-          work: current.work.map((w) =>
-            w.id === workId ? { ...w, media: [...(w.media ?? []), ...uploaded] } : w
-          ),
-        };
-      });
-    } catch (error) {
-      console.error(error);
-      setStatus("error");
+        try {
+          const blob = await upload(`${Date.now()}-${file.name}`, file, {
+            access: "public",
+            handleUploadUrl: "/api/upload",
+            multipart: true,
+            onUploadProgress(event) {
+              setUploadProgress((current) => ({
+                ...current,
+                [workId]: (current[workId] ?? []).map((item, itemIndex) =>
+                  itemIndex === index ? { ...item, progress: Math.round(event.percentage) } : item
+                ),
+              }));
+            },
+          });
+
+          const media: MediaItem = {
+            id: newId(),
+            url: blob.url,
+            type: mediaTypeFromFile(file),
+            name: file.name,
+          };
+
+          setContent((current) => {
+            if (!current) return current;
+            return {
+              ...current,
+              work: current.work.map((w) =>
+                w.id === workId ? { ...w, media: [...(w.media ?? []), media] } : w
+              ),
+            };
+          });
+
+          setUploadProgress((current) => ({
+            ...current,
+            [workId]: (current[workId] ?? []).map((item, itemIndex) =>
+              itemIndex === index ? { ...item, progress: 100, status: "done" as const } : item
+            ),
+          }));
+        } catch (error) {
+          console.error(`Upload failed for ${file.name}`, error);
+          setUploadProgress((current) => ({
+            ...current,
+            [workId]: (current[workId] ?? []).map((item, itemIndex) =>
+              itemIndex === index ? { ...item, status: "error" as const } : item
+            ),
+          }));
+          setStatus("error");
+        }
+      }
     } finally {
       setUploadingId(null);
     }
@@ -112,49 +155,27 @@ export default function AdminPage() {
   }
 
   function removeMedia(workId: string, mediaId: string) {
-    setContent((current) => {
-      if (!current) return current;
-      return {
-        ...current,
-        work: current.work.map((w) =>
-          w.id === workId
-            ? { ...w, media: (w.media ?? []).filter((m) => m.id !== mediaId) }
-            : w
-        ),
-      };
-    });
+    update("work", content.work.map((w) => w.id === workId ? { ...w, media: (w.media ?? []).filter((m) => m.id !== mediaId) } : w));
   }
 
   function moveMedia(workId: string, mediaId: string, direction: -1 | 1) {
-    setContent((current) => {
-      if (!current) return current;
-      return {
-        ...current,
-        work: current.work.map((w) => {
-          if (w.id !== workId) return w;
-          const media = [...(w.media ?? [])];
-          const index = media.findIndex((m) => m.id === mediaId);
-          const nextIndex = index + direction;
-          if (index < 0 || nextIndex < 0 || nextIndex >= media.length) return w;
-          [media[index], media[nextIndex]] = [media[nextIndex], media[index]];
-          return { ...w, media };
-        }),
-      };
-    });
+    update("work", content.work.map((w) => {
+      if (w.id !== workId) return w;
+      const media = [...(w.media ?? [])];
+      const index = media.findIndex((m) => m.id === mediaId);
+      const nextIndex = index + direction;
+      if (index < 0 || nextIndex < 0 || nextIndex >= media.length) return w;
+      [media[index], media[nextIndex]] = [media[nextIndex], media[index]];
+      return { ...w, media };
+    }));
   }
 
   function updateWork(id: string, patch: Partial<WorkItem>) {
-    setContent((current) => {
-      if (!current) return current;
-      return { ...current, work: current.work.map((w) => (w.id === id ? { ...w, ...patch } : w)) };
-    });
+    update("work", content.work.map((w) => (w.id === id ? { ...w, ...patch } : w)));
   }
 
   function updateClient(id: string, patch: Partial<ClientItem>) {
-    setContent((current) => {
-      if (!current) return current;
-      return { ...current, clients: current.clients.map((client) => client.id === id ? { ...client, ...patch } : client) };
-    });
+    update("clients", content.clients.map((client) => client.id === id ? { ...client, ...patch } : client));
   }
 
   function handleDrop(event: DragEvent<HTMLDivElement>, workId: string) {
@@ -199,12 +220,29 @@ export default function AdminPage() {
             <input placeholder="Tag, e.g. Brand · Motion" value={item.tag} onChange={(e) => updateWork(item.id, { tag: e.target.value })} />
 
             <div className={`upload-zone ${uploadingId === item.id ? "is-uploading" : ""}`} onDragOver={(e) => e.preventDefault()} onDrop={(e) => handleDrop(e, item.id)}>
-              <input id={`upload-${item.id}`} className="file-input" type="file" accept="image/*,video/*" multiple onChange={(e) => { void uploadFiles(item.id, e.target.files ?? []); e.currentTarget.value = ""; }} />
+              <input id={`upload-${item.id}`} className="file-input" type="file" accept="image/*,video/*,.mp4,.mov,.m4v,.webm" multiple onChange={(e) => { void uploadFiles(item.id, e.target.files ?? []); e.currentTarget.value = ""; }} />
               <label className="upload-label" htmlFor={`upload-${item.id}`}>
                 <span className="upload-icon">＋</span>
                 <span><strong>{uploadingId === item.id ? "Uploading media…" : "Add photos / videos"}</strong><small>Click to select multiple files or drag them here</small></span>
               </label>
             </div>
+            {!!uploadProgress[item.id]?.length && (
+              <div className="upload-progress-list">
+                {uploadProgress[item.id].map((uploadItem, uploadIndex) => (
+                  <div className="upload-progress-item" key={`${uploadItem.name}-${uploadIndex}`}>
+                    <div className="upload-progress-top">
+                      <span className="upload-progress-name">{uploadItem.name}</span>
+                      <span className={uploadItem.status === "error" ? "upload-progress-error" : "upload-progress-percent"}>
+                        {uploadItem.status === "error" ? "Failed" : `${uploadItem.progress}%`}
+                      </span>
+                    </div>
+                    <div className="upload-progress-track">
+                      <div className={`upload-progress-bar ${uploadItem.status === "error" ? "is-error" : ""}`} style={{ width: `${uploadItem.progress}%` }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
 
             {!!item.media?.length && <div className="admin-media-grid">
               {item.media.map((media, mediaIndex) => <div className="admin-media-card" key={media.id}>
