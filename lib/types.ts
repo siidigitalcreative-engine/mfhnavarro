@@ -11,6 +11,7 @@ export type WorkLayer = {
   url?: string;
   text?: string;
   name?: string;
+  thumbnailUrl?: string;
 };
 
 export type WorkItem = {
