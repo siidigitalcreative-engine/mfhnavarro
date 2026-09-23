@@ -229,3 +229,141 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
     background-position: right 15px center;
   }
 }
+
+/* Site identity: topbar logo + About portrait */
+.nav-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-logo {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  border-radius: 6px;
+  flex: 0 0 28px;
+}
+
+.about-with-portrait {
+  display: grid;
+  grid-template-columns: minmax(180px, 320px) minmax(0, 1fr);
+  column-gap: clamp(32px, 7vw, 96px);
+  align-items: start;
+}
+
+.about-with-portrait .eyebrow {
+  grid-column: 1;
+}
+
+.about-with-portrait .about-copy {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+}
+
+.about-portrait-wrap {
+  grid-column: 1;
+  grid-row: 1;
+  width: min(100%, 320px);
+  overflow: hidden;
+  border-radius: 14px;
+  border: 1px solid var(--line, #292c32);
+  background: #111318;
+}
+
+.about-portrait {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.identity-admin-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.identity-admin-card {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 20px;
+  padding: 18px;
+  border: 1px solid var(--line, #292c32);
+  border-radius: 14px;
+  background: #101216;
+}
+
+.identity-admin-preview {
+  width: 150px;
+  height: 150px;
+  overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid var(--line, #292c32);
+  display: grid;
+  place-items: center;
+  color: #737780;
+  font-family: var(--mono, monospace);
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.identity-admin-preview img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.identity-portrait-preview img {
+  object-fit: cover;
+}
+
+.identity-admin-copy {
+  min-width: 0;
+}
+
+.identity-admin-copy .admin-help {
+  margin: 7px 0 14px;
+}
+
+.identity-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  font-size: 13px;
+}
+
+.identity-toggle input {
+  width: 16px;
+  height: 16px;
+}
+
+@media (max-width: 760px) {
+  .identity-admin-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .identity-admin-card {
+    grid-template-columns: 110px minmax(0, 1fr);
+    gap: 14px;
+  }
+
+  .identity-admin-preview {
+    width: 110px;
+    height: 110px;
+  }
+
+  .about-with-portrait {
+    display: block;
+  }
+
+  .about-portrait-wrap {
+    margin-bottom: 28px;
+    width: min(100%, 280px);
+  }
+}
+
