@@ -155,10 +155,12 @@ export default function AdminPage() {
   }
 
   function removeMedia(workId: string, mediaId: string) {
+    if (!content) return;
     update("work", content.work.map((w) => w.id === workId ? { ...w, media: (w.media ?? []).filter((m) => m.id !== mediaId) } : w));
   }
 
   function moveMedia(workId: string, mediaId: string, direction: -1 | 1) {
+    if (!content) return;
     update("work", content.work.map((w) => {
       if (w.id !== workId) return w;
       const media = [...(w.media ?? [])];
@@ -171,10 +173,12 @@ export default function AdminPage() {
   }
 
   function updateWork(id: string, patch: Partial<WorkItem>) {
+    if (!content) return;
     update("work", content.work.map((w) => (w.id === id ? { ...w, ...patch } : w)));
   }
 
   function updateClient(id: string, patch: Partial<ClientItem>) {
+    if (!content) return;
     update("clients", content.clients.map((client) => client.id === id ? { ...client, ...patch } : client));
   }
 
