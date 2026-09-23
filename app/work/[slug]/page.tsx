@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { getContent } from "@/lib/content";
 import type { WorkLayer } from "@/lib/types";
 
-function Layer({ layer, projectName }: { layer: WorkLayer; projectName: string }) {
+function Layer({ layer, projectName, gap }: { layer: WorkLayer; projectName: string; gap: "none" | "small" | "large" }) {
   if (layer.type === "text") {
     return (
       <section className="landing-text-divider">
@@ -17,8 +17,13 @@ function Layer({ layer, projectName }: { layer: WorkLayer; projectName: string }
 
   if (!layer.url) return null;
 
+  const marginBottom = gap === "none" ? 0 : gap === "large" ? 64 : 48;
+
   return (
-    <section className={`landing-media-layer landing-${layer.type}`}>
+    <section
+      className={`landing-media-layer landing-${layer.type}`}
+      style={{ marginBottom }}
+    >
       {layer.type === "video" ? (
         <video src={layer.url} controls playsInline preload="metadata" aria-label={projectName} />
       ) : (
@@ -64,7 +69,7 @@ export default async function WorkLandingPage({ params }: { params: { slug: stri
       </section>
 
       <div className="landing-layers-public">
-        {layers.length ? layers.map((layer) => <Layer key={layer.id} layer={layer} projectName={project.name} />) : (
+        {layers.length ? layers.map((layer) => <Layer key={layer.id} layer={layer} projectName={project.name} gap={project.layerGap ?? "small"} />) : (
           <section className="landing-empty wrap">This project does not have a custom page yet.</section>
         )}
       </div>
