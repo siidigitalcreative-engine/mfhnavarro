@@ -5,13 +5,22 @@ export type MediaItem = {
   name?: string;
 };
 
+export type WorkLayer = {
+  id: string;
+  type: "image" | "video" | "text";
+  url?: string;
+  text?: string;
+  name?: string;
+};
+
 export type WorkItem = {
   id: string;
   name: string;
   desc: string;
   tag: string;
+  slug?: string;
   media?: MediaItem[];
-  // Kept for backwards compatibility with existing content.json files.
+  layers?: WorkLayer[];
   mediaUrl?: string;
   mediaType?: "image" | "video";
 };
@@ -53,18 +62,24 @@ export const DEFAULT_CONTENT: SiteContent = {
       name: "Ledgerline Rebrand",
       desc: "Full brand identity and motion system for a fintech relaunch.",
       tag: "Brand · Motion",
+      slug: "ledgerline-rebrand",
+      layers: [],
     },
     {
       id: "w2",
       name: "Ferry & Co. Campaign",
       desc: "Multi-channel launch campaign, from concept through delivery.",
       tag: "Campaign · Art Direction",
+      slug: "ferry-co-campaign",
+      layers: [],
     },
     {
       id: "w3",
       name: "Northbound Content Hub",
       desc: "Ongoing video and social content system for a logistics brand.",
       tag: "Video · Content Strategy",
+      slug: "northbound-content-hub",
+      layers: [],
     },
   ],
   testimonials: [
