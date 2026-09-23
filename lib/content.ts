@@ -1,7 +1,14 @@
 import { list, put } from "@vercel/blob";
-import { DEFAULT_CONTENT, SiteContent, WorkItem, MediaItem } from "./types";
+import { DEFAULT_CONTENT, SiteContent, WorkItem, MediaItem, ClientItem } from "./types";
 
 const CONTENT_PATH = "content.json";
+
+function normalizeClient(item: ClientItem | string, index: number): ClientItem {
+  if (typeof item === "string") {
+    return { id: `client-${index + 1}`, name: item };
+  }
+  return { ...item, id: item.id || `client-${index + 1}` };
+}
 
 function normalizeWork(item: WorkItem): WorkItem {
   if (item.media?.length) return item;
@@ -33,11 +40,15 @@ export async function getContent(): Promise<SiteContent> {
     const work = Array.isArray(data.work)
       ? data.work.map(normalizeWork)
       : DEFAULT_CONTENT.work;
+    const clients = Array.isArray(data.clients)
+      ? data.clients.map(normalizeClient)
+      : DEFAULT_CONTENT.clients;
 
     return {
       ...DEFAULT_CONTENT,
       ...data,
       work,
+      clients,
     };
   } catch {
     return DEFAULT_CONTENT;
