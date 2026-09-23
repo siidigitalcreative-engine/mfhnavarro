@@ -3,7 +3,7 @@
 import { upload } from "@vercel/blob/client";
 import { DragEvent, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import type { SiteContent, WorkItem, Testimonial, MediaItem, ClientItem } from "@/lib/types";
+import type { SiteContent, WorkItem, Testimonial, MediaItem, ClientItem, WorkLayer } from "@/lib/types";
 
 function newId() {
   return Math.random().toString(36).slice(2, 10);
@@ -19,6 +19,8 @@ export default function AdminPage() {
   const [uploadingId, setUploadingId] = useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState<Record<string, { name: string; progress: number; status: "uploading" | "done" | "error" }[]>>({});
   const [uploadingClientId, setUploadingClientId] = useState<string | null>(null);
+  const [uploadingLayerId, setUploadingLayerId] = useState<string | null>(null);
+  const [layerProgress, setLayerProgress] = useState<Record<string, number>>({});
   const router = useRouter();
 
   useEffect(() => {
@@ -177,6 +179,61 @@ export default function AdminPage() {
     update("work", content.work.map((w) => (w.id === id ? { ...w, ...patch } : w)));
   }
 
+  function updateLayer(workId: string, layerId: string, patch: Partial<WorkLayer>) {
+    if (!content) return;
+    update("work", content.work.map((w) => w.id === workId
+      ? { ...w, layers: (w.layers ?? []).map((layer) => layer.id === layerId ? { ...layer, ...patch } : layer) }
+      : w
+    ));
+  }
+
+  function addLayer(workId: string, type: WorkLayer["type"]) {
+    if (!content) return;
+    const layer: WorkLayer = { id: newId(), type, ...(type === "text" ? { text: "Section title" } : {}) };
+    update("work", content.work.map((w) => w.id === workId ? { ...w, layers: [...(w.layers ?? []), layer] } : w));
+  }
+
+  function removeLayer(workId: string, layerId: string) {
+    if (!content) return;
+    update("work", content.work.map((w) => w.id === workId ? { ...w, layers: (w.layers ?? []).filter((layer) => layer.id !== layerId) } : w));
+  }
+
+  function moveLayer(workId: string, layerId: string, direction: -1 | 1) {
+    if (!content) return;
+    update("work", content.work.map((w) => {
+      if (w.id !== workId) return w;
+      const layers = [...(w.layers ?? [])];
+      const index = layers.findIndex((layer) => layer.id === layerId);
+      const nextIndex = index + direction;
+      if (index < 0 || nextIndex < 0 || nextIndex >= layers.length) return w;
+      [layers[index], layers[nextIndex]] = [layers[nextIndex], layers[index]];
+      return { ...w, layers };
+    }));
+  }
+
+  async function uploadLayerFile(workId: string, layerId: string, file: File | undefined) {
+    if (!file) return;
+    setUploadingLayerId(layerId);
+    setLayerProgress((current) => ({ ...current, [layerId]: 0 }));
+    try {
+      const blob = await upload(`landing-${workId}-${layerId}-${Date.now()}-${file.name}`, file, {
+        access: "public",
+        handleUploadUrl: "/api/upload",
+        multipart: true,
+        onUploadProgress(event) {
+          setLayerProgress((current) => ({ ...current, [layerId]: Math.round(event.percentage) }));
+        },
+      });
+      updateLayer(workId, layerId, { url: blob.url, name: file.name });
+      setLayerProgress((current) => ({ ...current, [layerId]: 100 }));
+    } catch (error) {
+      console.error(error);
+      setStatus("error");
+    } finally {
+      setUploadingLayerId(null);
+    }
+  }
+
   function updateClient(id: string, patch: Partial<ClientItem>) {
     if (!content) return;
     update("clients", content.clients.map((client) => client.id === id ? { ...client, ...patch } : client));
@@ -212,7 +269,7 @@ export default function AdminPage() {
       <section className="admin-section">
         <div className="admin-section-head">
           <div><div className="admin-kicker">PORTFOLIO</div><h2>Work</h2></div>
-          <button className="btn btn-ghost" onClick={() => update("work", [...content.work, { id: newId(), name: "", desc: "", tag: "", media: [] }])}>+ Add work</button>
+          <button className="btn btn-ghost" onClick={() => update("work", [...content.work, { id: newId(), name: "", desc: "", tag: "", slug: "", media: [], layers: [] }])}>+ Add work</button>
         </div>
         <p className="admin-help">Add as many photos or videos as you need. Drag files into the upload area or select multiple files. The first media item is the project cover.</p>
 
@@ -222,6 +279,7 @@ export default function AdminPage() {
             <input placeholder="Project name" value={item.name} onChange={(e) => updateWork(item.id, { name: e.target.value })} />
             <textarea placeholder="Description" value={item.desc} onChange={(e) => updateWork(item.id, { desc: e.target.value })} />
             <input placeholder="Tag, e.g. Brand · Motion" value={item.tag} onChange={(e) => updateWork(item.id, { tag: e.target.value })} />
+            <input placeholder="Landing page URL slug, e.g. purple-tree" value={item.slug ?? ""} onChange={(e) => updateWork(item.id, { slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]+/g, "-") })} />
 
             <div className={`upload-zone ${uploadingId === item.id ? "is-uploading" : ""}`} onDragOver={(e) => e.preventDefault()} onDrop={(e) => handleDrop(e, item.id)}>
               <input id={`upload-${item.id}`} className="file-input" type="file" accept="image/*,video/*,.mp4,.mov,.m4v,.webm" multiple onChange={(e) => { void uploadFiles(item.id, e.target.files ?? []); e.currentTarget.value = ""; }} />
@@ -258,6 +316,43 @@ export default function AdminPage() {
                 </div></div>
               </div>)}
             </div>}
+            <div className="landing-builder">
+              <div className="landing-builder-head">
+                <div><div className="admin-kicker">CUSTOM PAGE</div><h3>Landing page</h3></div>
+                <span>{item.layers?.length ?? 0} layers</span>
+              </div>
+              <p className="admin-help">Build this project's own page from image, video, and text divider layers. Arrange them in the order you want, then save the site.</p>
+              <div className="layer-add-row">
+                <button className="btn btn-ghost" onClick={() => addLayer(item.id, "image")}>+ Image layer</button>
+                <button className="btn btn-ghost" onClick={() => addLayer(item.id, "video")}>+ Video layer</button>
+                <button className="btn btn-ghost" onClick={() => addLayer(item.id, "text")}>+ Text divider</button>
+              </div>
+              {!!item.layers?.length && <div className="landing-layers">
+                {item.layers.map((layer, layerIndex) => <div className="landing-layer" key={layer.id}>
+                  <div className="landing-layer-top">
+                    <div><span className="admin-index">{String(layerIndex + 1).padStart(2, "0")}</span><span className="layer-type">{layer.type}</span></div>
+                    <div className="admin-media-actions">
+                      <button className="icon-btn" disabled={layerIndex === 0} onClick={() => moveLayer(item.id, layer.id, -1)}>↑</button>
+                      <button className="icon-btn" disabled={layerIndex === item.layers!.length - 1} onClick={() => moveLayer(item.id, layer.id, 1)}>↓</button>
+                      <button className="icon-btn danger" onClick={() => removeLayer(item.id, layer.id)}>×</button>
+                    </div>
+                  </div>
+                  {layer.type === "text" ? (
+                    <textarea className="layer-text-input" placeholder="Text divider" value={layer.text ?? ""} onChange={(e) => updateLayer(item.id, layer.id, { text: e.target.value })} />
+                  ) : (
+                    <>
+                      {layer.url ? <div className="landing-layer-preview">{layer.type === "video" ? <video src={layer.url} controls /> : <img src={layer.url} alt={layer.name ?? item.name} />}</div> : <div className="landing-layer-empty">No {layer.type} selected yet.</div>}
+                      <div className="layer-upload-row">
+                        <label className="btn btn-ghost layer-upload-btn" htmlFor={`layer-${layer.id}`}>{uploadingLayerId === layer.id ? `Uploading ${layerProgress[layer.id] ?? 0}%` : layer.url ? `Replace ${layer.type}` : `Upload ${layer.type}`}</label>
+                        <input id={`layer-${layer.id}`} className="file-input" type="file" accept={layer.type === "video" ? "video/*,.mp4,.mov,.m4v,.webm" : "image/*"} onChange={(e) => { void uploadLayerFile(item.id, layer.id, e.target.files?.[0]); e.currentTarget.value = ""; }} />
+                        {uploadingLayerId === layer.id && <span className="layer-upload-percent">{layerProgress[layer.id] ?? 0}%</span>}
+                      </div>
+                    </>
+                  )}
+                </div>)}
+              </div>}
+            </div>
+
             <button className="btn btn-ghost danger-button" onClick={() => update("work", content.work.filter((w) => w.id !== item.id))}>Remove project</button>
           </div>
         ))}
