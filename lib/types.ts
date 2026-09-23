@@ -1,8 +1,17 @@
+export type MediaItem = {
+  id: string;
+  url: string;
+  type: "image" | "video";
+  name?: string;
+};
+
 export type WorkItem = {
   id: string;
   name: string;
   desc: string;
   tag: string;
+  media?: MediaItem[];
+  // Kept for backwards compatibility with existing content.json files.
   mediaUrl?: string;
   mediaType?: "image" | "video";
 };
@@ -28,7 +37,7 @@ export type SiteContent = {
 export const DEFAULT_CONTENT: SiteContent = {
   heroHeadline: "Ideas, shaped into work people remember.",
   heroLede:
-    "I'm MF Navarro, a Digital Creative Manager leading multimedia design across brand, campaign, and product — from first concept to final cut.",
+    "I'm MF Navarro, a Digital Creative Manager leading multimedia design across brand, campaign, and product, from first concept to final cut.",
   nowNote:
     "Now: leading a brand refresh and launch campaign for a retail client, based in London.",
   tools: ["Adobe CC", "Figma", "After Effects", "Premiere Pro", "Webflow"],
