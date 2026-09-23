@@ -21,6 +21,7 @@ export type WorkItem = {
   slug?: string;
   media?: MediaItem[];
   layers?: WorkLayer[];
+  layerGap?: "none" | "small" | "large";
   mediaUrl?: string;
   mediaType?: "image" | "video";
 };
