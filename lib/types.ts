@@ -22,6 +22,12 @@ export type Testimonial = {
   who: string;
 };
 
+export type ClientItem = {
+  id: string;
+  name: string;
+  logoUrl?: string;
+};
+
 export type SiteContent = {
   heroHeadline: string;
   heroLede: string;
@@ -29,7 +35,7 @@ export type SiteContent = {
   tools: string[];
   work: WorkItem[];
   testimonials: Testimonial[];
-  clients: string[];
+  clients: ClientItem[];
   aboutParagraphs: string[];
   email: string;
 };
@@ -75,7 +81,14 @@ export const DEFAULT_CONTENT: SiteContent = {
       who: "Sarah Yoon — Product Lead, Northbound",
     },
   ],
-  clients: ["Ragged Edge", "Ditta", "Foolproof", "Greggs", "Northbound", "Ferry & Co."],
+  clients: [
+    { id: "c1", name: "Ragged Edge" },
+    { id: "c2", name: "Ditta" },
+    { id: "c3", name: "Foolproof" },
+    { id: "c4", name: "Greggs" },
+    { id: "c5", name: "Northbound" },
+    { id: "c6", name: "Ferry & Co." },
+  ],
   aboutParagraphs: [
     "I started as a Multimedia Designer and now work as a Digital Creative Manager, leading design and content across brand, campaign, and video for clients between London and remote teams. I care most about the parts of creative work that don't show up in a single frame: the strategy behind it, how it holds up across channels, and how easy it is for a team to carry forward.",
     "Outside client work, I mentor junior designers and keep a running archive of visual references, one scoped project at a time.",
