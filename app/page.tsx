@@ -39,6 +39,22 @@ export default async function Home() {
           </div>
         </section>
 
+        <section>
+          <div className="wrap">
+            <div className="head"><div><div className="eyebrow">COLLABORATION</div><h2>Clients</h2></div><span>past &amp; present</span></div>
+            <div className="clients-marquee" aria-label="Clients">
+              <div className="clients-track">
+                {[...content.clients, ...content.clients].map((client, index) => (
+                  <div className="client" key={`${client.id}-${index}`}>
+                    {client.logoUrl ? <img src={client.logoUrl} alt={client.name} /> : <span>{client.name}</span>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+
         <section id="work" className="work-section">
           <div className="wrap">
             <div className="head"><div><div className="eyebrow">SELECTED WORK</div><h2>Selected work</h2></div><span>2023 — 2026</span></div>
@@ -74,21 +90,6 @@ export default async function Home() {
           <div className="wrap">
             <div className="head"><div><div className="eyebrow">WORDS</div><h2>What people say</h2></div><span>testimonials</span></div>
             <div className="testi-grid">{content.testimonials.map((t) => <div className="testi" key={t.id}><div className="quote-mark">“</div><p>{t.quote}</p><div className="who">{t.who}</div></div>)}</div>
-          </div>
-        </section>
-
-        <section>
-          <div className="wrap">
-            <div className="head"><div><div className="eyebrow">COLLABORATION</div><h2>Clients</h2></div><span>past &amp; present</span></div>
-            <div className="clients-marquee" aria-label="Clients">
-              <div className="clients-track">
-                {[...content.clients, ...content.clients].map((client, index) => (
-                  <div className="client" key={`${client.id}-${index}`}>
-                    {client.logoUrl ? <img src={client.logoUrl} alt={client.name} /> : <span>{client.name}</span>}
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
         </section>
 
