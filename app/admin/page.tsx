@@ -4,6 +4,7 @@ import { upload } from "@vercel/blob/client";
 import { DragEvent, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { SiteContent, WorkItem, Testimonial, MediaItem, ClientItem, WorkLayer } from "@/lib/types";
+import VideoThumbnailPicker from "@/components/VideoThumbnailPicker";
 
 function newId() {
   return Math.random().toString(36).slice(2, 10);
@@ -350,12 +351,31 @@ export default function AdminPage() {
                     <textarea className="layer-text-input" placeholder="Text divider" value={layer.text ?? ""} onChange={(e) => updateLayer(item.id, layer.id, { text: e.target.value })} />
                   ) : (
                     <>
-                      {layer.url ? <div className="landing-layer-preview">{layer.type === "video" ? <video src={layer.url} controls /> : <img src={layer.url} alt={layer.name ?? item.name} />}</div> : <div className="landing-layer-empty">No {layer.type} selected yet.</div>}
+                      {layer.url ? (
+                        <div className="landing-layer-preview">
+                          {layer.type === "video" ? (
+                            <video src={layer.url} poster={layer.thumbnailUrl} controls />
+                          ) : (
+                            <img src={layer.url} alt={layer.name ?? item.name} />
+                          )}
+                        </div>
+                      ) : (
+                        <div className="landing-layer-empty">No {layer.type} selected yet.</div>
+                      )}
                       <div className="layer-upload-row">
                         <label className="btn btn-ghost layer-upload-btn" htmlFor={`layer-${layer.id}`}>{uploadingLayerId === layer.id ? `Uploading ${layerProgress[layer.id] ?? 0}%` : layer.url ? `Replace ${layer.type}` : `Upload ${layer.type}`}</label>
                         <input id={`layer-${layer.id}`} className="file-input" type="file" accept={layer.type === "video" ? "video/*,.mp4,.mov,.m4v,.webm" : "image/*"} onChange={(e) => { void uploadLayerFile(item.id, layer.id, e.target.files?.[0]); e.currentTarget.value = ""; }} />
                         {uploadingLayerId === layer.id && <span className="layer-upload-percent">{layerProgress[layer.id] ?? 0}%</span>}
                       </div>
+                      {layer.type === "video" && layer.url && (
+                        <VideoThumbnailPicker
+                          src={layer.url}
+                          currentThumbnail={layer.thumbnailUrl}
+                          workId={item.id}
+                          layerId={layer.id}
+                          onThumbnailSaved={(url) => updateLayer(item.id, layer.id, { thumbnailUrl: url })}
+                        />
+                      )}
                     </>
                   )}
                 </div>)}
