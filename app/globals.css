@@ -98,3 +98,36 @@ footer .meta{margin-top:64px; display:flex; justify-content:space-between; color
 
 :focus-visible{outline:2px solid var(--accent); outline-offset:3px;}
 @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} }
+
+/* WORK THUMBNAILS (public site) */
+.work-thumb{width:56px; height:56px; object-fit:cover; border-radius:3px; border:1px solid var(--line); flex:none;}
+.work-namewrap{display:flex; align-items:center; gap:14px;}
+@media (max-width:700px){ .work-thumb{width:44px; height:44px;} }
+
+/* ADMIN */
+.admin-auth{min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;}
+.admin-auth-card{background:var(--bg-raise); border:1px solid var(--line); border-radius:6px; padding:32px; width:100%; max-width:360px; display:flex; flex-direction:column; gap:12px;}
+.admin-auth-card h1{font-family:var(--serif); font-size:22px; margin-bottom:8px;}
+.admin-shell{max-width:760px; margin:0 auto; padding:40px 24px 120px; font-family:var(--sans);}
+.admin-topbar{display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:8px; position:sticky; top:0; background:var(--bg); padding:16px 0; border-bottom:1px solid var(--line); z-index:5;}
+.admin-topbar h1{font-family:var(--serif); font-size:24px;}
+.admin-topbar-actions{display:flex; gap:10px;}
+.admin-note{color:var(--accent); font-size:13.5px; margin:12px 0;}
+.admin-error{color:#e08a8a; font-size:13.5px; margin:4px 0;}
+.admin-section{padding:32px 0; border-bottom:1px solid var(--line); display:flex; flex-direction:column; gap:10px;}
+.admin-section h2{font-family:var(--serif); font-size:19px; margin-bottom:6px;}
+.admin-section-head{display:flex; align-items:center; justify-content:space-between;}
+.admin-section label{font-family:var(--mono); font-size:11.5px; color:var(--ink-faint); margin-top:8px;}
+.admin-card{background:var(--bg-raise); border:1px solid var(--line); border-radius:4px; padding:18px; display:flex; flex-direction:column; gap:10px; margin-bottom:14px;}
+.admin-media-row{display:flex; align-items:center; gap:14px; flex-wrap:wrap; font-size:13px; color:var(--ink-dim);}
+.admin-thumb{width:72px; height:72px; object-fit:cover; border-radius:4px; border:1px solid var(--line);}
+.admin-shell input, .admin-shell textarea{
+  width:100%; background:var(--bg); color:var(--ink); border:1px solid var(--line); border-radius:3px;
+  padding:10px 12px; font-family:var(--sans); font-size:14.5px;
+}
+.admin-shell textarea{min-height:70px; resize:vertical;}
+.admin-shell input:focus, .admin-shell textarea:focus{outline:2px solid var(--accent); outline-offset:1px;}
+.btn-ghost{background:transparent; border:1px solid var(--line); color:var(--ink-dim); padding:10px 18px; border-radius:2px; font-size:13.5px; cursor:pointer;}
+.btn-ghost:hover{color:var(--ink); border-color:var(--ink-dim);}
+.admin-shell .btn, .admin-shell .btn-ghost{cursor:pointer; border:1px solid transparent;}
+.admin-shell .btn{border:none;}
