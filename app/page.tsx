@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { getContent } from "@/lib/content";
 import type { MediaItem } from "@/lib/types";
 
@@ -17,7 +16,12 @@ export default async function Home() {
     <>
       <header>
         <div className="nav wrap">
-          <a className="mark" href="#top">MF / NAVARRO</a>
+          <a className="mark nav-brand" href="#top">
+            {content.identity?.showLogo && content.identity.logoUrl ? (
+              <img className="nav-logo" src={content.identity.logoUrl} alt="" />
+            ) : null}
+            <span>MF / NAVARRO</span>
+          </a>
           <div className="status"><span className="dot" /> Open to new projects</div>
           <div className="links"><a href="#work">Work</a><a href="#about">About</a><a href="#contact">Contact</a></div>
         </div>
@@ -27,7 +31,7 @@ export default async function Home() {
         <section className="hero">
           <div className="wrap hero-grid">
             <div>
-              <div className="eyebrow">DIGITAL CREATIVE MANAGER / 09.26</div>
+              <div className="eyebrow">MULTIMEDIA DESIGNER</div>
               <h1>{content.heroHeadline}</h1>
               <p className="lede">{content.heroLede}</p>
               <div className="cta-row"><a className="btn" href="#work">View selected work <span>↗</span></a><span className="socials"><a href="#">Instagram</a> · <a href="#">LinkedIn</a></span></div>
@@ -64,7 +68,7 @@ export default async function Home() {
                 const media = item.media ?? [];
                 const primary = media[0];
                 return (
-                  <Link className="work-card work-card-link" key={item.id} href={`/work/${item.slug || item.id}`}>
+                  <article className="work-card" key={item.id}>
                     <div className="work-visual">
                       {primary ? <Media media={primary} alt={item.name} className="work-primary" /> : <div className="work-placeholder"><span>MF</span></div>}
                       <div className="work-number">{String(index + 1).padStart(2, "0")}</div>
@@ -80,7 +84,7 @@ export default async function Home() {
                         {media.length > 5 && <span className="more-media">+{media.length - 5}</span>}
                       </div>
                     )}
-                  </Link>
+                  </article>
                 );
               })}
             </div>
@@ -94,7 +98,19 @@ export default async function Home() {
           </div>
         </section>
 
-        <section id="about"><div className="wrap about"><div className="eyebrow">// ABOUT</div><div>{content.aboutParagraphs.map((p, i) => <p key={i}>{p}</p>)}</div></div></section>
+        <section id="about">
+          <div className={`wrap about ${content.identity?.showPortrait && content.identity.portraitUrl ? "about-with-portrait" : ""}`}>
+            {content.identity?.showPortrait && content.identity.portraitUrl ? (
+              <div className="about-portrait-wrap">
+                <img className="about-portrait" src={content.identity.portraitUrl} alt="MF Navarro" />
+              </div>
+            ) : null}
+            <div className="eyebrow">// ABOUT</div>
+            <div className="about-copy">
+              {content.aboutParagraphs.map((p, i) => <p key={i}>{p}</p>)}
+            </div>
+          </div>
+        </section>
       </main>
 
       <footer id="contact"><div className="wrap"><div className="eyebrow">START A CONVERSATION</div><h2>Have a project in mind?</h2><div className="row"><a className="email" href={`mailto:${content.email}`}>{content.email} <span>↗</span></a><span className="socials"><a href="#">Instagram</a> · <a href="#">LinkedIn</a></span></div><div className="meta"><span>MF Navarro — Digital Creative Manager</span><span>© 2026</span></div></div></footer>
