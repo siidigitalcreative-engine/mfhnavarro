@@ -3,7 +3,19 @@ import { notFound } from "next/navigation";
 import { getContent } from "@/lib/content";
 import type { WorkLayer } from "@/lib/types";
 
-function Layer({ layer, projectName, gap }: { layer: WorkLayer; projectName: string; gap: "none" | "small" | "large" }) {
+function Layer({
+  layer,
+  projectName,
+  gap,
+  isFirst = false,
+  isLast = false,
+}: {
+  layer: WorkLayer;
+  projectName: string;
+  gap: "none" | "small" | "large";
+  isFirst?: boolean;
+  isLast?: boolean;
+}) {
   if (layer.type === "text") {
     return (
       <section className="landing-text-divider">
@@ -21,7 +33,15 @@ function Layer({ layer, projectName, gap }: { layer: WorkLayer; projectName: str
 
   return (
     <section
-      className={`landing-media-layer landing-${layer.type}`}
+      className={[
+        "landing-media-layer",
+        `landing-${layer.type}`,
+        gap === "none" ? "landing-media-unified-item" : "",
+        gap === "none" && isFirst ? "landing-media-first" : "",
+        gap === "none" && isLast ? "landing-media-last" : "",
+      ]
+        .filter(Boolean)
+        .join(" ")}
       style={{ marginBottom }}
     >
       {layer.type === "video" ? (
@@ -69,8 +89,46 @@ export default async function WorkLandingPage({ params }: { params: { slug: stri
       </section>
 
       <div className="landing-layers-public">
-        {layers.length ? layers.map((layer) => <Layer key={layer.id} layer={layer} projectName={project.name} gap={project.layerGap ?? "small"} />) : (
-          <section className="landing-empty wrap">This project does not have a custom page yet.</section>
+        {layers.length ? (
+          project.layerGap === "none" ? (
+            <div className="landing-media-unified">
+              {layers.map((layer, index) => {
+                const isMedia = layer.type === "image" || layer.type === "video";
+                const previousIsMedia =
+                  index > 0 &&
+                  (layers[index - 1].type === "image" ||
+                    layers[index - 1].type === "video");
+                const nextIsMedia =
+                  index < layers.length - 1 &&
+                  (layers[index + 1].type === "image" ||
+                    layers[index + 1].type === "video");
+
+                return (
+                  <Layer
+                    key={layer.id}
+                    layer={layer}
+                    projectName={project.name}
+                    gap="none"
+                    isFirst={isMedia && !previousIsMedia}
+                    isLast={isMedia && !nextIsMedia}
+                  />
+                );
+              })}
+            </div>
+          ) : (
+            layers.map((layer) => (
+              <Layer
+                key={layer.id}
+                layer={layer}
+                projectName={project.name}
+                gap={project.layerGap ?? "small"}
+              />
+            ))
+          )
+        ) : (
+          <section className="landing-empty wrap">
+            This project does not have a custom page yet.
+          </section>
         )}
       </div>
 
