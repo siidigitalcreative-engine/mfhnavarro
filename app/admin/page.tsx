@@ -112,27 +112,49 @@ export default function AdminPage() {
   }
 
   function removeMedia(workId: string, mediaId: string) {
-    update("work", content.work.map((w) => w.id === workId ? { ...w, media: (w.media ?? []).filter((m) => m.id !== mediaId) } : w));
+    setContent((current) => {
+      if (!current) return current;
+      return {
+        ...current,
+        work: current.work.map((w) =>
+          w.id === workId
+            ? { ...w, media: (w.media ?? []).filter((m) => m.id !== mediaId) }
+            : w
+        ),
+      };
+    });
   }
 
   function moveMedia(workId: string, mediaId: string, direction: -1 | 1) {
-    update("work", content.work.map((w) => {
-      if (w.id !== workId) return w;
-      const media = [...(w.media ?? [])];
-      const index = media.findIndex((m) => m.id === mediaId);
-      const nextIndex = index + direction;
-      if (index < 0 || nextIndex < 0 || nextIndex >= media.length) return w;
-      [media[index], media[nextIndex]] = [media[nextIndex], media[index]];
-      return { ...w, media };
-    }));
+    setContent((current) => {
+      if (!current) return current;
+      return {
+        ...current,
+        work: current.work.map((w) => {
+          if (w.id !== workId) return w;
+          const media = [...(w.media ?? [])];
+          const index = media.findIndex((m) => m.id === mediaId);
+          const nextIndex = index + direction;
+          if (index < 0 || nextIndex < 0 || nextIndex >= media.length) return w;
+          [media[index], media[nextIndex]] = [media[nextIndex], media[index]];
+          return { ...w, media };
+        }),
+      };
+    });
   }
 
   function updateWork(id: string, patch: Partial<WorkItem>) {
-    update("work", content.work.map((w) => (w.id === id ? { ...w, ...patch } : w)));
+    setContent((current) => {
+      if (!current) return current;
+      return { ...current, work: current.work.map((w) => (w.id === id ? { ...w, ...patch } : w)) };
+    });
   }
 
   function updateClient(id: string, patch: Partial<ClientItem>) {
-    update("clients", content.clients.map((client) => client.id === id ? { ...client, ...patch } : client));
+    setContent((current) => {
+      if (!current) return current;
+      return { ...current, clients: current.clients.map((client) => client.id === id ? { ...client, ...patch } : client) };
+    });
   }
 
   function handleDrop(event: DragEvent<HTMLDivElement>, workId: string) {
