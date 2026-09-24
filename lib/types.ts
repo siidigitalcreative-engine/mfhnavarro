@@ -12,6 +12,7 @@ export type WorkLayer = {
   text?: string;
   name?: string;
   thumbnailUrl?: string;
+  layout?: "full" | "two";
 };
 
 export type WorkItem = {
@@ -39,13 +40,6 @@ export type ClientItem = {
   logoUrl?: string;
 };
 
-export type SiteIdentity = {
-  logoUrl?: string;
-  showLogo?: boolean;
-  portraitUrl?: string;
-  showPortrait?: boolean;
-};
-
 export type SiteContent = {
   heroHeadline: string;
   heroLede: string;
@@ -56,7 +50,6 @@ export type SiteContent = {
   clients: ClientItem[];
   aboutParagraphs: string[];
   email: string;
-  identity: SiteIdentity;
 };
 
 export const DEFAULT_CONTENT: SiteContent = {
@@ -119,10 +112,4 @@ export const DEFAULT_CONTENT: SiteContent = {
     "Outside client work, I mentor junior designers and keep a running archive of visual references, one scoped project at a time.",
   ],
   email: "hello@mfnavarro.dev",
-  identity: {
-    logoUrl: "",
-    showLogo: true,
-    portraitUrl: "",
-    showPortrait: true,
-  },
 };
