@@ -118,6 +118,14 @@ function MediaGroup({
             <div
               className="landing-media-grid-row"
               key={`${row[0].id}-${row[1].id}`}
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+                gap: isUnified ? 0 : gap === "large" ? 64 : 24,
+                width: "100%",
+                alignItems: "start",
+                marginBottom: isUnified ? 0 : gap === "large" ? 64 : 24,
+              }}
             >
               {row.map((layer) => (
                 <Layer
