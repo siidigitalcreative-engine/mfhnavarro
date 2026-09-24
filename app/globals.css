@@ -366,172 +366,253 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
     width: min(100%, 280px);
   }
 }
-/* Custom work-page media layout
-   Supports:
-   - Space between media: none / small / large
-   - Layout per media layer: full width / 2 columns
-*/
-.landing-media-group,
-.landing-media-unified {
-  width: min(calc(100% - 64px), 1180px);
-  margin: 0 auto 48px;
+/* =========================================================
+   CUSTOM WORK PAGE — MEDIA LAYOUT
+   Full width / 2 columns + None / Small / Large spacing
+   ========================================================= */
+
+/* Admin: per-layer layout selector */
+.layer-layout-row {
+  display: grid;
+  grid-template-columns: 90px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
 }
 
-.landing-media-group {
+.layer-layout-row label {
+  margin: 0;
+}
+
+.layer-layout-row select {
+  width: 100%;
+  min-height: 42px;
+  padding: 10px 38px 10px 12px;
+  background: #0d0f12;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.2;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+
+/* Public work page media wrapper */
+.landing-media-section {
+  width: 100%;
+  margin: 0;
+}
+
+.landing-media-section-inner {
+  width: min(calc(100% - 64px), 1180px);
+  margin: 0 auto;
+}
+
+.landing-media-rows {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
-.landing-media-grid-row {
+/* A two-column row is created only when two adjacent layers
+   are both set to "2 columns". */
+.landing-media-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 48px;
-  margin-bottom: 48px;
+  gap: var(--landing-media-gap, 24px);
+  width: 100%;
+  align-items: start;
+  margin: 0 0 var(--landing-media-gap, 24px);
 }
 
-.landing-media-grid-row:last-child {
+.landing-media-grid:last-child {
   margin-bottom: 0;
 }
 
-.landing-media-group .landing-media-layer {
+.landing-media-grid .landing-media-layer {
   width: 100%;
+  min-width: 0;
   margin: 0;
 }
 
-.landing-media-group .landing-media-grid-row .landing-media-layer {
+/* A single 2-column layer remains in the first column
+   rather than stretching unpredictably. */
+.landing-media-grid-single .landing-media-layer {
+  grid-column: 1;
+}
+
+/* Full-width media layer */
+.landing-media-rows > .landing-media-layer {
   width: 100%;
-  margin: 0;
+  margin: 0 0 var(--landing-media-gap, 24px);
 }
 
-.landing-media-group-small .landing-media-grid-row {
-  gap: 48px;
-  margin-bottom: 48px;
-}
-
-.landing-media-group-large .landing-media-grid-row {
-  gap: 64px;
-  margin-bottom: 64px;
-}
-
-.landing-media-group-small > .landing-media-layer {
-  margin-bottom: 48px;
-}
-
-.landing-media-group-large > .landing-media-layer {
-  margin-bottom: 64px;
-}
-
-.landing-media-group-small > .landing-media-layer:last-child,
-.landing-media-group-large > .landing-media-layer:last-child {
+.landing-media-rows > .landing-media-layer:last-child {
   margin-bottom: 0;
 }
 
-/* No-space mode: all consecutive media layers become one unified visual block. */
-.landing-media-unified {
-  overflow: hidden;
+/* Spacing presets */
+.landing-media-section.landing-gap-small {
+  --landing-media-gap: 24px;
+}
+
+.landing-media-section.landing-gap-large {
+  --landing-media-gap: 64px;
+}
+
+.landing-media-section.landing-gap-none {
+  --landing-media-gap: 0px;
+}
+
+/* Remove the old individual media-card width/margins
+   inside the new renderer. */
+.landing-media-section .landing-media-layer {
+  box-sizing: border-box;
+}
+
+.landing-media-section .landing-media-layer img,
+.landing-media-section .landing-media-layer video {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  margin: 0;
+  object-fit: contain;
+}
+
+/* NONE = one unified visual container.
+   All consecutive media rows touch. */
+.landing-media-section.landing-gap-none {
+  width: min(calc(100% - 64px), 1180px);
+  margin: 0 auto 48px;
   border: 1px solid var(--line);
   border-radius: 14px;
+  overflow: hidden;
   background: #070809;
-  display: flex;
-  flex-direction: column;
 }
 
-.landing-media-unified .landing-media-grid-row {
-  gap: 0;
+.landing-media-section.landing-gap-none .landing-media-section-inner {
+  width: 100%;
   margin: 0;
 }
 
-.landing-media-unified .landing-media-layer {
+.landing-media-section.landing-gap-none .landing-media-rows {
+  width: 100%;
+}
+
+.landing-media-section.landing-gap-none .landing-media-layer {
   width: 100%;
   margin: 0 !important;
-  padding: 0 !important;
+  padding: 0;
   border: 0;
   border-radius: 0;
   overflow: hidden;
   background: transparent;
 }
 
-.landing-media-unified .landing-media-layer img,
-.landing-media-unified .landing-media-layer video {
-  display: block;
+.landing-media-section.landing-gap-none .landing-media-grid {
+  gap: 0;
+  margin: 0;
+}
+
+.landing-media-section.landing-gap-none .landing-media-layer img,
+.landing-media-section.landing-gap-none .landing-media-layer video {
   width: 100%;
-  height: auto;
-  max-width: 100%;
-  max-height: none;
-  object-fit: contain;
   margin: 0;
   border-radius: 0;
-  background: #070809;
 }
 
-.landing-media-unified .landing-media-first {
+/* Outer top/bottom corners only. */
+.landing-media-section.landing-gap-none
+  .landing-media-rows > .landing-media-layer:first-child img,
+.landing-media-section.landing-gap-none
+  .landing-media-rows > .landing-media-layer:first-child video,
+.landing-media-section.landing-gap-none
+  .landing-media-grid:first-child .landing-media-layer:first-child img,
+.landing-media-section.landing-gap-none
+  .landing-media-grid:first-child .landing-media-layer:first-child video {
   border-radius: 13px 13px 0 0;
 }
 
-.landing-media-unified .landing-media-last {
+.landing-media-section.landing-gap-none
+  .landing-media-rows > .landing-media-layer:last-child img,
+.landing-media-section.landing-gap-none
+  .landing-media-rows > .landing-media-layer:last-child video,
+.landing-media-section.landing-gap-none
+  .landing-media-grid:last-child .landing-media-layer:last-child img,
+.landing-media-section.landing-gap-none
+  .landing-media-grid:last-child .landing-media-layer:last-child video {
   border-radius: 0 0 13px 13px;
 }
 
-.landing-media-unified .landing-media-first img,
-.landing-media-unified .landing-media-first video {
-  border-radius: 13px 13px 0 0;
+/* Keep the actual video element constrained inside its grid cell. */
+.landing-media-grid video,
+.landing-media-grid img {
+  min-width: 0;
 }
 
-.landing-media-unified .landing-media-last img,
-.landing-media-unified .landing-media-last video {
-  border-radius: 0 0 13px 13px;
-}
-
+/* Mobile: 2 columns become a single stacked column. */
 @media (max-width: 760px) {
-  .landing-media-group,
-  .landing-media-unified {
+  .layer-layout-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .landing-media-section-inner {
+    width: calc(100% - 40px);
+  }
+
+  .landing-media-grid {
+    grid-template-columns: 1fr;
+    gap: var(--landing-media-gap, 24px);
+    margin-bottom: var(--landing-media-gap, 24px);
+  }
+
+  .landing-media-grid-single {
+    grid-template-columns: 1fr;
+  }
+
+  .landing-media-section.landing-gap-small {
+    --landing-media-gap: 24px;
+  }
+
+  .landing-media-section.landing-gap-large {
+    --landing-media-gap: 40px;
+  }
+
+  .landing-media-section.landing-gap-none {
     width: calc(100% - 40px);
     margin-bottom: 24px;
-  }
-
-  .landing-media-grid-row {
-    grid-template-columns: 1fr;
-    gap: 24px;
-    margin-bottom: 24px;
-  }
-
-  .landing-media-group-small .landing-media-grid-row {
-    gap: 24px;
-    margin-bottom: 24px;
-  }
-
-  .landing-media-group-large .landing-media-grid-row {
-    gap: 32px;
-    margin-bottom: 32px;
-  }
-
-  .landing-media-group-small > .landing-media-layer {
-    margin-bottom: 24px;
-  }
-
-  .landing-media-group-large > .landing-media-layer {
-    margin-bottom: 32px;
-  }
-
-  .landing-media-unified {
     border-radius: 10px;
   }
 
-  .landing-media-unified .landing-media-first {
+  .landing-media-section.landing-gap-none .landing-media-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .landing-media-section.landing-gap-none
+    .landing-media-rows > .landing-media-layer:first-child img,
+  .landing-media-section.landing-gap-none
+    .landing-media-rows > .landing-media-layer:first-child video,
+  .landing-media-section.landing-gap-none
+    .landing-media-grid:first-child .landing-media-layer:first-child img,
+  .landing-media-section.landing-gap-none
+    .landing-media-grid:first-child .landing-media-layer:first-child video {
     border-radius: 9px 9px 0 0;
   }
 
-  .landing-media-unified .landing-media-last {
-    border-radius: 0 0 9px 9px;
-  }
-
-  .landing-media-unified .landing-media-first img,
-  .landing-media-unified .landing-media-first video {
-    border-radius: 9px 9px 0 0;
-  }
-
-  .landing-media-unified .landing-media-last img,
-  .landing-media-unified .landing-media-last video {
+  .landing-media-section.landing-gap-none
+    .landing-media-rows > .landing-media-layer:last-child img,
+  .landing-media-section.landing-gap-none
+    .landing-media-rows > .landing-media-layer:last-child video,
+  .landing-media-section.landing-gap-none
+    .landing-media-grid:last-child .landing-media-layer:last-child img,
+  .landing-media-section.landing-gap-none
+    .landing-media-grid:last-child .landing-media-layer:last-child video {
     border-radius: 0 0 9px 9px;
   }
 }
