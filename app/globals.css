@@ -1216,3 +1216,93 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
   width: 100% !important;
   margin: 0 !important;
 }
+
+/* =========================================================
+   FINAL 2-COLUMN SPACING / WIDTH FIX
+   ========================================================= */
+
+/* The 2-column row owns the spacing. Do not let the individual
+   media cards create their own horizontal spacing. */
+.landing-media-grid-row {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  box-sizing: border-box;
+  align-items: start !important;
+}
+
+/* SMALL: one consistent 24px gap, exactly matching the page rhythm. */
+.landing-media-group-small .landing-media-grid-row {
+  gap: 24px !important;
+  column-gap: 24px !important;
+  row-gap: 0 !important;
+  margin-bottom: 24px !important;
+}
+
+/* Each card must completely fill its grid track. */
+.landing-media-grid-row > .landing-media-layer,
+.landing-media-group-small .landing-media-grid-row > .landing-media-layer {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  margin: 0 !important;
+  box-sizing: border-box;
+}
+
+/* The actual image/video/player must also fill the card.
+   This removes the apparent oversized gap caused by intrinsic
+   media sizing. */
+.landing-media-grid-row > .landing-media-layer > img,
+.landing-media-grid-row > .landing-media-layer > video,
+.landing-media-grid-row > .landing-media-layer > .custom-video-player,
+.landing-media-grid-row > .landing-media-layer .custom-video-player {
+  display: block;
+  width: 100% !important;
+  max-width: none !important;
+  height: auto;
+  margin: 0 !important;
+  box-sizing: border-box;
+}
+
+/* LARGE stays clearly larger but still uses the same exact structure. */
+.landing-media-group-large .landing-media-grid-row {
+  gap: 64px !important;
+  column-gap: 64px !important;
+  row-gap: 0 !important;
+  margin-bottom: 64px !important;
+}
+
+/* NONE means the two tracks touch. */
+.landing-media-unified .landing-media-grid-row {
+  gap: 0 !important;
+  column-gap: 0 !important;
+  row-gap: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* Mobile keeps the 2-column layout for actual paired rows. */
+@media (max-width: 760px) {
+  .landing-media-grid-row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  }
+
+  .landing-media-group-small .landing-media-grid-row {
+    gap: 12px !important;
+    column-gap: 12px !important;
+    row-gap: 0 !important;
+    margin-bottom: 24px !important;
+  }
+
+  .landing-media-group-large .landing-media-grid-row {
+    gap: 24px !important;
+    column-gap: 24px !important;
+    row-gap: 0 !important;
+    margin-bottom: 32px !important;
+  }
+
+  .landing-media-unified .landing-media-grid-row {
+    gap: 0 !important;
+  }
+}
