@@ -21,7 +21,6 @@ export default function AdminPage() {
   const [uploadProgress, setUploadProgress] = useState<Record<string, { name: string; progress: number; status: "uploading" | "done" | "error" }[]>>({});
   const [uploadingClientId, setUploadingClientId] = useState<string | null>(null);
   const [uploadingLayerId, setUploadingLayerId] = useState<string | null>(null);
-  const [uploadingIdentity, setUploadingIdentity] = useState<"logo" | "portrait" | null>(null);
   const [layerProgress, setLayerProgress] = useState<Record<string, number>>({});
   const router = useRouter();
 
@@ -191,7 +190,11 @@ export default function AdminPage() {
 
   function addLayer(workId: string, type: WorkLayer["type"]) {
     if (!content) return;
-    const layer: WorkLayer = { id: newId(), type, ...(type === "text" ? { text: "Section title" } : {}) };
+    const layer: WorkLayer = {
+      id: newId(),
+      type,
+      ...(type === "text" ? { text: "Section title" } : { layout: "full" }),
+    };
     update("work", content.work.map((w) => w.id === workId ? { ...w, layers: [...(w.layers ?? []), layer] } : w));
   }
 
@@ -241,35 +244,6 @@ export default function AdminPage() {
     update("clients", content.clients.map((client) => client.id === id ? { ...client, ...patch } : client));
   }
 
-  async function uploadIdentityAsset(kind: "logo" | "portrait", file: File | undefined) {
-    if (!file) return;
-    setUploadingIdentity(kind);
-    try {
-      const blob = await upload(
-        `site-${kind}-${Date.now()}-${file.name}`,
-        file,
-        {
-          access: "public",
-          handleUploadUrl: "/api/upload",
-          multipart: true,
-        }
-      );
-
-      setContent((current) => current ? {
-        ...current,
-        identity: {
-          ...(current.identity ?? {}),
-          ...(kind === "logo" ? { logoUrl: blob.url } : { portraitUrl: blob.url }),
-        },
-      } : current);
-    } catch (error) {
-      console.error(error);
-      setStatus("error");
-    } finally {
-      setUploadingIdentity(null);
-    }
-  }
-
   function handleDrop(event: DragEvent<HTMLDivElement>, workId: string) {
     event.preventDefault();
     if (uploadingId !== workId) void uploadFiles(workId, event.dataTransfer.files);
@@ -287,99 +261,6 @@ export default function AdminPage() {
 
       {status === "saved" && <p className="admin-note">Changes saved.</p>}
       {status === "error" && <p className="admin-error">Something went wrong. Check the upload and try again.</p>}
-
-
-      <section className="admin-section">
-        <div className="admin-section-head">
-          <div>
-            <div className="admin-kicker">SITE IDENTITY</div>
-            <h2>Logo &amp; portrait</h2>
-          </div>
-          <span>optional</span>
-        </div>
-
-        <div className="identity-admin-grid">
-          <div className="identity-admin-card">
-            <div className="identity-admin-preview identity-logo-preview">
-              {content.identity?.logoUrl ? (
-                <img src={content.identity.logoUrl} alt="" />
-              ) : (
-                <span>LOGO</span>
-              )}
-            </div>
-            <div className="identity-admin-copy">
-              <div className="admin-kicker">TOPBAR LOGO</div>
-              <p className="admin-help">Use a square 1:1 logo. It appears beside MF / NAVARRO in the topbar.</p>
-              <label className="btn btn-ghost" htmlFor="site-logo">
-                {uploadingIdentity === "logo" ? "Uploading…" : content.identity?.logoUrl ? "Replace logo" : "Upload logo"}
-              </label>
-              <input
-                id="site-logo"
-                className="file-input"
-                type="file"
-                accept="image/*"
-                onChange={(e) => {
-                  void uploadIdentityAsset("logo", e.target.files?.[0]);
-                  e.currentTarget.value = "";
-                }}
-              />
-              <label className="identity-toggle">
-                <input
-                  type="checkbox"
-                  checked={content.identity?.showLogo ?? true}
-                  onChange={(e) => update("identity", { ...(content.identity ?? {}), showLogo: e.target.checked })}
-                />
-                Show logo in topbar
-              </label>
-              {content.identity?.logoUrl && (
-                <button className="btn btn-ghost danger-button" onClick={() => update("identity", { ...(content.identity ?? {}), logoUrl: "" })}>
-                  Remove logo
-                </button>
-              )}
-            </div>
-          </div>
-
-          <div className="identity-admin-card">
-            <div className="identity-admin-preview identity-portrait-preview">
-              {content.identity?.portraitUrl ? (
-                <img src={content.identity.portraitUrl} alt="" />
-              ) : (
-                <span>PORTRAIT</span>
-              )}
-            </div>
-            <div className="identity-admin-copy">
-              <div className="admin-kicker">ABOUT PORTRAIT</div>
-              <p className="admin-help">Add a portrait so visitors can see who is behind the work. It appears in the About section.</p>
-              <label className="btn btn-ghost" htmlFor="site-portrait">
-                {uploadingIdentity === "portrait" ? "Uploading…" : content.identity?.portraitUrl ? "Replace portrait" : "Upload portrait"}
-              </label>
-              <input
-                id="site-portrait"
-                className="file-input"
-                type="file"
-                accept="image/*"
-                onChange={(e) => {
-                  void uploadIdentityAsset("portrait", e.target.files?.[0]);
-                  e.currentTarget.value = "";
-                }}
-              />
-              <label className="identity-toggle">
-                <input
-                  type="checkbox"
-                  checked={content.identity?.showPortrait ?? true}
-                  onChange={(e) => update("identity", { ...(content.identity ?? {}), showPortrait: e.target.checked })}
-                />
-                Show portrait in About
-              </label>
-              {content.identity?.portraitUrl && (
-                <button className="btn btn-ghost danger-button" onClick={() => update("identity", { ...(content.identity ?? {}), portraitUrl: "" })}>
-                  Remove portrait
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
 
       <section className="admin-section">
         <div className="admin-section-head"><h2>Hero</h2><span>01</span></div>
@@ -489,6 +370,20 @@ export default function AdminPage() {
                         <label className="btn btn-ghost layer-upload-btn" htmlFor={`layer-${layer.id}`}>{uploadingLayerId === layer.id ? `Uploading ${layerProgress[layer.id] ?? 0}%` : layer.url ? `Replace ${layer.type}` : `Upload ${layer.type}`}</label>
                         <input id={`layer-${layer.id}`} className="file-input" type="file" accept={layer.type === "video" ? "video/*,.mp4,.mov,.m4v,.webm" : "image/*"} onChange={(e) => { void uploadLayerFile(item.id, layer.id, e.target.files?.[0]); e.currentTarget.value = ""; }} />
                         {uploadingLayerId === layer.id && <span className="layer-upload-percent">{layerProgress[layer.id] ?? 0}%</span>}
+                      </div>
+                      <div className="layer-layout-row">
+                        <label>Layout</label>
+                        <select
+                          value={layer.layout ?? "full"}
+                          onChange={(e) =>
+                            updateLayer(item.id, layer.id, {
+                              layout: e.target.value as WorkLayer["layout"],
+                            })
+                          }
+                        >
+                          <option value="full">Full width</option>
+                          <option value="two">2 columns</option>
+                        </select>
                       </div>
                       {layer.type === "video" && layer.url && (
                         <VideoThumbnailPicker
