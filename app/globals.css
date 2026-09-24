@@ -1154,3 +1154,65 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
 .landing-media-unified .landing-media-grid-row > .landing-media-layer .custom-video-player {
   border-radius: 0 !important;
 }
+
+/* =========================================================
+   FINAL FIX — SMALL SPACING FOR 2-COLUMN MEDIA
+   Keep the same spacing rhythm as the rest of the page.
+   ========================================================= */
+
+/* Small spacing = 24px everywhere: between the two columns,
+   between rows, and between a media row and the next layer. */
+.landing-media-group-small .landing-media-grid-row {
+  column-gap: 24px !important;
+  row-gap: 0 !important;
+  margin-bottom: 24px !important;
+}
+
+.landing-media-group-small > .landing-media-layer {
+  margin-bottom: 24px !important;
+}
+
+.landing-media-group-small > .landing-media-layer:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* Make the two columns equal in width and align them from the same top edge. */
+.landing-media-grid-row {
+  width: 100%;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  align-items: start !important;
+}
+
+/* The cards themselves should never introduce an additional margin
+   that changes the visible spacing. */
+.landing-media-group-small .landing-media-grid-row > .landing-media-layer {
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+/* On mobile, keep the two-column structure only when the screen
+   has enough room; otherwise stack cleanly with the same 24px rhythm. */
+@media (max-width: 760px) {
+  .landing-media-group-small .landing-media-grid-row {
+    grid-template-columns: 1fr !important;
+    row-gap: 24px !important;
+    column-gap: 0 !important;
+    margin-bottom: 24px !important;
+  }
+
+  .landing-media-group-small .landing-media-grid-row > .landing-media-layer {
+    width: 100% !important;
+  }
+}
+
+/* Large spacing remains intentionally larger. */
+.landing-media-group-large .landing-media-grid-row {
+  column-gap: 64px !important;
+  row-gap: 0 !important;
+  margin-bottom: 64px !important;
+}
+
+.landing-media-group-large .landing-media-grid-row > .landing-media-layer {
+  width: 100% !important;
+  margin: 0 !important;
+}
