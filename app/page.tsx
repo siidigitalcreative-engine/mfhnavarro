@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { getContent } from "@/lib/content";
 import type { MediaItem } from "@/lib/types";
 
@@ -68,7 +69,7 @@ export default async function Home() {
                 const media = item.media ?? [];
                 const primary = media[0];
                 return (
-                  <article className="work-card" key={item.id}>
+                  <Link className="work-card" key={item.id} href={`/work/${item.slug || item.id}`}>
                     <div className="work-visual">
                       {primary ? <Media media={primary} alt={item.name} className="work-primary" /> : <div className="work-placeholder"><span>MF</span></div>}
                       <div className="work-number">{String(index + 1).padStart(2, "0")}</div>
@@ -84,7 +85,7 @@ export default async function Home() {
                         {media.length > 5 && <span className="more-media">+{media.length - 5}</span>}
                       </div>
                     )}
-                  </article>
+                  </Link>
                 );
               })}
             </div>
