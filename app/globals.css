@@ -661,3 +661,71 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
     height: 23px;
   }
 }
+
+/* =========================================================
+   FINAL FIX — 2-COLUMN ROW MUST USE THE SAME OUTER WIDTH
+   AS THE NORMAL FULL-WIDTH MEDIA CARDS
+   ========================================================= */
+
+/* Spaced 2-column groups use the exact same horizontal
+   boundaries as the normal media cards. */
+.landing-media-group-small .landing-media-grid-row,
+.landing-media-group-large .landing-media-grid-row {
+  width: min(calc(100% - 64px), 1180px) !important;
+  max-width: 1180px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+}
+
+/* Keep the two cards themselves inside that same boundary. */
+.landing-media-group-small .landing-media-grid-row > .landing-media-layer,
+.landing-media-group-large .landing-media-grid-row > .landing-media-layer {
+  flex: 1 1 0 !important;
+  width: 0 !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+}
+
+/* The gap is inside the shared container, so the outside
+   left/right margins remain perfectly symmetrical. */
+.landing-media-group-small .landing-media-grid-row {
+  gap: 12px !important;
+}
+
+.landing-media-group-large .landing-media-grid-row {
+  gap: 48px !important;
+}
+
+/* NONE remains a single unified container. Its row must
+   continue to fill that container rather than creating a
+   second independent horizontal margin. */
+.landing-media-unified .landing-media-grid-row {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Mobile: same left/right margin as normal media cards. */
+@media (max-width: 760px) {
+  .landing-media-group-small .landing-media-grid-row,
+  .landing-media-group-large .landing-media-grid-row {
+    width: calc(100% - 40px) !important;
+    max-width: none !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .landing-media-group-small .landing-media-grid-row {
+    gap: 8px !important;
+  }
+
+  .landing-media-group-large .landing-media-grid-row {
+    gap: 24px !important;
+  }
+
+  .landing-media-unified .landing-media-grid-row {
+    width: 100% !important;
+  }
+}
