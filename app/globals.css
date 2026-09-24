@@ -875,3 +875,143 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
     border-radius: 0 10px 10px 0;
   }
 }
+/* =========================================================
+   FINAL VIDEO / 2-COLUMN OVERRIDES
+   ========================================================= */
+
+/* The video itself has no native browser controls.
+   Only the centered play/pause button is shown. */
+.custom-video-player {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 0 !important;
+  background: #070809;
+}
+
+.custom-video-player > video {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  margin: 0;
+  border: 0;
+  border-radius: 0 !important;
+  background: #070809;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+/* No bottom player / timeline / volume bar. */
+.custom-video-controls {
+  display: none !important;
+}
+
+/* Center play/pause button only. */
+.custom-video-play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 64px;
+  height: 64px;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(10, 13, 15, .82);
+  color: #fff;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: opacity .2s ease, transform .2s ease;
+  z-index: 3;
+}
+
+.custom-video-play svg {
+  width: 28px;
+  height: 28px;
+}
+
+.custom-video-play:hover {
+  transform: translate(-50%, -50%) scale(1.04);
+}
+
+.custom-video-player.is-playing .custom-video-play {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* =========================================================
+   2-COLUMN SEAM
+   The inner/center edges are ALWAYS square.
+   Only the outside corners may be rounded.
+   ========================================================= */
+
+.landing-media-grid-row {
+  overflow: visible;
+}
+
+.landing-media-grid-row > .landing-media-layer {
+  min-width: 0;
+  overflow: hidden !important;
+  border-radius: 0 !important;
+}
+
+/* First column: only top/bottom LEFT corners. */
+.landing-media-grid-row > .landing-media-layer:first-child {
+  border-radius: 14px 0 0 14px !important;
+}
+
+/* Second column: only top/bottom RIGHT corners. */
+.landing-media-grid-row > .landing-media-layer:last-child {
+  border-radius: 0 14px 14px 0 !important;
+}
+
+/* Remove any radius inherited by media inside the cards. */
+.landing-media-grid-row > .landing-media-layer img,
+.landing-media-grid-row > .landing-media-layer video,
+.landing-media-grid-row > .landing-media-layer .custom-video-player {
+  border-radius: 0 !important;
+}
+
+/* No-space mode: the entire pair is one rectangle.
+   There must be absolutely no rounding at the center seam. */
+.landing-media-unified .landing-media-grid-row > .landing-media-layer,
+.landing-media-unified .landing-media-grid-row > .landing-media-layer:first-child,
+.landing-media-unified .landing-media-grid-row > .landing-media-layer:last-child {
+  border-radius: 0 !important;
+}
+
+.landing-media-unified .landing-media-grid-row > .landing-media-layer img,
+.landing-media-unified .landing-media-grid-row > .landing-media-layer video,
+.landing-media-unified .landing-media-grid-row > .landing-media-layer .custom-video-player {
+  border-radius: 0 !important;
+}
+
+@media (max-width: 760px) {
+  .custom-video-play {
+    width: 52px;
+    height: 52px;
+  }
+
+  .custom-video-play svg {
+    width: 23px;
+    height: 23px;
+  }
+
+  .landing-media-grid-row > .landing-media-layer:first-child {
+    border-radius: 10px 0 0 10px !important;
+  }
+
+  .landing-media-grid-row > .landing-media-layer:last-child {
+    border-radius: 0 10px 10px 0 !important;
+  }
+
+  .landing-media-unified .landing-media-grid-row > .landing-media-layer,
+  .landing-media-unified .landing-media-grid-row > .landing-media-layer:first-child,
+  .landing-media-unified .landing-media-grid-row > .landing-media-layer:last-child {
+    border-radius: 0 !important;
+  }
+}
