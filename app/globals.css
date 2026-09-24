@@ -1015,3 +1015,142 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
     border-radius: 0 !important;
   }
 }
+/* =========================================================
+   FINAL HOMEPAGE + WORK PAGE REFINEMENTS
+   ========================================================= */
+
+/* Homepage work cards: the whole card is clickable, but descriptions
+   and metadata should never look like links. */
+.work-grid > .work-card,
+.work-grid > .work-card-link {
+  display: block;
+  color: inherit;
+  text-decoration: none !important;
+}
+
+.work-grid > .work-card *,
+.work-grid > .work-card-link * {
+  text-decoration: none !important;
+}
+
+.work-info {
+  align-items: flex-start;
+}
+
+.work-info > div {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.work-info h3 {
+  text-decoration: none !important;
+}
+
+.work-info p {
+  margin-top: 8px;
+  max-width: 65ch;
+  color: var(--ink-dim);
+  font-size: 14px;
+  line-height: 1.55;
+  text-decoration: none !important;
+}
+
+.work-info .tag {
+  flex: 0 0 auto;
+  text-decoration: none !important;
+}
+
+/* On mobile, let the description use the full card width instead of
+   losing half its width to the tag. */
+@media (max-width: 760px) {
+  .work-info {
+    display: block;
+  }
+
+  .work-info .tag {
+    display: block;
+    margin-top: 10px;
+    padding-top: 0;
+  }
+
+  .work-info p {
+    max-width: 100%;
+  }
+}
+
+/* =========================================================
+   TEXT DIVIDERS — smaller, cleaner editorial treatment
+   ========================================================= */
+
+.landing-text-divider-inner {
+  padding: 54px 24px !important;
+}
+
+.landing-text-divider h2 {
+  max-width: none !important;
+  font-size: clamp(34px, 4.4vw, 58px) !important;
+  font-weight: 500 !important;
+  line-height: 1.08 !important;
+  letter-spacing: -0.035em !important;
+  margin: 0;
+}
+
+.landing-text-line {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+@media (max-width: 760px) {
+  .landing-text-divider-inner {
+    padding: 38px 20px !important;
+  }
+
+  .landing-text-divider h2 {
+    font-size: clamp(30px, 8.5vw, 48px) !important;
+    line-height: 1.08 !important;
+  }
+}
+
+/* =========================================================
+   TWO-COLUMN MEDIA — remove the tiny center seam/gap
+   ========================================================= */
+
+.landing-media-grid-row {
+  column-gap: 0 !important;
+}
+
+.landing-media-grid-row > .landing-media-layer {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  border-radius: 0 !important;
+}
+
+.landing-media-grid-row > .landing-media-layer:first-child {
+  border-radius: 14px 0 0 14px !important;
+}
+
+.landing-media-grid-row > .landing-media-layer:last-child {
+  border-radius: 0 14px 14px 0 !important;
+}
+
+/* The media and custom player itself must also be square at the seam. */
+.landing-media-grid-row > .landing-media-layer img,
+.landing-media-grid-row > .landing-media-layer video,
+.landing-media-grid-row > .landing-media-layer .custom-video-player {
+  border-radius: 0 !important;
+}
+
+/* For no-space mode, absolutely no internal rounding. */
+.landing-media-unified .landing-media-grid-row,
+.landing-media-unified .landing-media-grid-row > .landing-media-layer,
+.landing-media-unified .landing-media-grid-row > .landing-media-layer:first-child,
+.landing-media-unified .landing-media-grid-row > .landing-media-layer:last-child {
+  border-radius: 0 !important;
+}
+
+.landing-media-unified .landing-media-grid-row > .landing-media-layer img,
+.landing-media-unified .landing-media-grid-row > .landing-media-layer video,
+.landing-media-unified .landing-media-grid-row > .landing-media-layer .custom-video-player {
+  border-radius: 0 !important;
+}
