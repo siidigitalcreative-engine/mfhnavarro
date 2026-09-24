@@ -69,7 +69,7 @@ export default async function Home() {
                 const media = item.media ?? [];
                 const primary = media[0];
                 return (
-                  <Link className="work-card" key={item.id} href={`/work/${item.slug || item.id}`}>
+                  <Link className="work-card work-card-link" key={item.id} href={`/work/${item.slug || item.id}`}>
                     <div className="work-visual">
                       {primary ? <Media media={primary} alt={item.name} className="work-primary" /> : <div className="work-placeholder"><span>MF</span></div>}
                       <div className="work-number">{String(index + 1).padStart(2, "0")}</div>
