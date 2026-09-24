@@ -366,521 +366,182 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
     width: min(100%, 280px);
   }
 }
+
 /* =========================================================
-   CUSTOM WORK PAGE — MEDIA LAYOUT
-   Full width / 2 columns + None / Small / Large spacing
+   FINAL MF NAVARRO PORTFOLIO OVERRIDES
+   Full-width / 2-column media + spacing + clean video UI
    ========================================================= */
 
-/* Admin: per-layer layout selector */
-.layer-layout-row {
-  display: grid;
-  grid-template-columns: 90px minmax(0, 1fr);
-  align-items: center;
-  gap: 10px;
-  margin-top: 12px;
-}
-
-.layer-layout-row label {
-  margin: 0;
-}
-
-.layer-layout-row select {
-  width: 100%;
-  min-height: 42px;
-  padding: 10px 38px 10px 12px;
-  background: #0d0f12;
-  color: var(--ink);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  font-family: var(--sans);
-  font-size: 13px;
-  line-height: 1.2;
-  appearance: none;
-  -webkit-appearance: none;
-  cursor: pointer;
-}
-
-/* Public work page media wrapper */
-.landing-media-section {
-  width: 100%;
-  margin: 0;
-}
-
-.landing-media-section-inner {
-  width: min(calc(100% - 64px), 1180px);
-  margin: 0 auto;
-}
-
-.landing-media-rows {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-/* A two-column row is created only when two adjacent layers
-   are both set to "2 columns". */
-.landing-media-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--landing-media-gap, 24px);
-  width: 100%;
-  align-items: start;
-  margin: 0 0 var(--landing-media-gap, 24px);
-}
-
-.landing-media-grid:last-child {
-  margin-bottom: 0;
-}
-
-.landing-media-grid .landing-media-layer {
-  width: 100%;
-  min-width: 0;
-  margin: 0;
-}
-
-/* A single 2-column layer remains in the first column
-   rather than stretching unpredictably. */
-.landing-media-grid-single .landing-media-layer {
-  grid-column: 1;
-}
-
-/* Full-width media layer */
-.landing-media-rows > .landing-media-layer {
-  width: 100%;
-  margin: 0 0 var(--landing-media-gap, 24px);
-}
-
-.landing-media-rows > .landing-media-layer:last-child {
-  margin-bottom: 0;
-}
-
-/* Spacing presets */
-.landing-media-section.landing-gap-small {
-  --landing-media-gap: 24px;
-}
-
-.landing-media-section.landing-gap-large {
-  --landing-media-gap: 64px;
-}
-
-.landing-media-section.landing-gap-none {
-  --landing-media-gap: 0px;
-}
-
-/* Remove the old individual media-card width/margins
-   inside the new renderer. */
-.landing-media-section .landing-media-layer {
-  box-sizing: border-box;
-}
-
-.landing-media-section .landing-media-layer img,
-.landing-media-section .landing-media-layer video {
+/* -----------------------------
+   Homepage work cards
+   ----------------------------- */
+.work-grid > .work-card,
+.work-grid > .work-card-link {
   display: block;
-  width: 100%;
-  height: auto;
-  max-width: 100%;
-  margin: 0;
-  object-fit: contain;
+  color: inherit;
+  text-decoration: none !important;
 }
 
-/* NONE = one unified visual container.
-   All consecutive media rows touch. */
-.landing-media-section.landing-gap-none {
-  width: min(calc(100% - 64px), 1180px);
-  margin: 0 auto 48px;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  overflow: hidden;
-  background: #070809;
+.work-grid > .work-card *,
+.work-grid > .work-card-link * {
+  text-decoration: none !important;
 }
 
-.landing-media-section.landing-gap-none .landing-media-section-inner {
-  width: 100%;
-  margin: 0;
+.work-info {
+  align-items: flex-start;
 }
 
-.landing-media-section.landing-gap-none .landing-media-rows {
-  width: 100%;
-}
-
-.landing-media-section.landing-gap-none .landing-media-layer {
-  width: 100%;
-  margin: 0 !important;
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  overflow: hidden;
-  background: transparent;
-}
-
-.landing-media-section.landing-gap-none .landing-media-grid {
-  gap: 0;
-  margin: 0;
-}
-
-.landing-media-section.landing-gap-none .landing-media-layer img,
-.landing-media-section.landing-gap-none .landing-media-layer video {
-  width: 100%;
-  margin: 0;
-  border-radius: 0;
-}
-
-/* Outer top/bottom corners only. */
-.landing-media-section.landing-gap-none
-  .landing-media-rows > .landing-media-layer:first-child img,
-.landing-media-section.landing-gap-none
-  .landing-media-rows > .landing-media-layer:first-child video,
-.landing-media-section.landing-gap-none
-  .landing-media-grid:first-child .landing-media-layer:first-child img,
-.landing-media-section.landing-gap-none
-  .landing-media-grid:first-child .landing-media-layer:first-child video {
-  border-radius: 13px 13px 0 0;
-}
-
-.landing-media-section.landing-gap-none
-  .landing-media-rows > .landing-media-layer:last-child img,
-.landing-media-section.landing-gap-none
-  .landing-media-rows > .landing-media-layer:last-child video,
-.landing-media-section.landing-gap-none
-  .landing-media-grid:last-child .landing-media-layer:last-child img,
-.landing-media-section.landing-gap-none
-  .landing-media-grid:last-child .landing-media-layer:last-child video {
-  border-radius: 0 0 13px 13px;
-}
-
-/* Keep the actual video element constrained inside its grid cell. */
-.landing-media-grid video,
-.landing-media-grid img {
+.work-info > div {
   min-width: 0;
-}
-
-/* Mobile: 2 columns become a single stacked column. */
-@media (max-width: 760px) {
-  .layer-layout-row {
-    grid-template-columns: 1fr;
-    gap: 6px;
-  }
-
-  .landing-media-section-inner {
-    width: calc(100% - 40px);
-  }
-
-  /* Keep true 2-column media rows on mobile as well.
-     Only a single 2-column layer remains in one column. */
-  .landing-media-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--landing-media-gap, 24px);
-    margin-bottom: var(--landing-media-gap, 24px);
-  }
-
-  .landing-media-grid-single {
-    grid-template-columns: 1fr;
-  }
-
-  .landing-media-section.landing-gap-small {
-    --landing-media-gap: 24px;
-  }
-
-  .landing-media-section.landing-gap-large {
-    --landing-media-gap: 40px;
-  }
-
-  .landing-media-section.landing-gap-none {
-    width: calc(100% - 40px);
-    margin-bottom: 24px;
-    border-radius: 10px;
-  }
-
-  .landing-media-section.landing-gap-none .landing-media-grid {
-    grid-template-columns: 1fr;
-    gap: 0;
-  }
-
-  .landing-media-section.landing-gap-none
-    .landing-media-rows > .landing-media-layer:first-child img,
-  .landing-media-section.landing-gap-none
-    .landing-media-rows > .landing-media-layer:first-child video,
-  .landing-media-section.landing-gap-none
-    .landing-media-grid:first-child .landing-media-layer:first-child img,
-  .landing-media-section.landing-gap-none
-    .landing-media-grid:first-child .landing-media-layer:first-child video {
-    border-radius: 9px 9px 0 0;
-  }
-
-  .landing-media-section.landing-gap-none
-    .landing-media-rows > .landing-media-layer:last-child img,
-  .landing-media-section.landing-gap-none
-    .landing-media-rows > .landing-media-layer:last-child video,
-  .landing-media-section.landing-gap-none
-    .landing-media-grid:last-child .landing-media-layer:last-child img,
-  .landing-media-section.landing-gap-none
-    .landing-media-grid:last-child .landing-media-layer:last-child video {
-    border-radius: 0 0 9px 9px;
-  }
-}
-/* =========================================================
-   CUSTOM VIDEO PLAYER
-   Inset controls + clean two-column center seam
-   ========================================================= */
-
-.custom-video-player {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-  background: #070809;
-}
-
-.custom-video-player > video {
-  display: block;
-  width: 100%;
-  height: auto;
-  max-width: 100%;
-  margin: 0;
-  background: #070809;
-  object-fit: contain;
-  cursor: pointer;
-}
-
-/* Large center play button */
-.custom-video-play {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 68px;
-  height: 68px;
-  transform: translate(-50%, -50%);
-  display: grid;
-  place-items: center;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: rgba(15, 18, 20, 0.78);
-  color: #fff;
-  cursor: pointer;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  transition: opacity .2s ease, transform .2s ease, background .2s ease;
-}
-
-.custom-video-play svg {
-  width: 30px;
-  height: 30px;
-}
-
-.custom-video-play:hover {
-  background: rgba(15, 18, 20, 0.92);
-  transform: translate(-50%, -50%) scale(1.04);
-}
-
-/* Hide the large play button while the video is playing. */
-.custom-video-player.is-playing .custom-video-play {
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* Inset control bar — never touches the video edges. */
-.custom-video-controls {
-  position: absolute;
-  left: 14px;
-  right: 14px;
-  bottom: 14px;
-  min-height: 42px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 7px 9px;
-  border: 1px solid rgba(255, 255, 255, .12);
-  border-radius: 12px;
-  background: rgba(8, 10, 12, .78);
-  color: #fff;
-  box-sizing: border-box;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-.custom-video-control-button {
-  flex: 0 0 auto;
-  width: 28px;
-  height: 28px;
-  display: grid;
-  place-items: center;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: #fff;
-  cursor: pointer;
-  border-radius: 6px;
-}
-
-.custom-video-control-button:hover {
-  background: rgba(255, 255, 255, .1);
-}
-
-.custom-video-control-button svg {
-  width: 17px;
-  height: 17px;
-}
-
-.custom-video-time {
-  flex: 0 0 auto;
-  min-width: 32px;
-  font-family: var(--mono, monospace);
-  font-size: 9px;
-  line-height: 1;
-  letter-spacing: .04em;
-  color: rgba(255, 255, 255, .78);
-  text-align: center;
-}
-
-.custom-video-progress {
   flex: 1 1 auto;
-  min-width: 0;
-  width: 100%;
-  height: 4px;
-  margin: 0 3px;
-  padding: 0;
-  appearance: none;
-  -webkit-appearance: none;
-  border-radius: 999px;
-  background:
-    linear-gradient(
-      to right,
-      rgba(255,255,255,.9) var(--video-progress, 0%),
-      rgba(255,255,255,.22) var(--video-progress, 0%)
-    );
-  cursor: pointer;
 }
 
-.custom-video-progress::-webkit-slider-runnable-track {
-  height: 4px;
-  background: transparent;
-  border-radius: 999px;
+.work-info h3,
+.work-info p,
+.work-info .tag {
+  text-decoration: none !important;
 }
 
-.custom-video-progress::-webkit-slider-thumb {
-  appearance: none;
-  -webkit-appearance: none;
-  width: 11px;
-  height: 11px;
-  margin-top: -3.5px;
-  border: 0;
-  border-radius: 50%;
-  background: #fff;
-}
-
-.custom-video-progress::-moz-range-track {
-  height: 4px;
-  background: rgba(255,255,255,.22);
-  border-radius: 999px;
-}
-
-.custom-video-progress::-moz-range-progress {
-  height: 4px;
-  background: rgba(255,255,255,.9);
-  border-radius: 999px;
-}
-
-.custom-video-progress::-moz-range-thumb {
-  width: 11px;
-  height: 11px;
-  border: 0;
-  border-radius: 50%;
-  background: #fff;
-}
-
-/* Two-column cards: center seam is always square. */
-.landing-media-grid:not(.landing-media-unified-grid) > .landing-media-layer {
-  border-radius: 0;
-  overflow: hidden;
-}
-
-.landing-media-grid:not(.landing-media-unified-grid)
-  > .landing-media-layer:first-child {
-  border-radius: 14px 0 0 14px;
-}
-
-.landing-media-grid:not(.landing-media-unified-grid)
-  > .landing-media-layer:last-child {
-  border-radius: 0 14px 14px 0;
-}
-
-.landing-media-grid:not(.landing-media-unified-grid)
-  > .landing-media-layer:first-child
-  .custom-video-player,
-.landing-media-grid:not(.landing-media-unified-grid)
-  > .landing-media-layer:last-child
-  .custom-video-player {
-  overflow: hidden;
-}
-
-.landing-media-section.landing-gap-none
-  .landing-media-grid
-  > .landing-media-layer,
-.landing-media-section.landing-gap-none
-  .landing-media-grid
-  > .landing-media-layer:first-child,
-.landing-media-section.landing-gap-none
-  .landing-media-grid
-  > .landing-media-layer:last-child {
-  border-radius: 0;
+.work-info p {
+  margin-top: 8px;
+  max-width: 65ch;
+  color: var(--ink-dim);
+  font-size: 14px;
+  line-height: 1.55;
 }
 
 @media (max-width: 760px) {
-  .custom-video-play {
-    width: 54px;
-    height: 54px;
+  .work-info {
+    display: block;
   }
 
-  .custom-video-play svg {
-    width: 24px;
-    height: 24px;
+  .work-info .tag {
+    display: block;
+    margin-top: 10px;
   }
 
-  .custom-video-controls {
-    left: 8px;
-    right: 8px;
-    bottom: 8px;
-    min-height: 38px;
-    gap: 5px;
-    padding: 5px 7px;
-    border-radius: 9px;
-  }
-
-  .custom-video-control-button {
-    width: 25px;
-    height: 25px;
-  }
-
-  .custom-video-control-button svg {
-    width: 15px;
-    height: 15px;
-  }
-
-  .custom-video-time {
-    min-width: 25px;
-    font-size: 8px;
-  }
-
-  .custom-video-progress {
-    margin: 0 1px;
-  }
-
-  .landing-media-grid:not(.landing-media-unified-grid)
-    > .landing-media-layer:first-child {
-    border-radius: 10px 0 0 10px;
-  }
-
-  .landing-media-grid:not(.landing-media-unified-grid)
-    > .landing-media-layer:last-child {
-    border-radius: 0 10px 10px 0;
+  .work-info p {
+    max-width: 100%;
   }
 }
-/* =========================================================
-   FINAL VIDEO / 2-COLUMN OVERRIDES
-   ========================================================= */
 
-/* The video itself has no native browser controls.
-   Only the centered play/pause button is shown. */
+/* -----------------------------
+   Text layers
+   One sentence = one line.
+   ----------------------------- */
+.landing-text-divider-inner {
+  padding: 54px 24px !important;
+}
+
+.landing-text-divider h2 {
+  max-width: none !important;
+  font-size: clamp(32px, 4.4vw, 56px) !important;
+  font-weight: 500 !important;
+  line-height: 1.08 !important;
+  letter-spacing: -0.035em !important;
+  margin: 0;
+}
+
+.landing-text-line {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+@media (max-width: 760px) {
+  .landing-text-divider-inner {
+    padding: 34px 20px !important;
+  }
+
+  .landing-text-divider h2 {
+    font-size: clamp(28px, 8vw, 44px) !important;
+    line-height: 1.08 !important;
+  }
+}
+
+/* -----------------------------
+   2-column media
+   IMPORTANT: flex is used instead of grid so older mobile
+   grid rules cannot collapse the two cards.
+   ----------------------------- */
+.landing-media-grid-row {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  width: 100% !important;
+  align-items: flex-start !important;
+  box-sizing: border-box !important;
+}
+
+/* Exactly two equal columns. */
+.landing-media-grid-row > .landing-media-layer {
+  flex: 1 1 0 !important;
+  width: 0 !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* Media fills its column. */
+.landing-media-grid-row > .landing-media-layer img,
+.landing-media-grid-row > .landing-media-layer video,
+.landing-media-grid-row > .landing-media-layer .custom-video-player {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  object-fit: contain !important;
+}
+
+/* SMALL spacing: tight and consistent. */
+.landing-media-group-small .landing-media-grid-row {
+  gap: 12px !important;
+  margin-bottom: 12px !important;
+}
+
+/* LARGE spacing. */
+.landing-media-group-large .landing-media-grid-row {
+  gap: 48px !important;
+  margin-bottom: 48px !important;
+}
+
+/* NONE: completely touching. */
+.landing-media-unified .landing-media-grid-row {
+  gap: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* Spaced cards get their own outer corners. */
+.landing-media-group-small .landing-media-grid-row > .landing-media-layer,
+.landing-media-group-large .landing-media-grid-row > .landing-media-layer {
+  border-radius: 14px !important;
+  overflow: hidden !important;
+}
+
+.landing-media-group-small .landing-media-grid-row > .landing-media-layer:first-child,
+.landing-media-group-large .landing-media-grid-row > .landing-media-layer:first-child {
+  border-radius: 14px !important;
+}
+
+.landing-media-group-small .landing-media-grid-row > .landing-media-layer:last-child,
+.landing-media-group-large .landing-media-grid-row > .landing-media-layer:last-child {
+  border-radius: 14px !important;
+}
+
+/* No-space mode: no internal rounding whatsoever. */
+.landing-media-unified .landing-media-grid-row > .landing-media-layer,
+.landing-media-unified .landing-media-grid-row > .landing-media-layer:first-child,
+.landing-media-unified .landing-media-grid-row > .landing-media-layer:last-child,
+.landing-media-unified .landing-media-grid-row > .landing-media-layer img,
+.landing-media-unified .landing-media-grid-row > .landing-media-layer video,
+.landing-media-unified .landing-media-grid-row > .landing-media-layer .custom-video-player {
+  border-radius: 0 !important;
+}
+
+/* -----------------------------
+   Clean custom video player
+   ----------------------------- */
 .custom-video-player {
   position: relative;
   width: 100%;
@@ -902,7 +563,7 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
   cursor: pointer;
 }
 
-/* No bottom player / timeline / volume bar. */
+/* No bottom timeline/player bar. */
 .custom-video-controls {
   display: none !important;
 }
@@ -943,54 +604,53 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
   pointer-events: none;
 }
 
-/* =========================================================
-   2-COLUMN SEAM
-   The inner/center edges are ALWAYS square.
-   Only the outside corners may be rounded.
-   ========================================================= */
-
-.landing-media-grid-row {
-  overflow: visible;
-}
-
-.landing-media-grid-row > .landing-media-layer {
-  min-width: 0;
-  overflow: hidden !important;
-  border-radius: 0 !important;
-}
-
-/* First column: only top/bottom LEFT corners. */
-.landing-media-grid-row > .landing-media-layer:first-child {
-  border-radius: 14px 0 0 14px !important;
-}
-
-/* Second column: only top/bottom RIGHT corners. */
-.landing-media-grid-row > .landing-media-layer:last-child {
-  border-radius: 0 14px 14px 0 !important;
-}
-
-/* Remove any radius inherited by media inside the cards. */
-.landing-media-grid-row > .landing-media-layer img,
-.landing-media-grid-row > .landing-media-layer video,
-.landing-media-grid-row > .landing-media-layer .custom-video-player {
-  border-radius: 0 !important;
-}
-
-/* No-space mode: the entire pair is one rectangle.
-   There must be absolutely no rounding at the center seam. */
-.landing-media-unified .landing-media-grid-row > .landing-media-layer,
-.landing-media-unified .landing-media-grid-row > .landing-media-layer:first-child,
-.landing-media-unified .landing-media-grid-row > .landing-media-layer:last-child {
-  border-radius: 0 !important;
-}
-
-.landing-media-unified .landing-media-grid-row > .landing-media-layer img,
-.landing-media-unified .landing-media-grid-row > .landing-media-layer video,
-.landing-media-unified .landing-media-grid-row > .landing-media-layer .custom-video-player {
-  border-radius: 0 !important;
-}
-
+/* -----------------------------
+   Mobile 2-column behavior
+   ----------------------------- */
 @media (max-width: 760px) {
+  .landing-media-grid-row {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    width: 100% !important;
+    grid-template-columns: none !important;
+  }
+
+  .landing-media-grid-row > .landing-media-layer {
+    flex: 1 1 0 !important;
+    width: 0 !important;
+    min-width: 0 !important;
+  }
+
+  /* Small = 8px on mobile. */
+  .landing-media-group-small .landing-media-grid-row {
+    gap: 8px !important;
+    margin-bottom: 8px !important;
+  }
+
+  /* Large = 24px on mobile. */
+  .landing-media-group-large .landing-media-grid-row {
+    gap: 24px !important;
+    margin-bottom: 24px !important;
+  }
+
+  /* None = 0px. */
+  .landing-media-unified .landing-media-grid-row {
+    gap: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  .landing-media-group-small .landing-media-grid-row > .landing-media-layer,
+  .landing-media-group-large .landing-media-grid-row > .landing-media-layer {
+    border-radius: 10px !important;
+  }
+
+  .landing-media-group-small .landing-media-grid-row > .landing-media-layer img,
+  .landing-media-group-small .landing-media-grid-row > .landing-media-layer video,
+  .landing-media-group-large .landing-media-grid-row > .landing-media-layer img,
+  .landing-media-group-large .landing-media-grid-row > .landing-media-layer video {
+    border-radius: 9px !important;
+  }
+
   .custom-video-play {
     width: 52px;
     height: 52px;
@@ -999,310 +659,5 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
   .custom-video-play svg {
     width: 23px;
     height: 23px;
-  }
-
-  .landing-media-grid-row > .landing-media-layer:first-child {
-    border-radius: 10px 0 0 10px !important;
-  }
-
-  .landing-media-grid-row > .landing-media-layer:last-child {
-    border-radius: 0 10px 10px 0 !important;
-  }
-
-  .landing-media-unified .landing-media-grid-row > .landing-media-layer,
-  .landing-media-unified .landing-media-grid-row > .landing-media-layer:first-child,
-  .landing-media-unified .landing-media-grid-row > .landing-media-layer:last-child {
-    border-radius: 0 !important;
-  }
-}
-/* =========================================================
-   FINAL HOMEPAGE + WORK PAGE REFINEMENTS
-   ========================================================= */
-
-/* Homepage work cards: the whole card is clickable, but descriptions
-   and metadata should never look like links. */
-.work-grid > .work-card,
-.work-grid > .work-card-link {
-  display: block;
-  color: inherit;
-  text-decoration: none !important;
-}
-
-.work-grid > .work-card *,
-.work-grid > .work-card-link * {
-  text-decoration: none !important;
-}
-
-.work-info {
-  align-items: flex-start;
-}
-
-.work-info > div {
-  min-width: 0;
-  flex: 1 1 auto;
-}
-
-.work-info h3 {
-  text-decoration: none !important;
-}
-
-.work-info p {
-  margin-top: 8px;
-  max-width: 65ch;
-  color: var(--ink-dim);
-  font-size: 14px;
-  line-height: 1.55;
-  text-decoration: none !important;
-}
-
-.work-info .tag {
-  flex: 0 0 auto;
-  text-decoration: none !important;
-}
-
-/* On mobile, let the description use the full card width instead of
-   losing half its width to the tag. */
-@media (max-width: 760px) {
-  .work-info {
-    display: block;
-  }
-
-  .work-info .tag {
-    display: block;
-    margin-top: 10px;
-    padding-top: 0;
-  }
-
-  .work-info p {
-    max-width: 100%;
-  }
-}
-
-/* =========================================================
-   TEXT DIVIDERS — smaller, cleaner editorial treatment
-   ========================================================= */
-
-.landing-text-divider-inner {
-  padding: 54px 24px !important;
-}
-
-.landing-text-divider h2 {
-  max-width: none !important;
-  font-size: clamp(34px, 4.4vw, 58px) !important;
-  font-weight: 500 !important;
-  line-height: 1.08 !important;
-  letter-spacing: -0.035em !important;
-  margin: 0;
-}
-
-.landing-text-line {
-  display: block;
-  margin: 0;
-  padding: 0;
-}
-
-@media (max-width: 760px) {
-  .landing-text-divider-inner {
-    padding: 38px 20px !important;
-  }
-
-  .landing-text-divider h2 {
-    font-size: clamp(30px, 8.5vw, 48px) !important;
-    line-height: 1.08 !important;
-  }
-}
-
-/* =========================================================
-   TWO-COLUMN MEDIA — remove the tiny center seam/gap
-   ========================================================= */
-
-.landing-media-grid-row {
-  column-gap: 0 !important;
-}
-
-.landing-media-grid-row > .landing-media-layer {
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  border-radius: 0 !important;
-}
-
-.landing-media-grid-row > .landing-media-layer:first-child {
-  border-radius: 14px 0 0 14px !important;
-}
-
-.landing-media-grid-row > .landing-media-layer:last-child {
-  border-radius: 0 14px 14px 0 !important;
-}
-
-/* The media and custom player itself must also be square at the seam. */
-.landing-media-grid-row > .landing-media-layer img,
-.landing-media-grid-row > .landing-media-layer video,
-.landing-media-grid-row > .landing-media-layer .custom-video-player {
-  border-radius: 0 !important;
-}
-
-/* For no-space mode, absolutely no internal rounding. */
-.landing-media-unified .landing-media-grid-row,
-.landing-media-unified .landing-media-grid-row > .landing-media-layer,
-.landing-media-unified .landing-media-grid-row > .landing-media-layer:first-child,
-.landing-media-unified .landing-media-grid-row > .landing-media-layer:last-child {
-  border-radius: 0 !important;
-}
-
-.landing-media-unified .landing-media-grid-row > .landing-media-layer img,
-.landing-media-unified .landing-media-grid-row > .landing-media-layer video,
-.landing-media-unified .landing-media-grid-row > .landing-media-layer .custom-video-player {
-  border-radius: 0 !important;
-}
-
-/* =========================================================
-   FINAL FIX — SMALL SPACING FOR 2-COLUMN MEDIA
-   Keep the same spacing rhythm as the rest of the page.
-   ========================================================= */
-
-/* Small spacing = 24px everywhere: between the two columns,
-   between rows, and between a media row and the next layer. */
-.landing-media-group-small .landing-media-grid-row {
-  column-gap: 24px !important;
-  row-gap: 0 !important;
-  margin-bottom: 24px !important;
-}
-
-.landing-media-group-small > .landing-media-layer {
-  margin-bottom: 24px !important;
-}
-
-.landing-media-group-small > .landing-media-layer:last-child {
-  margin-bottom: 0 !important;
-}
-
-/* Make the two columns equal in width and align them from the same top edge. */
-.landing-media-grid-row {
-  width: 100%;
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  align-items: start !important;
-}
-
-/* The cards themselves should never introduce an additional margin
-   that changes the visible spacing. */
-.landing-media-group-small .landing-media-grid-row > .landing-media-layer {
-  width: 100% !important;
-  margin: 0 !important;
-}
-
-/* On mobile, keep the two-column structure only when the screen
-   has enough room; otherwise stack cleanly with the same 24px rhythm. */
-@media (max-width: 760px) {
-  .landing-media-group-small .landing-media-grid-row {
-    grid-template-columns: 1fr !important;
-    row-gap: 24px !important;
-    column-gap: 0 !important;
-    margin-bottom: 24px !important;
-  }
-
-  .landing-media-group-small .landing-media-grid-row > .landing-media-layer {
-    width: 100% !important;
-  }
-}
-
-/* Large spacing remains intentionally larger. */
-.landing-media-group-large .landing-media-grid-row {
-  column-gap: 64px !important;
-  row-gap: 0 !important;
-  margin-bottom: 64px !important;
-}
-
-.landing-media-group-large .landing-media-grid-row > .landing-media-layer {
-  width: 100% !important;
-  margin: 0 !important;
-}
-
-/* =========================================================
-   FINAL 2-COLUMN SPACING / WIDTH FIX
-   ========================================================= */
-
-/* The 2-column row owns the spacing. Do not let the individual
-   media cards create their own horizontal spacing. */
-.landing-media-grid-row {
-  display: grid !important;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
-  width: 100% !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  box-sizing: border-box;
-  align-items: start !important;
-}
-
-/* SMALL: one consistent 24px gap, exactly matching the page rhythm. */
-.landing-media-group-small .landing-media-grid-row {
-  gap: 24px !important;
-  column-gap: 24px !important;
-  row-gap: 0 !important;
-  margin-bottom: 24px !important;
-}
-
-/* Each card must completely fill its grid track. */
-.landing-media-grid-row > .landing-media-layer,
-.landing-media-group-small .landing-media-grid-row > .landing-media-layer {
-  width: 100% !important;
-  min-width: 0 !important;
-  max-width: none !important;
-  margin: 0 !important;
-  box-sizing: border-box;
-}
-
-/* The actual image/video/player must also fill the card.
-   This removes the apparent oversized gap caused by intrinsic
-   media sizing. */
-.landing-media-grid-row > .landing-media-layer > img,
-.landing-media-grid-row > .landing-media-layer > video,
-.landing-media-grid-row > .landing-media-layer > .custom-video-player,
-.landing-media-grid-row > .landing-media-layer .custom-video-player {
-  display: block;
-  width: 100% !important;
-  max-width: none !important;
-  height: auto;
-  margin: 0 !important;
-  box-sizing: border-box;
-}
-
-/* LARGE stays clearly larger but still uses the same exact structure. */
-.landing-media-group-large .landing-media-grid-row {
-  gap: 64px !important;
-  column-gap: 64px !important;
-  row-gap: 0 !important;
-  margin-bottom: 64px !important;
-}
-
-/* NONE means the two tracks touch. */
-.landing-media-unified .landing-media-grid-row {
-  gap: 0 !important;
-  column-gap: 0 !important;
-  row-gap: 0 !important;
-  margin-bottom: 0 !important;
-}
-
-/* Mobile keeps the 2-column layout for actual paired rows. */
-@media (max-width: 760px) {
-  .landing-media-grid-row {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
-  }
-
-  .landing-media-group-small .landing-media-grid-row {
-    gap: 12px !important;
-    column-gap: 12px !important;
-    row-gap: 0 !important;
-    margin-bottom: 24px !important;
-  }
-
-  .landing-media-group-large .landing-media-grid-row {
-    gap: 24px !important;
-    column-gap: 24px !important;
-    row-gap: 0 !important;
-    margin-bottom: 32px !important;
-  }
-
-  .landing-media-unified .landing-media-grid-row {
-    gap: 0 !important;
   }
 }
