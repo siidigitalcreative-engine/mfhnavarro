@@ -118,14 +118,6 @@ function MediaGroup({
             <div
               className="landing-media-grid-row"
               key={`${row[0].id}-${row[1].id}`}
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-                gap: isUnified ? 0 : gap === "large" ? 64 : 24,
-                width: "100%",
-                alignItems: "start",
-                marginBottom: isUnified ? 0 : gap === "large" ? 64 : 24,
-              }}
             >
               {row.map((layer) => (
                 <Layer
@@ -270,8 +262,15 @@ export default async function WorkLandingPage({
     <main className="landing-page">
       <header className="landing-nav">
         <div className="wrap landing-nav-inner">
-          <Link className="mark" href="/">
-            MF / NAVARRO
+          <Link className="mark nav-brand landing-nav-brand" href="/">
+            {content.identity?.showLogo && content.identity.logoUrl ? (
+              <img
+                className="nav-logo"
+                src={content.identity.logoUrl}
+                alt=""
+              />
+            ) : null}
+            <span>MF / NAVARRO</span>
           </Link>
 
           <Link className="landing-back" href="/#work">
