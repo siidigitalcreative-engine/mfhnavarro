@@ -833,3 +833,50 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
     font-size: 18px;
   }
 }
+
+/* =========================================================
+   MF / NAVARRO — EXACT HOMEPAGE BRAND TYPOGRAPHY
+   Copied from the homepage .nav .mark values.
+   Do not change font size, weight, or letter spacing here.
+   ========================================================= */
+
+.landing-nav .mark {
+  font-family: var(--sans);
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  letter-spacing: .08em !important;
+  line-height: normal;
+  text-decoration: none;
+}
+
+.landing-nav .nav-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.landing-nav .nav-logo {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  border-radius: 6px;
+  flex: 0 0 28px;
+}
+
+@media (max-width: 760px) {
+  .landing-nav .mark {
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    letter-spacing: .08em !important;
+  }
+
+  .landing-nav .nav-brand {
+    gap: 10px;
+  }
+
+  .landing-nav .nav-logo {
+    width: 28px;
+    height: 28px;
+    flex-basis: 28px;
+  }
+}
