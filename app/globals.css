@@ -833,3 +833,36 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
     font-size: 18px;
   }
 }
+/* Same MF / NAVARRO brand treatment on work/project pages. */
+.landing-nav-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.landing-nav-brand .nav-logo {
+  display: block;
+  width: 34px;
+  height: 34px;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  flex: 0 0 34px;
+}
+
+.landing-nav-brand span {
+  display: inline-block;
+}
+
+@media (max-width: 760px) {
+  .landing-nav-brand {
+    gap: 10px;
+  }
+
+  .landing-nav-brand .nav-logo {
+    width: 28px;
+    height: 28px;
+    flex-basis: 28px;
+  }
+}
