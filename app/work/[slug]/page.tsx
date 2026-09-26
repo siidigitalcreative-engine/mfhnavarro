@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getContent } from "@/lib/content";
 import type { WorkLayer } from "@/lib/types";
 import VideoWithFirstFrame from "@/components/VideoWithFirstFrame";
+import ImageLightbox from "@/components/ImageLightbox";
 
 function Layer({
   layer,
@@ -11,6 +12,8 @@ function Layer({
   isFirst = false,
   isLast = false,
   grouped = false,
+  lightboxImages = [],
+  lightboxIndex = 0,
 }: {
   layer: WorkLayer;
   projectName: string;
@@ -18,6 +21,8 @@ function Layer({
   isFirst?: boolean;
   isLast?: boolean;
   grouped?: boolean;
+  lightboxImages?: Array<{ src: string; alt: string }>;
+  lightboxIndex?: number;
 }) {
   if (layer.type === "text") {
     return (
@@ -61,9 +66,11 @@ function Layer({
           label={projectName}
         />
       ) : (
-        <img
+        <ImageLightbox
           src={layer.url}
           alt={layer.name || projectName}
+          images={lightboxImages}
+          initialIndex={lightboxIndex}
         />
       )}
     </section>
@@ -74,10 +81,12 @@ function MediaGroup({
   layers,
   projectName,
   gap,
+  lightboxImages,
 }: {
   layers: WorkLayer[];
   projectName: string;
   gap: "none" | "small" | "large";
+  lightboxImages: Array<{ src: string; alt: string }>;
 }) {
   const isUnified = gap === "none";
   const groupClass = [
@@ -88,18 +97,13 @@ function MediaGroup({
     .join(" ");
 
   const rows: WorkLayer[][] = [];
-
   let index = 0;
 
   while (index < layers.length) {
     const current = layers[index];
     const next = layers[index + 1];
 
-    if (
-      current.layout === "two" &&
-      next &&
-      next.layout === "two"
-    ) {
+    if (current.layout === "two" && next && next.layout === "two") {
       rows.push([current, next]);
       index += 2;
     } else {
@@ -108,12 +112,13 @@ function MediaGroup({
     }
   }
 
+  const getLightboxIndex = (layer: WorkLayer) =>
+    lightboxImages.findIndex((image) => image.src === layer.url);
+
   return (
     <div className={groupClass}>
       {rows.map((row, rowIndex) => {
-        const isTwoColumnRow = row.length === 2;
-
-        if (isTwoColumnRow) {
+        if (row.length === 2) {
           return (
             <div
               className="landing-media-grid-row"
@@ -127,10 +132,9 @@ function MediaGroup({
                   gap={gap}
                   grouped
                   isFirst={isUnified && rowIndex === 0}
-                  isLast={
-                    isUnified &&
-                    rowIndex === rows.length - 1
-                  }
+                  isLast={isUnified && rowIndex === rows.length - 1}
+                  lightboxImages={lightboxImages}
+                  lightboxIndex={getLightboxIndex(layer)}
                 />
               ))}
             </div>
@@ -147,10 +151,9 @@ function MediaGroup({
             gap={gap}
             grouped
             isFirst={isUnified && rowIndex === 0}
-            isLast={
-              isUnified &&
-              rowIndex === rows.length - 1
-            }
+            isLast={isUnified && rowIndex === rows.length - 1}
+            lightboxImages={lightboxImages}
+            lightboxIndex={getLightboxIndex(layer)}
           />
         );
       })}
@@ -167,6 +170,13 @@ function RenderLayers({
   projectName: string;
   gap: "none" | "small" | "large";
 }) {
+  const lightboxImages = layers
+    .filter((layer) => layer.type === "image" && !!layer.url)
+    .map((layer) => ({
+      src: layer.url as string,
+      alt: layer.name || projectName,
+    }));
+
   const sections: Array<
     | { type: "media"; layers: WorkLayer[] }
     | { type: "text"; layer: WorkLayer }
@@ -175,8 +185,7 @@ function RenderLayers({
   let mediaGroup: WorkLayer[] = [];
 
   for (const layer of layers) {
-    const isMedia =
-      layer.type === "image" || layer.type === "video";
+    const isMedia = layer.type === "image" || layer.type === "video";
 
     if (isMedia) {
       mediaGroup.push(layer);
@@ -184,24 +193,15 @@ function RenderLayers({
     }
 
     if (mediaGroup.length) {
-      sections.push({
-        type: "media",
-        layers: mediaGroup,
-      });
+      sections.push({ type: "media", layers: mediaGroup });
       mediaGroup = [];
     }
 
-    sections.push({
-      type: "text",
-      layer,
-    });
+    sections.push({ type: "text", layer });
   }
 
   if (mediaGroup.length) {
-    sections.push({
-      type: "media",
-      layers: mediaGroup,
-    });
+    sections.push({ type: "media", layers: mediaGroup });
   }
 
   return (
@@ -224,6 +224,7 @@ function RenderLayers({
             layers={section.layers}
             projectName={projectName}
             gap={gap}
+            lightboxImages={lightboxImages}
           />
         );
       })}
@@ -253,7 +254,7 @@ export default async function WorkLandingPage({
         type: media.type,
         url: media.url,
         name: media.name,
-        layout: "full",
+        layout: "full" as const,
       }));
 
   const gap = project.layerGap ?? "small";
@@ -262,8 +263,15 @@ export default async function WorkLandingPage({
     <main className="landing-page">
       <header className="landing-nav">
         <div className="wrap landing-nav-inner">
-          <Link className="mark" href="/">
-            MF / NAVARRO
+          <Link className="mark nav-brand landing-nav-brand" href="/">
+            {content.identity?.showLogo && content.identity.logoUrl ? (
+              <img
+                className="nav-logo"
+                src={content.identity.logoUrl}
+                alt=""
+              />
+            ) : null}
+            <span>MF / NAVARRO</span>
           </Link>
 
           <Link className="landing-back" href="/#work">
