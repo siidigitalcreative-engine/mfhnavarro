@@ -510,6 +510,12 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
   margin-bottom: 48px !important;
 }
 
+/* If the group ends with a 2-column row, that row already defines the
+   bottom edge of the group. Let the divider provide the single gap. */
+.landing-media-group-small > .landing-media-grid-row:last-child {
+  margin-bottom: 0 !important;
+}
+
 .landing-media-group-small > .landing-media-layer {
   margin-bottom: 48px !important;
 }
@@ -526,6 +532,12 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
 .landing-media-group-large .landing-media-grid-row {
   gap: 64px !important;
   margin-bottom: 64px !important;
+}
+
+/* If the group ends with a 2-column row, that row already defines the
+   bottom edge of the group. Let the divider provide the single gap. */
+.landing-media-group-large > .landing-media-grid-row:last-child {
+  margin-bottom: 0 !important;
 }
 
 .landing-media-group-large > .landing-media-layer {
@@ -698,6 +710,10 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
     margin-bottom: 24px !important;
   }
 
+  .landing-media-group-small > .landing-media-grid-row:last-child {
+    margin-bottom: 0 !important;
+  }
+
   .landing-media-group-small > .landing-media-layer {
     margin-bottom: 24px !important;
   }
@@ -706,6 +722,10 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
   .landing-media-group-large .landing-media-grid-row {
     gap: 48px !important;
     margin-bottom: 48px !important;
+  }
+
+  .landing-media-group-large > .landing-media-grid-row:last-child {
+    margin-bottom: 0 !important;
   }
 
   .landing-media-group-large > .landing-media-layer {
