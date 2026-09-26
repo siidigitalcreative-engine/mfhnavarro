@@ -1075,11 +1075,13 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
    ========================================================= */
 
 .landing-text-divider {
+  margin-top: 32px !important;
   margin-bottom: 32px !important;
 }
 
 @media (max-width: 760px) {
   .landing-text-divider {
+    margin-top: 24px !important;
     margin-bottom: 24px !important;
   }
 }
