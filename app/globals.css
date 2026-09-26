@@ -1070,25 +1070,15 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
 }
 
 /* =========================================================
-   TEXT DIVIDER — SINGLE SPACING RHYTHM
-   Use one spacing only between a divider and adjacent media.
-   The preceding media group keeps its spacing unless it is
-   immediately followed by a divider; in that case the divider
-   owns the spacing below itself. This prevents double gaps.
+   TEXT DIVIDER — SINGLE OUTER SPACING
+   Keep the existing media-group spacing before the divider.
+   The divider only owns the spacing after itself.
+   This prevents double gaps without changing media spacing.
    ========================================================= */
 
 .landing-text-divider {
   margin-top: 0 !important;
   margin-bottom: 32px !important;
-}
-
-/* If media comes immediately before a divider, let the divider
-   own the gap instead of stacking both spaces. */
-.landing-media-group-small:has(+ .landing-text-divider) .landing-media-grid-row,
-.landing-media-group-small:has(+ .landing-text-divider) > .landing-media-layer,
-.landing-media-group-large:has(+ .landing-text-divider) .landing-media-grid-row,
-.landing-media-group-large:has(+ .landing-text-divider) > .landing-media-layer {
-  margin-bottom: 0 !important;
 }
 
 @media (max-width: 760px) {
