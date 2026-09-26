@@ -67,7 +67,7 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
 .landing-builder{margin-top:14px;padding:16px;border:1px solid var(--line);border-radius:12px;background:#0d0f12}.landing-builder-head{display:flex;align-items:end;justify-content:space-between;gap:12px}.landing-builder-head h3{font-size:15px;font-weight:600;letter-spacing:-.02em}.landing-builder-head>span{font-family:var(--mono);font-size:9px;color:var(--ink-faint);text-transform:uppercase}.layer-add-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:4px}.landing-layers{display:flex;flex-direction:column;gap:8px;margin-top:4px}.landing-layer{border:1px solid var(--line);border-radius:10px;padding:10px;background:#101216}.landing-layer-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:9px}.landing-layer-top>div:first-child{display:flex;align-items:center;gap:8px}.layer-type{font-family:var(--mono);font-size:9px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.08em}.landing-layer-preview{width:100%;aspect-ratio:16/8;background:#070809;border:1px solid var(--line);border-radius:7px;overflow:hidden}.landing-layer-preview img,.landing-layer-preview video{width:100%;height:100%;object-fit:cover;display:block}.landing-layer-empty{min-height:92px;border:1px dashed #3a3e46;border-radius:7px;display:grid;place-items:center;color:var(--ink-faint);font-family:var(--mono);font-size:9px;text-transform:uppercase}.layer-text-input{min-height:100px}.layer-upload-row{display:flex;align-items:center;gap:8px;margin-top:8px}.layer-upload-btn{cursor:pointer}.layer-upload-percent{font-family:var(--mono);font-size:9px;color:var(--accent)}
 .upload-progress-list{display:flex;flex-direction:column;gap:7px;margin-top:2px}.upload-progress-item{padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:#0d0f12}.upload-progress-top{font-family:var(--mono);font-size:9px;color:var(--ink-dim);text-transform:none}.upload-progress-percent{color:var(--accent)}.upload-progress-error{color:#ff8d8d}.upload-progress-track{height:3px;background:#24272d;border-radius:999px;overflow:hidden;margin-top:7px}.upload-progress-bar{height:100%;background:var(--accent);transition:width .18s ease}.upload-progress-bar.is-error{background:#ff6f6f}
 
-.landing-page{min-height:100vh;background:var(--bg)}.landing-nav{position:sticky;top:0;z-index:10;background:rgba(11,12,14,.88);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}.landing-nav-inner{height:72px;display:flex;align-items:center;justify-content:space-between}.landing-back{font-family:var(--mono);font-size:10px;color:var(--ink-dim);text-decoration:none;text-transform:uppercase;letter-spacing:.08em}.landing-back:hover{color:var(--ink)}.landing-intro{padding:90px 32px 70px}.landing-intro-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:70px;align-items:end;margin-top:22px}.landing-number{font-family:var(--mono);font-size:11px;color:var(--accent);margin-bottom:14px}.landing-intro h1{font-size:clamp(48px,8vw,110px);font-weight:600;line-height:.92;letter-spacing:-.065em;max-width:9ch}.landing-intro-grid>p{font-size:17px;line-height:1.65;color:var(--ink-dim);max-width:46ch;padding-bottom:4px}.landing-layers-public{display:flex;flex-direction:column;gap:0}.landing-media-layer{padding:0;width:min(calc(100% - 64px),1180px);margin:0 auto 48px;background:transparent;border:1px solid var(--line);border-radius:14px;overflow:hidden}.landing-media-layer img,.landing-media-layer video{display:block;width:auto;height:auto;max-width:100%;max-height:none;object-fit:contain;margin:0 auto;background:#070809}.landing-media-layer video{width:100%;height:auto}.landing-text-divider{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--bg-raise)}.landing-text-divider-inner{max-width:1400px;margin:0 auto;padding:clamp(70px,11vw,150px) 24px;display:grid;grid-template-columns:80px 1fr;gap:30px;align-items:start}.landing-divider-mark{font-family:var(--mono);font-size:13px;color:var(--accent);padding-top:10px}.landing-text-divider h2{font-size:clamp(38px,6vw,82px);font-weight:500;line-height:1;letter-spacing:-.055em;max-width:15ch}.landing-empty{padding:100px 24px;color:var(--ink-dim)}.landing-footer{display:flex;justify-content:space-between;gap:20px;padding:30px 32px 50px;border-top:1px solid var(--line);font-family:var(--mono);font-size:10px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.07em}.landing-footer a{color:var(--ink-dim);text-decoration:none}.landing-footer a:hover{color:var(--ink)}
+.landing-page{min-height:100vh;background:var(--bg)}.landing-nav{position:sticky;top:0;z-index:10;background:rgba(11,12,14,.88);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}.landing-nav-inner{height:70px;display:flex;align-items:center;justify-content:space-between}.landing-back{font-family:var(--mono);font-size:10px;color:var(--ink-dim);text-decoration:none;text-transform:uppercase;letter-spacing:.08em}.landing-back:hover{color:var(--ink)}.landing-intro{padding:90px 32px 70px}.landing-intro-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:70px;align-items:end;margin-top:22px}.landing-number{font-family:var(--mono);font-size:11px;color:var(--accent);margin-bottom:14px}.landing-intro h1{font-size:clamp(48px,8vw,110px);font-weight:600;line-height:.92;letter-spacing:-.065em;max-width:9ch}.landing-intro-grid>p{font-size:17px;line-height:1.65;color:var(--ink-dim);max-width:46ch;padding-bottom:4px}.landing-layers-public{display:flex;flex-direction:column;gap:0}.landing-media-layer{padding:0;width:min(calc(100% - 64px),1180px);margin:0 auto 48px;background:transparent;border:1px solid var(--line);border-radius:14px;overflow:hidden}.landing-media-layer img,.landing-media-layer video{display:block;width:auto;height:auto;max-width:100%;max-height:none;object-fit:contain;margin:0 auto;background:#070809}.landing-media-layer video{width:100%;height:auto}.landing-text-divider{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--bg-raise)}.landing-text-divider-inner{max-width:1400px;margin:0 auto;padding:clamp(70px,11vw,150px) 24px;display:grid;grid-template-columns:80px 1fr;gap:30px;align-items:start}.landing-divider-mark{font-family:var(--mono);font-size:13px;color:var(--accent);padding-top:10px}.landing-text-divider h2{font-size:clamp(38px,6vw,82px);font-weight:500;line-height:1;letter-spacing:-.055em;max-width:15ch}.landing-empty{padding:100px 24px;color:var(--ink-dim)}.landing-footer{display:flex;justify-content:space-between;gap:20px;padding:30px 32px 50px;border-top:1px solid var(--line);font-family:var(--mono);font-size:10px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.07em}.landing-footer a{color:var(--ink-dim);text-decoration:none}.landing-footer a:hover{color:var(--ink)}
 @media(max-width:760px){.landing-intro{padding:60px 20px 48px}.landing-intro-grid{grid-template-columns:1fr;gap:28px}.landing-intro h1{max-width:12ch}.landing-text-divider-inner{grid-template-columns:1fr;gap:12px}.landing-divider-mark{padding-top:0}.landing-footer{padding-left:20px;padding-right:20px}.landing-media-layer{width:calc(100% - 40px);margin-bottom:24px;border-radius:10px}.landing-media-layer img,.landing-media-layer video{max-width:100%;max-height:none}.layer-add-row .btn{flex:1}.landing-builder{padding:12px}}
 
 
@@ -366,558 +366,172 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
     width: min(100%, 280px);
   }
 }
-
-/* =========================================================
-   FINAL MF NAVARRO PORTFOLIO OVERRIDES
-   Full-width / 2-column media + spacing + clean video UI
-   ========================================================= */
-
-/* -----------------------------
-   Homepage work cards
-   ----------------------------- */
-.work-grid > .work-card,
-.work-grid > .work-card-link {
-  display: block;
-  color: inherit;
-  text-decoration: none !important;
+/* Custom work-page media layout
+   Supports:
+   - Space between media: none / small / large
+   - Layout per media layer: full width / 2 columns
+*/
+.landing-media-group,
+.landing-media-unified {
+  width: min(calc(100% - 64px), 1180px);
+  margin: 0 auto 48px;
 }
 
-.work-grid > .work-card *,
-.work-grid > .work-card-link * {
-  text-decoration: none !important;
+.landing-media-group {
+  display: flex;
+  flex-direction: column;
 }
 
-.work-info {
-  align-items: flex-start;
-}
-
-.work-info > div {
-  min-width: 0;
-  flex: 1 1 auto;
-}
-
-.work-info h3,
-.work-info p,
-.work-info .tag {
-  text-decoration: none !important;
-}
-
-.work-info p {
-  margin-top: 8px;
-  max-width: 65ch;
-  color: var(--ink-dim);
-  font-size: 14px;
-  line-height: 1.55;
-}
-
-@media (max-width: 760px) {
-  .work-info {
-    display: block;
-  }
-
-  .work-info .tag {
-    display: block;
-    margin-top: 10px;
-  }
-
-  .work-info p {
-    max-width: 100%;
-  }
-}
-
-/* -----------------------------
-   Text layers
-   One sentence = one line.
-   ----------------------------- */
-.landing-text-divider-inner {
-  padding: 54px 24px !important;
-}
-
-.landing-text-divider h2 {
-  max-width: none !important;
-  font-size: clamp(32px, 4.4vw, 56px) !important;
-  font-weight: 500 !important;
-  line-height: 1.08 !important;
-  letter-spacing: -0.035em !important;
-  margin: 0;
-}
-
-.landing-text-line {
-  display: block;
-  margin: 0;
-  padding: 0;
-}
-
-@media (max-width: 760px) {
-  .landing-text-divider-inner {
-    padding: 34px 20px !important;
-  }
-
-  .landing-text-divider h2 {
-    font-size: clamp(28px, 8vw, 44px) !important;
-    line-height: 1.08 !important;
-  }
-}
-
-/* =========================================================
-   FINAL MEDIA LAYOUT — SPACING + 2-COLUMN ALIGNMENT
-   ========================================================= */
-
-/* Two-column rows use the exact same outer width as normal
-   media cards. The gap lives INSIDE this width. */
 .landing-media-grid-row {
-  display: flex !important;
-  flex-wrap: nowrap !important;
-  width: min(calc(100% - 64px), 1180px) !important;
-  max-width: 1180px !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-  box-sizing: border-box !important;
-  align-items: flex-start !important;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 48px;
+  margin-bottom: 48px;
 }
 
-/* Exactly two equal columns. */
-.landing-media-grid-row > .landing-media-layer {
-  flex: 1 1 0 !important;
-  width: 0 !important;
-  min-width: 0 !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  box-sizing: border-box !important;
+.landing-media-grid-row:last-child {
+  margin-bottom: 0;
 }
 
-/* Media fills its column. */
-.landing-media-grid-row > .landing-media-layer img,
-.landing-media-grid-row > .landing-media-layer video,
-.landing-media-grid-row > .landing-media-layer .custom-video-player {
-  display: block !important;
-  width: 100% !important;
-  height: auto !important;
-  max-width: none !important;
-  min-width: 0 !important;
-  margin: 0 !important;
-  object-fit: contain !important;
+.landing-media-group .landing-media-layer {
+  width: 100%;
+  margin: 0;
 }
 
-/* ---------------------------------------------------------
-   SMALL
-   Same spacing as the normal media rhythm:
-   48px desktop / 24px mobile.
-   --------------------------------------------------------- */
+.landing-media-group .landing-media-grid-row .landing-media-layer {
+  width: 100%;
+  margin: 0;
+}
+
 .landing-media-group-small .landing-media-grid-row {
-  gap: 48px !important;
-  margin-bottom: 48px !important;
+  gap: 48px;
+  margin-bottom: 48px;
+}
+
+.landing-media-group-large .landing-media-grid-row {
+  gap: 64px;
+  margin-bottom: 64px;
 }
 
 .landing-media-group-small > .landing-media-layer {
-  margin-bottom: 48px !important;
-}
-
-.landing-media-group-small > .landing-media-layer:last-child {
-  margin-bottom: 0 !important;
-}
-
-/* ---------------------------------------------------------
-   LARGE
-   Clearly larger than Small:
-   64px desktop / 48px mobile.
-   --------------------------------------------------------- */
-.landing-media-group-large .landing-media-grid-row {
-  gap: 64px !important;
-  margin-bottom: 64px !important;
+  margin-bottom: 48px;
 }
 
 .landing-media-group-large > .landing-media-layer {
-  margin-bottom: 64px !important;
+  margin-bottom: 64px;
 }
 
+.landing-media-group-small > .landing-media-layer:last-child,
 .landing-media-group-large > .landing-media-layer:last-child {
-  margin-bottom: 0 !important;
+  margin-bottom: 0;
 }
 
-/* Keep each spaced card independently rounded. */
-.landing-media-group-small .landing-media-grid-row > .landing-media-layer,
-.landing-media-group-large .landing-media-grid-row > .landing-media-layer {
-  border-radius: 14px !important;
-  overflow: hidden !important;
-}
-
-/* ---------------------------------------------------------
-   NONE
-   No gap between columns and no gap between rows.
-   The unified wrapper controls the outer radius.
-   --------------------------------------------------------- */
-.landing-media-unified .landing-media-grid-row {
-  width: 100% !important;
-  max-width: none !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  gap: 0 !important;
-  margin-bottom: 0 !important;
-}
-
-.landing-media-unified .landing-media-grid-row > .landing-media-layer,
-.landing-media-unified .landing-media-grid-row > .landing-media-layer:first-child,
-.landing-media-unified .landing-media-grid-row > .landing-media-layer:last-child,
-.landing-media-unified .landing-media-grid-row > .landing-media-layer img,
-.landing-media-unified .landing-media-grid-row > .landing-media-layer video,
-.landing-media-unified .landing-media-grid-row > .landing-media-layer .custom-video-player {
-  border-radius: 0 !important;
-}
-
-/* ---------------------------------------------------------
-   CLEAN VIDEO PLAYER
-   Only the centered play/pause button remains.
-   --------------------------------------------------------- */
-.custom-video-player {
-  position: relative;
-  width: 100%;
+/* No-space mode: all consecutive media layers become one unified visual block. */
+.landing-media-unified {
   overflow: hidden;
-  border-radius: 0 !important;
+  border: 1px solid var(--line);
+  border-radius: 14px;
   background: #070809;
+  display: flex;
+  flex-direction: column;
 }
 
-.custom-video-player > video {
+.landing-media-unified .landing-media-grid-row {
+  gap: 0;
+  margin: 0;
+}
+
+.landing-media-unified .landing-media-layer {
+  width: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0;
+  border-radius: 0;
+  overflow: hidden;
+  background: transparent;
+}
+
+.landing-media-unified .landing-media-layer img,
+.landing-media-unified .landing-media-layer video {
   display: block;
   width: 100%;
   height: auto;
   max-width: 100%;
-  margin: 0;
-  border: 0;
-  border-radius: 0 !important;
-  background: #070809;
+  max-height: none;
   object-fit: contain;
-  cursor: pointer;
-}
-
-.custom-video-controls {
-  display: none !important;
-}
-
-.custom-video-play {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 64px;
-  height: 64px;
-  transform: translate(-50%, -50%);
-  display: grid;
-  place-items: center;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: rgba(10, 13, 15, .82);
-  color: #fff;
-  cursor: pointer;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  transition: opacity .2s ease, transform .2s ease;
-  z-index: 3;
-}
-
-.custom-video-play svg {
-  width: 28px;
-  height: 28px;
-}
-
-.custom-video-play:hover {
-  transform: translate(-50%, -50%) scale(1.04);
-}
-
-.custom-video-player.is-playing .custom-video-play {
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* ---------------------------------------------------------
-   TEXT DIVIDERS
-   Smaller, cleaner typography.
-   --------------------------------------------------------- */
-.landing-text-divider-inner {
-  padding: 54px 24px !important;
-}
-
-.landing-text-divider h2 {
-  max-width: none !important;
-  font-size: clamp(32px, 4.4vw, 56px) !important;
-  font-weight: 500 !important;
-  line-height: 1.08 !important;
-  letter-spacing: -0.035em !important;
   margin: 0;
+  border-radius: 0;
+  background: #070809;
 }
 
-.landing-text-line {
-  display: block;
-  margin: 0;
-  padding: 0;
+.landing-media-unified .landing-media-first {
+  border-radius: 13px 13px 0 0;
 }
 
-/* ---------------------------------------------------------
-   HOMEPAGE WORK CARDS
-   Descriptions are not underlined.
-   --------------------------------------------------------- */
-.work-grid > .work-card,
-.work-grid > .work-card-link {
-  display: block;
-  color: inherit;
-  text-decoration: none !important;
+.landing-media-unified .landing-media-last {
+  border-radius: 0 0 13px 13px;
 }
 
-.work-grid > .work-card *,
-.work-grid > .work-card-link * {
-  text-decoration: none !important;
+.landing-media-unified .landing-media-first img,
+.landing-media-unified .landing-media-first video {
+  border-radius: 13px 13px 0 0;
 }
 
-.work-info h3,
-.work-info p,
-.work-info .tag {
-  text-decoration: none !important;
-}
-
-.work-info p {
-  margin-top: 8px;
-  max-width: 65ch;
-  color: var(--ink-dim);
-  font-size: 14px;
-  line-height: 1.55;
+.landing-media-unified .landing-media-last img,
+.landing-media-unified .landing-media-last video {
+  border-radius: 0 0 13px 13px;
 }
 
 @media (max-width: 760px) {
-  /* Same outer margin as normal media cards: 20px each side. */
-  .landing-media-grid-row {
-    width: calc(100% - 40px) !important;
-    max-width: none !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
+  .landing-media-group,
+  .landing-media-unified {
+    width: calc(100% - 40px);
+    margin-bottom: 24px;
   }
 
-  /* SMALL = 24px everywhere. */
+  .landing-media-grid-row {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+
   .landing-media-group-small .landing-media-grid-row {
-    gap: 24px !important;
-    margin-bottom: 24px !important;
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+
+  .landing-media-group-large .landing-media-grid-row {
+    gap: 32px;
+    margin-bottom: 32px;
   }
 
   .landing-media-group-small > .landing-media-layer {
-    margin-bottom: 24px !important;
-  }
-
-  /* LARGE = 48px everywhere. */
-  .landing-media-group-large .landing-media-grid-row {
-    gap: 48px !important;
-    margin-bottom: 48px !important;
+    margin-bottom: 24px;
   }
 
   .landing-media-group-large > .landing-media-layer {
-    margin-bottom: 48px !important;
+    margin-bottom: 32px;
   }
 
-  /* NONE remains zero. */
-  .landing-media-unified .landing-media-grid-row {
-    width: 100% !important;
-    gap: 0 !important;
-    margin-bottom: 0 !important;
+  .landing-media-unified {
+    border-radius: 10px;
   }
 
-  .landing-media-group-small .landing-media-grid-row > .landing-media-layer,
-  .landing-media-group-large .landing-media-grid-row > .landing-media-layer {
-    border-radius: 10px !important;
+  .landing-media-unified .landing-media-first {
+    border-radius: 9px 9px 0 0;
   }
 
-  .landing-media-group-small .landing-media-grid-row > .landing-media-layer img,
-  .landing-media-group-small .landing-media-grid-row > .landing-media-layer video,
-  .landing-media-group-large .landing-media-grid-row > .landing-media-layer img,
-  .landing-media-group-large .landing-media-grid-row > .landing-media-layer video {
-    border-radius: 9px !important;
+  .landing-media-unified .landing-media-last {
+    border-radius: 0 0 9px 9px;
   }
 
-  .custom-video-play {
-    width: 52px;
-    height: 52px;
+  .landing-media-unified .landing-media-first img,
+  .landing-media-unified .landing-media-first video {
+    border-radius: 9px 9px 0 0;
   }
 
-  .custom-video-play svg {
-    width: 23px;
-    height: 23px;
-  }
-
-  .landing-text-divider-inner {
-    padding: 34px 20px !important;
-  }
-
-  .landing-text-divider h2 {
-    font-size: clamp(28px, 8vw, 44px) !important;
-    line-height: 1.08 !important;
-  }
-
-  .work-info {
-    display: block;
-  }
-
-  .work-info .tag {
-    display: block;
-    margin-top: 10px;
-  }
-
-  .work-info p {
-    max-width: 100%;
+  .landing-media-unified .landing-media-last img,
+  .landing-media-unified .landing-media-last video {
+    border-radius: 0 0 9px 9px;
   }
 }
-
-/* =========================================================
-   TEXT DIVIDER — COMPACT SECTION LABEL
-   This is a divider, not a headline.
-   ========================================================= */
-
-.landing-text-divider {
-  width: 100%;
-  margin: 0;
-  padding: 0 !important;
-}
-
-.landing-text-divider-inner {
-  width: min(calc(100% - 64px), 1180px);
-  margin: 0 auto;
-  padding: 28px 0 !important;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.landing-text-divider h2 {
-  margin: 0 !important;
-  padding: 0 !important;
-  max-width: none !important;
-  font-size: 18px !important;
-  line-height: 1.2 !important;
-  font-weight: 500 !important;
-  letter-spacing: -0.01em !important;
-  text-transform: none;
-}
-
-.landing-divider-mark {
-  flex: 0 0 auto;
-  font-size: 20px;
-  line-height: 1;
-}
-
-.landing-text-line {
-  display: inline !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-.landing-text-line + .landing-text-line::before {
-  content: " ";
-}
-
-/* A divider should never create a huge empty vertical area. */
-.landing-text-divider + .landing-media-layer,
-.landing-text-divider + .landing-media-group,
-.landing-text-divider + .landing-media-unified {
-  margin-top: 0 !important;
-}
-
-@media (max-width: 760px) {
-  .landing-text-divider-inner {
-    width: calc(100% - 40px);
-    padding: 22px 0 !important;
-    gap: 10px;
-  }
-
-  .landing-text-divider h2 {
-    font-size: 16px !important;
-    line-height: 1.2 !important;
-  }
-
-  .landing-divider-mark {
-    font-size: 18px;
-  }
-}
-
-/* =========================================================
-   MF / NAVARRO — EXACT HOMEPAGE BRAND TYPOGRAPHY
-   Copied from the homepage .nav .mark values.
-   Do not change font size, weight, or letter spacing here.
-   ========================================================= */
-
-.landing-nav .mark {
-  font-family: var(--sans);
-  font-size: 14px !important;
-  font-weight: 700 !important;
-  letter-spacing: .08em !important;
-  line-height: normal;
-  text-decoration: none;
-}
-
-.landing-nav .nav-brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.landing-nav .nav-logo {
-  width: 28px;
-  height: 28px;
-  object-fit: contain;
-  border-radius: 6px;
-  flex: 0 0 28px;
-}
-
-@media (max-width: 760px) {
-  .landing-nav .mark {
-    font-size: 14px !important;
-    font-weight: 700 !important;
-    letter-spacing: .08em !important;
-  }
-
-  .landing-nav .nav-brand {
-    gap: 10px;
-  }
-
-  .landing-nav .nav-logo {
-    width: 28px;
-    height: 28px;
-    flex-basis: 28px;
-  }
-}
-
-
-/* =========================================================
-   SELECTED WORK — SPACE AFTER LAST MEDIA
-   ========================================================= */
-
-.landing-layers-public {
-  padding-bottom: 64px;
-}
-
-@media (max-width: 760px) {
-  .landing-layers-public {
-    padding-bottom: 48px;
-  }
-}
-
-/* =========================================================
-   CLICKABLE IMAGE — OPEN ORIGINAL FULL VIEW
-   ========================================================= */
-
-.landing-image-link {
-  display: block;
-  color: inherit;
-  text-decoration: none;
-  cursor: zoom-in;
-}
-
-.landing-image-link img {
-  display: block;
-  width: auto;
-  height: auto;
-  max-width: 100%;
-  margin: 0 auto;
-}
-
-.landing-media-unified .landing-image-link img {
-  width: 100%;
-  max-width: 100%;
-  margin: 0;
-}
-
