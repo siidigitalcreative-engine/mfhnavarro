@@ -1068,3 +1068,18 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
     bottom: 24px;
   }
 }
+
+/* =========================================================
+   TEXT DIVIDER — SPACE BEFORE THE NEXT CARD
+   Keep a clear gap between the section label and its first card.
+   ========================================================= */
+
+.landing-text-divider {
+  margin-bottom: 32px !important;
+}
+
+@media (max-width: 760px) {
+  .landing-text-divider {
+    margin-bottom: 24px !important;
+  }
+}
