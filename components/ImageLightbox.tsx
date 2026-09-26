@@ -14,6 +14,11 @@ type Props = {
   initialIndex?: number;
 };
 
+type Point = {
+  x: number;
+  y: number;
+};
+
 export default function ImageLightbox({
   src,
   alt,
@@ -24,7 +29,10 @@ export default function ImageLightbox({
   const [index, setIndex] = useState(initialIndex);
   const [scale, setScale] = useState(1);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
+
+  const pointersRef = useRef(new Map<number, Point>());
   const dragRef = useRef({ active: false, x: 0, y: 0 });
+  const pinchRef = useRef({ active: false, distance: 0, scale: 1 });
 
   const current = images[index] ?? { src, alt };
   const hasMultiple = images.length > 1;
@@ -32,6 +40,8 @@ export default function ImageLightbox({
   const resetView = () => {
     setScale(1);
     setOffset({ x: 0, y: 0 });
+    dragRef.current.active = false;
+    pinchRef.current.active = false;
   };
 
   const close = () => {
@@ -64,13 +74,6 @@ export default function ImageLightbox({
       if (event.key === "Escape") close();
       if (event.key === "ArrowLeft") previous();
       if (event.key === "ArrowRight") next();
-      if (event.key === "+" || event.key === "=") {
-        setScale((value) => Math.min(4, value + 0.25));
-      }
-      if (event.key === "-") {
-        setScale((value) => Math.max(1, value - 0.25));
-      }
-      if (event.key === "0") resetView();
     };
 
     document.addEventListener("keydown", onKeyDown);
@@ -82,6 +85,15 @@ export default function ImageLightbox({
     };
   }, [open, images.length]);
 
+  const getDistance = (a: Point, b: Point) =>
+    Math.hypot(a.x - b.x, a.y - b.y);
+
+  const getPointerPair = () => {
+    const points = Array.from(pointersRef.current.values());
+    if (points.length < 2) return null;
+    return [points[0], points[1]] as const;
+  };
+
   const onWheel = (event: React.WheelEvent<HTMLDivElement>) => {
     event.preventDefault();
     setScale((value) => {
@@ -91,25 +103,86 @@ export default function ImageLightbox({
   };
 
   const onPointerDown = (event: React.PointerEvent<HTMLImageElement>) => {
-    if (scale <= 1) return;
     event.currentTarget.setPointerCapture(event.pointerId);
-    dragRef.current = {
-      active: true,
-      x: event.clientX - offset.x,
-      y: event.clientY - offset.y,
-    };
+
+    pointersRef.current.set(event.pointerId, {
+      x: event.clientX,
+      y: event.clientY,
+    });
+
+    if (pointersRef.current.size >= 2) {
+      const pair = getPointerPair();
+      if (!pair) return;
+
+      pinchRef.current = {
+        active: true,
+        distance: getDistance(pair[0], pair[1]),
+        scale,
+      };
+      dragRef.current.active = false;
+      return;
+    }
+
+    if (scale > 1) {
+      dragRef.current = {
+        active: true,
+        x: event.clientX - offset.x,
+        y: event.clientY - offset.y,
+      };
+    }
   };
 
   const onPointerMove = (event: React.PointerEvent<HTMLImageElement>) => {
+    if (!pointersRef.current.has(event.pointerId)) return;
+
+    pointersRef.current.set(event.pointerId, {
+      x: event.clientX,
+      y: event.clientY,
+    });
+
+    if (pointersRef.current.size >= 2 && pinchRef.current.active) {
+      const pair = getPointerPair();
+      if (!pair || pinchRef.current.distance <= 0) return;
+
+      const distance = getDistance(pair[0], pair[1]);
+      const pinchScale =
+        pinchRef.current.scale * (distance / pinchRef.current.distance);
+
+      setScale(Math.min(4, Math.max(1, pinchScale)));
+      return;
+    }
+
     if (!dragRef.current.active || scale <= 1) return;
+
     setOffset({
       x: event.clientX - dragRef.current.x,
       y: event.clientY - dragRef.current.y,
     });
   };
 
-  const onPointerUp = () => {
+  const onPointerUp = (event: React.PointerEvent<HTMLImageElement>) => {
+    pointersRef.current.delete(event.pointerId);
+
+    if (pointersRef.current.size < 2) {
+      pinchRef.current.active = false;
+    }
+
+    if (pointersRef.current.size === 1 && scale > 1) {
+      const remaining = Array.from(pointersRef.current.values())[0];
+      dragRef.current = {
+        active: true,
+        x: remaining.x - offset.x,
+        y: remaining.y - offset.y,
+      };
+    } else {
+      dragRef.current.active = false;
+    }
+  };
+
+  const onPointerCancel = (event: React.PointerEvent<HTMLImageElement>) => {
+    pointersRef.current.delete(event.pointerId);
     dragRef.current.active = false;
+    pinchRef.current.active = false;
   };
 
   return (
@@ -153,74 +226,14 @@ export default function ImageLightbox({
               onPointerDown={onPointerDown}
               onPointerMove={onPointerMove}
               onPointerUp={onPointerUp}
-              onPointerCancel={onPointerUp}
+              onPointerCancel={onPointerCancel}
             />
           </div>
 
-          <div className="landing-image-lightbox-toolbar">
-            <button
-              type="button"
-              className="landing-image-lightbox-control"
-              onClick={() => setScale((value) => Math.min(4, value + 0.25))}
-              aria-label="Zoom in"
-            >
-              +
-            </button>
-            <span className="landing-image-lightbox-zoom">
-              {Math.round(scale * 100)}%
-            </span>
-            <button
-              type="button"
-              className="landing-image-lightbox-control"
-              onClick={() => {
-                const nextScale = Math.max(1, scale - 0.25);
-                setScale(nextScale);
-                if (nextScale === 1) setOffset({ x: 0, y: 0 });
-              }}
-              aria-label="Zoom out"
-            >
-              −
-            </button>
-            <button
-              type="button"
-              className="landing-image-lightbox-control"
-              onClick={resetView}
-              aria-label="Reset zoom"
-            >
-              1:1
-            </button>
-          </div>
-
           {hasMultiple ? (
-            <>
-              <button
-                type="button"
-                className="landing-image-lightbox-nav landing-image-lightbox-prev"
-                onClick={(event) => {
-                  event.stopPropagation();
-                  previous();
-                }}
-                disabled={index === 0}
-                aria-label="Previous image"
-              >
-                ‹
-              </button>
-              <button
-                type="button"
-                className="landing-image-lightbox-nav landing-image-lightbox-next"
-                onClick={(event) => {
-                  event.stopPropagation();
-                  next();
-                }}
-                disabled={index === images.length - 1}
-                aria-label="Next image"
-              >
-                ›
-              </button>
-              <div className="landing-image-lightbox-counter">
-                {index + 1} / {images.length}
-              </div>
-            </>
+            <div className="landing-image-lightbox-counter">
+              {index + 1} / {images.length}
+            </div>
           ) : null}
 
           <button
