@@ -1001,14 +1001,33 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
   border: 1px solid rgba(255, 255, 255, .18);
   border-radius: 50%;
   background: rgba(11, 12, 14, .78);
-  color: var(--ink);
+  color: transparent;
   cursor: pointer;
-  font-family: var(--sans);
-  font-size: 28px;
-  font-weight: 300;
+  font-size: 0;
   line-height: 0;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+}
+
+.landing-image-lightbox-close::before,
+.landing-image-lightbox-close::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 19px;
+  height: 2.5px;
+  border-radius: 999px;
+  background: var(--ink);
+  transform-origin: center;
+}
+
+.landing-image-lightbox-close::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.landing-image-lightbox-close::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
 }
 
 .landing-image-lightbox-close:hover {
