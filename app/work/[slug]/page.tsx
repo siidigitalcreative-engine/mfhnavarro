@@ -40,6 +40,13 @@ function Layer({
         ? 64
         : 48;
 
+  const image = (
+    <img
+      src={layer.url}
+      alt={layer.name || projectName}
+    />
+  );
+
   return (
     <section
       className={[
@@ -61,10 +68,15 @@ function Layer({
           label={projectName}
         />
       ) : (
-        <img
-          src={layer.url}
-          alt={layer.name || projectName}
-        />
+        <a
+          className="landing-image-link"
+          href={layer.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`View ${layer.name || projectName} full size`}
+        >
+          {image}
+        </a>
       )}
     </section>
   );
@@ -88,18 +100,13 @@ function MediaGroup({
     .join(" ");
 
   const rows: WorkLayer[][] = [];
-
   let index = 0;
 
   while (index < layers.length) {
     const current = layers[index];
     const next = layers[index + 1];
 
-    if (
-      current.layout === "two" &&
-      next &&
-      next.layout === "two"
-    ) {
+    if (current.layout === "two" && next && next.layout === "two") {
       rows.push([current, next]);
       index += 2;
     } else {
@@ -111,9 +118,7 @@ function MediaGroup({
   return (
     <div className={groupClass}>
       {rows.map((row, rowIndex) => {
-        const isTwoColumnRow = row.length === 2;
-
-        if (isTwoColumnRow) {
+        if (row.length === 2) {
           return (
             <div
               className="landing-media-grid-row"
@@ -127,10 +132,7 @@ function MediaGroup({
                   gap={gap}
                   grouped
                   isFirst={isUnified && rowIndex === 0}
-                  isLast={
-                    isUnified &&
-                    rowIndex === rows.length - 1
-                  }
+                  isLast={isUnified && rowIndex === rows.length - 1}
                 />
               ))}
             </div>
@@ -147,10 +149,7 @@ function MediaGroup({
             gap={gap}
             grouped
             isFirst={isUnified && rowIndex === 0}
-            isLast={
-              isUnified &&
-              rowIndex === rows.length - 1
-            }
+            isLast={isUnified && rowIndex === rows.length - 1}
           />
         );
       })}
@@ -175,8 +174,7 @@ function RenderLayers({
   let mediaGroup: WorkLayer[] = [];
 
   for (const layer of layers) {
-    const isMedia =
-      layer.type === "image" || layer.type === "video";
+    const isMedia = layer.type === "image" || layer.type === "video";
 
     if (isMedia) {
       mediaGroup.push(layer);
@@ -184,24 +182,15 @@ function RenderLayers({
     }
 
     if (mediaGroup.length) {
-      sections.push({
-        type: "media",
-        layers: mediaGroup,
-      });
+      sections.push({ type: "media", layers: mediaGroup });
       mediaGroup = [];
     }
 
-    sections.push({
-      type: "text",
-      layer,
-    });
+    sections.push({ type: "text", layer });
   }
 
   if (mediaGroup.length) {
-    sections.push({
-      type: "media",
-      layers: mediaGroup,
-    });
+    sections.push({ type: "media", layers: mediaGroup });
   }
 
   return (
@@ -253,7 +242,7 @@ export default async function WorkLandingPage({
         type: media.type,
         url: media.url,
         name: media.name,
-        layout: "full",
+        layout: "full" as const,
       }));
 
   const gap = project.layerGap ?? "small";
