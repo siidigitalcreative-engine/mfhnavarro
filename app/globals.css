@@ -301,8 +301,9 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
   overflow: hidden;
   border-radius: 10px;
   border: 1px solid var(--line, #292c32);
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: #737780;
   font-family: var(--mono, monospace);
   font-size: 11px;
@@ -991,8 +992,9 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
   top: 24px;
   right: 24px;
   z-index: 4;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 42px;
   height: 42px;
   padding: 0;
@@ -1004,7 +1006,7 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
   font-family: var(--sans);
   font-size: 28px;
   font-weight: 300;
-  line-height: 1;
+  line-height: 0;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
