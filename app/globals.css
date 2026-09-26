@@ -1071,9 +1071,10 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
 
 /* =========================================================
    TEXT DIVIDER — SINGLE OUTER SPACING
-   Keep the existing media-group spacing before the divider.
-   The divider only owns the spacing after itself.
-   This prevents double gaps without changing media spacing.
+   Keep exactly one gap between a media group and a divider.
+   The divider owns the top gap only when it directly follows
+   a media group whose final row/card has no bottom margin.
+   The divider owns the bottom gap before the next media group.
    ========================================================= */
 
 .landing-text-divider {
@@ -1081,9 +1082,34 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
   margin-bottom: 32px !important;
 }
 
+.landing-media-group-small + .landing-text-divider {
+  margin-top: 48px !important;
+}
+
+.landing-media-group-large + .landing-text-divider {
+  margin-top: 64px !important;
+}
+
+/* None intentionally stays at zero spacing. */
+.landing-media-unified + .landing-text-divider {
+  margin-top: 0 !important;
+}
+
 @media (max-width: 760px) {
   .landing-text-divider {
     margin-top: 0 !important;
     margin-bottom: 24px !important;
+  }
+
+  .landing-media-group-small + .landing-text-divider {
+    margin-top: 24px !important;
+  }
+
+  .landing-media-group-large + .landing-text-divider {
+    margin-top: 48px !important;
+  }
+
+  .landing-media-unified + .landing-text-divider {
+    margin-top: 0 !important;
   }
 }
