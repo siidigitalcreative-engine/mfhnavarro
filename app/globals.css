@@ -1133,3 +1133,181 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
     margin-top: 0 !important;
   }
 }
+
+
+/* =========================================================
+   CREATIVE HIGHLIGHTS / CATEGORY SPOTLIGHTS
+   Separate from Selected Work: these are discipline-based
+   collections rather than individual projects.
+   ========================================================= */
+
+.spotlight-section { padding-top: 96px; }
+.spotlight-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 48px 24px;
+}
+.spotlight-card {
+  display: block;
+  min-width: 0;
+  color: inherit;
+  text-decoration: none;
+}
+.spotlight-visual {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--bg-soft);
+}
+.spotlight-preview-grid {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 2px;
+  background: var(--line);
+}
+.spotlight-preview-media {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  object-fit: cover;
+  background: var(--bg-soft);
+}
+.spotlight-preview-grid:has(> :only-child) .spotlight-preview-media {
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
+}
+.spotlight-placeholder {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 50% 40%, #22252b 0, #111318 50%, #0b0c0e 100%);
+}
+.spotlight-placeholder span {
+  font-family: var(--mono);
+  font-size: 10vw;
+  color: #2a2d33;
+}
+.spotlight-number,
+.spotlight-count {
+  position: absolute;
+  top: 14px;
+  padding: 6px 9px;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 999px;
+  background: rgba(11,12,14,.72);
+  backdrop-filter: blur(10px);
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--ink-dim);
+}
+.spotlight-number { left: 14px; }
+.spotlight-count { right: 14px; }
+.spotlight-info {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px 2px 0;
+}
+.spotlight-info h3 {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -.025em;
+}
+.spotlight-info p {
+  margin-top: 6px;
+  color: var(--ink-dim);
+  font-size: 13px;
+  max-width: 48ch;
+}
+.spotlight-info .tag {
+  padding-top: 5px;
+  font-size: 9px;
+  color: var(--ink-faint);
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.spotlight-empty {
+  min-height: 180px;
+  display: grid;
+  place-items: center;
+  border: 1px dashed var(--line);
+  color: var(--ink-faint);
+  font-family: var(--mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.spotlight-intro { padding: 90px 32px 70px; }
+.spotlight-intro-grid {
+  display: grid;
+  grid-template-columns: 1.2fr .8fr;
+  gap: 70px;
+  align-items: end;
+  margin-top: 22px;
+}
+.spotlight-intro h1 {
+  font-size: clamp(48px, 8vw, 110px);
+  font-weight: 600;
+  line-height: .92;
+  letter-spacing: -.065em;
+  max-width: 9ch;
+}
+.spotlight-intro-grid > p {
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--ink-dim);
+  max-width: 46ch;
+  padding-bottom: 4px;
+}
+.spotlight-page-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  padding-bottom: 80px;
+}
+.spotlight-page-media {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #070809;
+}
+.spotlight-page-media img,
+.spotlight-page-media video {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.spotlight-page-video video { width: 100%; }
+.spotlight-page-media .landing-image-lightbox-trigger { width: 100%; }
+
+.spotlight-admin-list { display: flex; flex-direction: column; gap: 18px; }
+.spotlight-admin-card { margin: 0; }
+.spotlight-admin-media-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+}
+
+@media(max-width:760px) {
+  .spotlight-grid { grid-template-columns: 1fr; gap: 36px; }
+  .spotlight-section { padding-top: 72px; }
+  .spotlight-info { gap: 12px; }
+  .spotlight-info h3 { font-size: 18px; }
+  .spotlight-intro { padding: 60px 20px 48px; }
+  .spotlight-intro-grid { grid-template-columns: 1fr; gap: 28px; }
+  .spotlight-intro h1 { max-width: 12ch; }
+  .spotlight-page-gallery { grid-template-columns: 1fr; gap: 16px; padding-bottom: 56px; }
+  .spotlight-page-media { border-radius: 10px; }
+  .spotlight-admin-media-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
