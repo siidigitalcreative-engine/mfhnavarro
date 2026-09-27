@@ -8,8 +8,11 @@ import VideoWithFirstFrame from "@/components/VideoWithFirstFrame";
 function SpotlightMedia({ spotlight, item }: { spotlight: CreativeSpotlight; item: CreativeSpotlight["media"][number] }) {
   if (item.type === "video") {
     return (
-      <div className="spotlight-page-media spotlight-page-video">
-        <VideoWithFirstFrame src={item.url} poster={item.thumbnailUrl} label={spotlight.name} />
+      <div className="spotlight-page-media-card">
+        <div className="spotlight-page-media spotlight-page-video">
+          <VideoWithFirstFrame src={item.url} poster={item.thumbnailUrl} label={spotlight.name} />
+        </div>
+        {item.description ? <p className="spotlight-media-description">{item.description}</p> : null}
       </div>
     );
   }
@@ -20,13 +23,16 @@ function SpotlightMedia({ spotlight, item }: { spotlight: CreativeSpotlight; ite
   const imageIndex = images.findIndex((image) => image.src === item.url);
 
   return (
-    <div className="spotlight-page-media">
-      <ImageLightbox
-        src={item.url}
-        alt={item.name || spotlight.name}
-        images={images}
-        initialIndex={Math.max(0, imageIndex)}
-      />
+    <div className="spotlight-page-media-card">
+      <div className="spotlight-page-media">
+        <ImageLightbox
+          src={item.url}
+          alt={item.name || spotlight.name}
+          images={images}
+          initialIndex={Math.max(0, imageIndex)}
+        />
+      </div>
+      {item.description ? <p className="spotlight-media-description">{item.description}</p> : null}
     </div>
   );
 }
