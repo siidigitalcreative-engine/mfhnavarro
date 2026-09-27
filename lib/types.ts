@@ -40,6 +40,15 @@ export type ClientItem = {
   logoUrl?: string;
 };
 
+
+export type CreativeSpotlight = {
+  id: string;
+  name: string;
+  slug?: string;
+  desc: string;
+  media: MediaItem[];
+};
+
 export type SiteIdentity = {
   showLogo?: boolean;
   logoUrl?: string;
@@ -58,6 +67,7 @@ export type SiteContent = {
   aboutParagraphs: string[];
   email: string;
   identity?: SiteIdentity;
+  spotlights?: CreativeSpotlight[];
 };
 
 export const DEFAULT_CONTENT: SiteContent = {
@@ -126,4 +136,5 @@ export const DEFAULT_CONTENT: SiteContent = {
     showPortrait: false,
     portraitUrl: "",
   },
+  spotlights: [],
 };
