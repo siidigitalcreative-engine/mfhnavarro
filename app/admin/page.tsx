@@ -105,6 +105,7 @@ export default function AdminPage() {
             url: blob.url,
             type: mediaTypeFromFile(file),
             name: file.name,
+            description: "",
           };
 
           setContent((current) => {
@@ -195,7 +196,7 @@ export default function AdminPage() {
     const layer: WorkLayer = {
       id: newId(),
       type,
-      ...(type === "text" ? { text: "Section title" } : { layout: "full" }),
+      ...(type === "text" ? { text: "Section title" } : { layout: "full", description: "" }),
     };
     update("work", content.work.map((w) => w.id === workId ? { ...w, layers: [...(w.layers ?? []), layer] } : w));
   }
@@ -316,6 +317,7 @@ export default function AdminPage() {
             url: blob.url,
             type: mediaTypeFromFile(file),
             name: file.name,
+            description: "",
           };
 
           setContent((current) => current ? {
@@ -429,6 +431,7 @@ export default function AdminPage() {
                   <button className="icon-btn" disabled={mediaIndex === item.media!.length - 1} onClick={() => moveMedia(item.id, media.id, 1)}>→</button>
                   <button className="icon-btn danger" onClick={() => removeMedia(item.id, media.id)}>×</button>
                 </div></div>
+                <textarea className="media-description-input" placeholder="Short description for this image or video" value={media.description ?? ""} onChange={(e) => update("work", content.work.map((w) => w.id === item.id ? { ...w, media: (w.media ?? []).map((m) => m.id === media.id ? { ...m, description: e.target.value } : m) } : w))} />
               </div>)}
             </div>}
             <div className="landing-builder">
@@ -476,6 +479,7 @@ export default function AdminPage() {
                       ) : (
                         <div className="landing-layer-empty">No {layer.type} selected yet.</div>
                       )}
+                      <textarea className="media-description-input" placeholder="Short description for this image or video" value={layer.description ?? ""} onChange={(e) => updateLayer(item.id, layer.id, { description: e.target.value })} />
                       <div className="layer-upload-row">
                         <label className="btn btn-ghost layer-upload-btn" htmlFor={`layer-${layer.id}`}>{uploadingLayerId === layer.id ? `Uploading ${layerProgress[layer.id] ?? 0}%` : layer.url ? `Replace ${layer.type}` : `Upload ${layer.type}`}</label>
                         <input id={`layer-${layer.id}`} className="file-input" type="file" accept={layer.type === "video" ? "video/*,.mp4,.mov,.m4v,.webm" : "image/*"} onChange={(e) => { void uploadLayerFile(item.id, layer.id, e.target.files?.[0]); e.currentTarget.value = ""; }} />
@@ -584,6 +588,7 @@ export default function AdminPage() {
                           <button className="icon-btn danger" onClick={() => removeSpotlightMedia(spotlight.id, media.id)}>×</button>
                         </div>
                       </div>
+                      <textarea className="media-description-input" placeholder="Short description for this image or video" value={media.description ?? ""} onChange={(e) => updateSpotlight(spotlight.id, { media: spotlight.media.map((item) => item.id === media.id ? { ...item, description: e.target.value } : item) })} />
                       {media.type === "video" && (
                         <VideoThumbnailPicker
                           src={media.url}
