@@ -9,7 +9,7 @@ function SpotlightMedia({ spotlight, item }: { spotlight: CreativeSpotlight; ite
   if (item.type === "video") {
     return (
       <div className="spotlight-page-media spotlight-page-video">
-        <VideoWithFirstFrame src={item.url} label={spotlight.name} />
+        <VideoWithFirstFrame src={item.url} poster={item.thumbnailUrl} label={spotlight.name} />
       </div>
     );
   }
@@ -49,13 +49,13 @@ export default async function SpotlightPage({ params }: { params: { slug: string
             ) : null}
             <span>MF / NAVARRO</span>
           </Link>
-          <Link className="landing-back" href="/#spotlights">Back to highlights ↗</Link>
+          <Link className="landing-back" href="/#spotlights">Back to spotlights ↗</Link>
         </div>
       </header>
 
-      <section className="spotlight-intro wrap">
-        <div className="eyebrow">CREATIVE HIGHLIGHTS</div>
-        <div className="spotlight-intro-grid">
+      <section className="landing-intro wrap spotlight-intro-page">
+        <div className="eyebrow">SPOTLIGHTS</div>
+        <div className="landing-intro-grid">
           <div>
             <div className="landing-number">{String((content.spotlights ?? []).findIndex((item) => item.id === spotlight.id) + 1).padStart(2, "0")}</div>
             <h1>{spotlight.name}</h1>
@@ -65,7 +65,7 @@ export default async function SpotlightPage({ params }: { params: { slug: string
       </section>
 
       {spotlight.media.length ? (
-        <section className="spotlight-page-gallery wrap">
+        <section className="spotlight-page-gallery">
           {spotlight.media.map((item) => (
             <SpotlightMedia key={item.id} spotlight={spotlight} item={item} />
           ))}
@@ -75,7 +75,7 @@ export default async function SpotlightPage({ params }: { params: { slug: string
       )}
 
       <footer className="landing-footer wrap">
-        <Link href="/#spotlights">← Creative highlights</Link>
+        <Link href="/#spotlights">← Spotlights</Link>
         <span>{spotlight.name}</span>
       </footer>
     </main>
