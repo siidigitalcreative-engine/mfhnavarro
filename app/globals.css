@@ -301,9 +301,8 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
   overflow: hidden;
   border-radius: 10px;
   border: 1px solid var(--line, #292c32);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
   color: #737780;
   font-family: var(--mono, monospace);
   font-size: 11px;
@@ -510,12 +509,6 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
   margin-bottom: 48px !important;
 }
 
-/* If the group ends with a 2-column row, that row already defines the
-   bottom edge of the group. Let the divider provide the single gap. */
-.landing-media-group-small > .landing-media-grid-row:last-child {
-  margin-bottom: 0 !important;
-}
-
 .landing-media-group-small > .landing-media-layer {
   margin-bottom: 48px !important;
 }
@@ -532,12 +525,6 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
 .landing-media-group-large .landing-media-grid-row {
   gap: 64px !important;
   margin-bottom: 64px !important;
-}
-
-/* If the group ends with a 2-column row, that row already defines the
-   bottom edge of the group. Let the divider provide the single gap. */
-.landing-media-group-large > .landing-media-grid-row:last-child {
-  margin-bottom: 0 !important;
 }
 
 .landing-media-group-large > .landing-media-layer {
@@ -710,10 +697,6 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
     margin-bottom: 24px !important;
   }
 
-  .landing-media-group-small > .landing-media-grid-row:last-child {
-    margin-bottom: 0 !important;
-  }
-
   .landing-media-group-small > .landing-media-layer {
     margin-bottom: 24px !important;
   }
@@ -722,10 +705,6 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
   .landing-media-group-large .landing-media-grid-row {
     gap: 48px !important;
     margin-bottom: 48px !important;
-  }
-
-  .landing-media-group-large > .landing-media-grid-row:last-child {
-    margin-bottom: 0 !important;
   }
 
   .landing-media-group-large > .landing-media-layer {
@@ -917,10 +896,10 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
   }
 }
 
+
 /* =========================================================
    SELECTED WORK — IMAGE LIGHTBOX
-   Same-page popup viewer with drag and pinch zoom.
-   No image opens in a new tab.
+   Same-page popup viewer. No image opens in a new tab.
    ========================================================= */
 
 .landing-image-lightbox-trigger {
@@ -980,7 +959,7 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
   justify-content: center;
   width: 100%;
   height: 100%;
-  padding: 88px 48px;
+  padding: 88px 110px;
   overflow: hidden;
   touch-action: none;
 }
@@ -989,70 +968,113 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
   display: block;
   width: auto;
   height: auto;
-  max-width: calc(100vw - 96px);
+  max-width: calc(100vw - 220px);
   max-height: calc(100vh - 176px);
   object-fit: contain;
   margin: 0;
   user-select: none;
   -webkit-user-select: none;
-  -webkit-user-drag: none;
-  touch-action: none;
-  cursor: grab;
+  cursor: default;
   transform-origin: center center;
-  transition: none;
+  transition: transform .16s ease;
   will-change: transform;
 }
 
-.landing-image-lightbox-image:active {
-  cursor: grabbing;
-}
-
+.landing-image-lightbox-control,
+.landing-image-lightbox-nav,
 .landing-image-lightbox-close {
   position: absolute;
-  top: 24px;
-  right: 24px;
   z-index: 4;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 42px;
-  height: 42px;
+  display: grid;
+  place-items: center;
   padding: 0;
   border: 1px solid rgba(255, 255, 255, .18);
-  border-radius: 50%;
   background: rgba(11, 12, 14, .78);
-  color: transparent;
+  color: var(--ink);
   cursor: pointer;
-  font-size: 0;
-  line-height: 0;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
 
-.landing-image-lightbox-close::before,
-.landing-image-lightbox-close::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 19px;
-  height: 2.5px;
-  border-radius: 999px;
-  background: var(--ink);
-  transform-origin: center;
-}
-
-.landing-image-lightbox-close::before {
-  transform: translate(-50%, -50%) rotate(45deg);
-}
-
-.landing-image-lightbox-close::after {
-  transform: translate(-50%, -50%) rotate(-45deg);
-}
-
+.landing-image-lightbox-control:hover,
+.landing-image-lightbox-nav:hover:not(:disabled),
 .landing-image-lightbox-close:hover {
   border-color: rgba(255, 255, 255, .4);
   background: rgba(25, 27, 31, .9);
+}
+
+.landing-image-lightbox-control:disabled,
+.landing-image-lightbox-nav:disabled {
+  opacity: .25;
+  cursor: default;
+}
+
+.landing-image-lightbox-close {
+  top: 24px;
+  right: 24px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  font-family: var(--sans);
+  font-size: 28px;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.landing-image-lightbox-nav {
+  top: 50%;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  transform: translateY(-50%);
+  font-family: var(--sans);
+  font-size: 34px;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.landing-image-lightbox-prev {
+  left: 24px;
+}
+
+.landing-image-lightbox-next {
+  right: 24px;
+}
+
+.landing-image-lightbox-toolbar {
+  position: absolute;
+  z-index: 4;
+  left: 50%;
+  bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transform: translateX(-50%);
+  padding: 6px;
+  border: 1px solid rgba(255, 255, 255, .14);
+  border-radius: 999px;
+  background: rgba(11, 12, 14, .78);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.landing-image-lightbox-control {
+  position: static;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1;
+}
+
+.landing-image-lightbox-zoom {
+  min-width: 48px;
+  color: var(--ink-dim);
+  font-family: var(--mono);
+  font-size: 9px;
+  text-align: center;
+  letter-spacing: .04em;
 }
 
 .landing-image-lightbox-counter {
@@ -1068,11 +1090,11 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
 
 @media (max-width: 760px) {
   .landing-image-lightbox-stage {
-    padding: 72px 20px;
+    padding: 72px 52px;
   }
 
   .landing-image-lightbox-image {
-    max-width: calc(100vw - 40px);
+    max-width: calc(100vw - 104px);
     max-height: calc(100vh - 144px);
   }
 
@@ -1083,275 +1105,99 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
     height: 40px;
   }
 
+  .landing-image-lightbox-nav {
+    width: 40px;
+    height: 40px;
+    font-size: 28px;
+  }
+
+  .landing-image-lightbox-prev {
+    left: 10px;
+  }
+
+  .landing-image-lightbox-next {
+    right: 10px;
+  }
+
+  .landing-image-lightbox-toolbar {
+    bottom: 14px;
+  }
+
   .landing-image-lightbox-counter {
-    left: 24px;
-    bottom: 24px;
-  }
-}
-
-/* =========================================================
-   TEXT DIVIDER — SINGLE OUTER SPACING
-   Keep exactly one gap between a media group and a divider.
-   The divider owns the top gap only when it directly follows
-   a media group whose final row/card has no bottom margin.
-   The divider owns the bottom gap before the next media group.
-   ========================================================= */
-
-.landing-text-divider {
-  margin-top: 0 !important;
-  margin-bottom: 32px !important;
-}
-
-.landing-media-group-small + .landing-text-divider {
-  margin-top: 48px !important;
-}
-
-.landing-media-group-large + .landing-text-divider {
-  margin-top: 64px !important;
-}
-
-/* None intentionally stays at zero spacing. */
-.landing-media-unified + .landing-text-divider {
-  margin-top: 0 !important;
-}
-
-@media (max-width: 760px) {
-  .landing-text-divider {
-    margin-top: 0 !important;
-    margin-bottom: 24px !important;
-  }
-
-  .landing-media-group-small + .landing-text-divider {
-    margin-top: 24px !important;
-  }
-
-  .landing-media-group-large + .landing-text-divider {
-    margin-top: 48px !important;
-  }
-
-  .landing-media-unified + .landing-text-divider {
-    margin-top: 0 !important;
+    left: 14px;
+    bottom: 25px;
   }
 }
 
 
 /* =========================================================
-   SPOTLIGHTS
-   Discipline-based collections, separate from Selected Work.
+   MEDIA DESCRIPTIONS — UPLOADED WORK / SPOTLIGHTS
    ========================================================= */
 
-.spotlight-section { padding-top: 96px; }
-.spotlight-intro {
-  max-width: 62ch;
-  margin: -8px 0 40px;
-  color: var(--ink-dim);
-  font-size: 15px;
-  line-height: 1.65;
-}
-.spotlight-list {
-  border-top: 1px solid var(--line);
-}
-.spotlight-row {
-  position: relative;
-  display: grid;
-  grid-template-columns: 64px minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 24px;
-  min-height: 118px;
-  padding: 22px 0;
-  border-bottom: 1px solid var(--line);
-  color: inherit;
-  text-decoration: none;
-  transition: padding .22s ease, background .22s ease;
-}
-.spotlight-row::after {
-  content: "";
-  position: absolute;
-  left: 64px;
-  right: 0;
-  bottom: -1px;
-  height: 1px;
-  background: transparent;
-  transition: background .22s ease;
-}
-.spotlight-row:hover::after {
-  background: var(--accent);
-}
-.spotlight-row:hover {
-  padding-left: 12px;
-  padding-right: 12px;
-  background: rgba(255,255,255,.025);
-}
-.spotlight-row-number {
-  align-self: start;
-  padding-top: 5px;
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: .08em;
-  color: var(--ink-faint);
-}
-.spotlight-row-main {
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.spotlight-row-name {
-  font-size: clamp(28px, 4vw, 52px);
-  line-height: 1;
-  font-weight: 600;
-  letter-spacing: -.045em;
-}
-.spotlight-row-desc {
-  max-width: 58ch;
-  color: var(--ink-dim);
-  font-size: 13px;
-  line-height: 1.5;
-}
-.spotlight-row-action {
-  justify-self: end;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 9px 0;
-  font-family: var(--mono);
-  font-size: 9px;
-  line-height: 1;
-  letter-spacing: .14em;
-  color: var(--ink-faint);
-  white-space: nowrap;
-  transition: color .22s ease, transform .22s ease;
-}
-.spotlight-row-action span {
-  font-family: var(--sans);
-  font-size: 17px;
-  line-height: .7;
-}
-.spotlight-row:hover .spotlight-row-action {
-  color: var(--ink);
-  transform: translateX(4px);
-}
-.spotlight-empty {
-  min-height: 180px;
-  display: grid;
-  place-items: center;
-  border: 1px dashed var(--line);
-  color: var(--ink-faint);
-  font-family: var(--mono);
-  font-size: 9px;
-  text-transform: uppercase;
-  letter-spacing: .08em;
+.media-description-input {
+  width: 100%;
+  min-height: 76px;
+  margin-top: 12px;
+  resize: vertical;
 }
 
-@media(max-width:760px) {
-  .spotlight-section { padding-top: 72px; }
-  .spotlight-intro {
-    margin: -4px 0 28px;
-    font-size: 13px;
-    line-height: 1.6;
-  }
-  .spotlight-row {
-    grid-template-columns: 34px minmax(0, 1fr) auto;
-    gap: 12px;
-    min-height: 96px;
-    padding: 20px 0;
-  }
-  .spotlight-row:hover {
-    padding-left: 8px;
-    padding-right: 8px;
-  }
-  .spotlight-row-name {
-    font-size: clamp(26px, 8vw, 38px);
-  }
-  .spotlight-row-desc {
-    font-size: 12px;
-  }
-  .spotlight-row-action {
-    gap: 7px;
-    font-size: 8px;
-  }
-  .spotlight-row-action span {
-    font-size: 15px;
-  }
+.landing-media-description,
+.spotlight-media-description {
+  margin: 14px 0 0;
+  color: rgba(255,255,255,.62);
+  font-size: 14px;
+  line-height: 1.55;
+  letter-spacing: 0;
 }
 
-/* =========================================================
-   FINAL HOMEPAGE FIX — SPOTLIGHTS + HERO VISIBILITY
-   Keep the existing visual system; only correct the layout flow.
-   ========================================================= */
-
-.hero {
-  display: block !important;
-  visibility: visible !important;
-}
-
-.spotlight-section {
-  display: block !important;
-  visibility: visible !important;
-}
-
-.spotlight-row {
-  display: grid !important;
-  grid-template-columns: 64px minmax(0, 1fr) auto !important;
-  align-items: center !important;
-}
-
-.spotlight-row-main {
-  min-width: 0 !important;
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: flex-start !important;
-  gap: 6px !important;
-}
-
-.spotlight-row-name,
-.spotlight-row-desc,
-.spotlight-row-action {
+.spotlight-page-media-card {
   display: block;
 }
 
-.spotlight-row-action {
-  justify-self: end !important;
+@media (max-width: 700px) {
+  .landing-media-description,
+  .spotlight-media-description {
+    margin-top: 12px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+}
+
+
+/* =========================================================
+   MEDIA SHORT DESCRIPTION — COMPACT CAPTION
+   Optional. Shown only when a description is provided.
+   ========================================================= */
+
+.landing-media-description,
+.spotlight-media-description {
+  display: block;
+  margin: 0;
+  padding: 9px 0 0;
+  color: var(--ink-faint);
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: 0;
+}
+
+/* Keep the caption visually attached to the media. */
+.spotlight-page-media-card .spotlight-media-description {
+  width: min(calc(100% - 64px), 1180px);
+  margin-left: auto;
+  margin-right: auto;
 }
 
 @media (max-width: 760px) {
-  .spotlight-section {
-    padding-top: 72px !important;
-    padding-bottom: 72px !important;
+  .landing-media-description,
+  .spotlight-media-description {
+    padding-top: 8px;
+    font-size: 12px;
+    line-height: 1.4;
   }
 
-  .spotlight-row {
-    grid-template-columns: 34px minmax(0, 1fr) !important;
-    gap: 12px !important;
-    min-height: 0 !important;
-    padding: 20px 0 !important;
-  }
-
-  .spotlight-row-number {
-    grid-column: 1;
-    grid-row: 1 / span 2;
-  }
-
-  .spotlight-row-main {
-    grid-column: 2;
-    grid-row: 1;
-    gap: 6px !important;
-  }
-
-  .spotlight-row-action {
-    grid-column: 2;
-    grid-row: 2;
-    justify-self: start !important;
-    margin-top: 8px !important;
-    padding: 0 !important;
-  }
-
-  .spotlight-row-name {
-    font-size: clamp(26px, 8vw, 38px) !important;
-    line-height: 1 !important;
-  }
-
-  .spotlight-row-desc {
-    font-size: 12px !important;
+  .spotlight-page-media-card .spotlight-media-description {
+    width: calc(100% - 40px);
   }
 }
