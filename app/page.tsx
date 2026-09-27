@@ -69,7 +69,7 @@ export default async function Home() {
                 const media = item.media ?? [];
                 const primary = media[0];
                 return (
-                  <Link className="work-card work-card-link" key={item.id} href={`/work/${item.slug || item.id}`}>
+                  <Link className="work-card" key={item.id} href={`/work/${item.slug || item.id}`}>
                     <div className="work-visual">
                       {primary ? <Media media={primary} alt={item.name} className="work-primary" /> : <div className="work-placeholder"><span>MF</span></div>}
                       <div className="work-number">{String(index + 1).padStart(2, "0")}</div>
@@ -89,6 +89,64 @@ export default async function Home() {
                 );
               })}
             </div>
+          </div>
+        </section>
+
+
+
+        <section id="spotlights" className="spotlight-section">
+          <div className="wrap">
+            <div className="head">
+              <div>
+                <div className="eyebrow">CREATIVE HIGHLIGHTS</div>
+                <h2>Creative highlights</h2>
+              </div>
+              <span>by discipline</span>
+            </div>
+            {content.spotlights?.length ? (
+              <div className="spotlight-grid">
+                {content.spotlights.map((spotlight, index) => {
+                  const media = spotlight.media ?? [];
+                  return (
+                    <Link
+                      className="spotlight-card"
+                      key={spotlight.id}
+                      href={`/spotlight/${spotlight.slug || spotlight.id}`}
+                    >
+                      <div className="spotlight-visual">
+                        {media.length ? (
+                          <div className="spotlight-preview-grid">
+                            {media.slice(0, 4).map((item) => (
+                              <Media
+                                key={item.id}
+                                media={item}
+                                alt={`${spotlight.name} preview`}
+                                className="spotlight-preview-media"
+                              />
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="spotlight-placeholder"><span>{String(index + 1).padStart(2, "0")}</span></div>
+                        )}
+                        <div className="spotlight-number">{String(index + 1).padStart(2, "0")}</div>
+                        {media.length > 0 && <div className="spotlight-count">{media.length} pieces</div>}
+                      </div>
+                      <div className="spotlight-info">
+                        <div>
+                          <h3>{spotlight.name}</h3>
+                          {spotlight.desc ? <p>{spotlight.desc}</p> : null}
+                        </div>
+                        <span className="tag">View ↗</span>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="spotlight-empty">
+                <span>No creative highlights published yet.</span>
+              </div>
+            )}
           </div>
         </section>
 
