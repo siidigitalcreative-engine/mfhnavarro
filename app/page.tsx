@@ -4,7 +4,7 @@ import type { MediaItem } from "@/lib/types";
 
 function Media({ media, alt, className = "" }: { media: MediaItem; alt: string; className?: string }) {
   return media.type === "video" ? (
-    <video className={className} src={media.url} muted loop playsInline autoPlay controls={false} aria-label={alt} />
+    <video className={className} src={media.url} poster={media.thumbnailUrl} muted loop playsInline autoPlay controls={false} aria-label={alt} />
   ) : (
     <img className={className} src={media.url} alt={alt} />
   );
@@ -61,6 +61,40 @@ export default async function Home() {
         </section>
 
 
+        <section id="spotlights" className="spotlight-section">
+          <div className="wrap">
+            <div className="head">
+              <div>
+                <div className="eyebrow">SPOTLIGHTS</div>
+                <h2>Spotlights</h2>
+              </div>
+              <span>by discipline</span>
+            </div>
+            {content.spotlights?.length ? (
+              <div className="spotlight-list">
+                {content.spotlights.map((spotlight, index) => (
+                  <Link
+                    className="spotlight-row"
+                    key={spotlight.id}
+                    href={`/spotlight/${spotlight.slug || spotlight.id}`}
+                  >
+                    <span className="spotlight-row-number">{String(index + 1).padStart(2, "0")}</span>
+                    <span className="spotlight-row-main">
+                      <span className="spotlight-row-name">{spotlight.name || "Untitled spotlight"}</span>
+                      {spotlight.desc ? <span className="spotlight-row-desc">{spotlight.desc}</span> : null}
+                    </span>
+                    <span className="spotlight-row-arrow" aria-hidden="true">↗</span>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <div className="spotlight-empty">
+                <span>No spotlights published yet.</span>
+              </div>
+            )}
+          </div>
+        </section>
+
         <section id="work" className="work-section">
           <div className="wrap">
             <div className="head"><div><div className="eyebrow">SELECTED WORK</div><h2>Selected work</h2></div><span>2023 — 2026</span></div>
@@ -94,61 +128,7 @@ export default async function Home() {
 
 
 
-        <section id="spotlights" className="spotlight-section">
-          <div className="wrap">
-            <div className="head">
-              <div>
-                <div className="eyebrow">CREATIVE HIGHLIGHTS</div>
-                <h2>Creative highlights</h2>
-              </div>
-              <span>by discipline</span>
-            </div>
-            {content.spotlights?.length ? (
-              <div className="spotlight-grid">
-                {content.spotlights.map((spotlight, index) => {
-                  const media = spotlight.media ?? [];
-                  return (
-                    <Link
-                      className="spotlight-card"
-                      key={spotlight.id}
-                      href={`/spotlight/${spotlight.slug || spotlight.id}`}
-                    >
-                      <div className="spotlight-visual">
-                        {media.length ? (
-                          <div className="spotlight-preview-grid">
-                            {media.slice(0, 4).map((item) => (
-                              <Media
-                                key={item.id}
-                                media={item}
-                                alt={`${spotlight.name} preview`}
-                                className="spotlight-preview-media"
-                              />
-                            ))}
-                          </div>
-                        ) : (
-                          <div className="spotlight-placeholder"><span>{String(index + 1).padStart(2, "0")}</span></div>
-                        )}
-                        <div className="spotlight-number">{String(index + 1).padStart(2, "0")}</div>
-                        {media.length > 0 && <div className="spotlight-count">{media.length} pieces</div>}
-                      </div>
-                      <div className="spotlight-info">
-                        <div>
-                          <h3>{spotlight.name}</h3>
-                          {spotlight.desc ? <p>{spotlight.desc}</p> : null}
-                        </div>
-                        <span className="tag">View ↗</span>
-                      </div>
-                    </Link>
-                  );
-                })}
-              </div>
-            ) : (
-              <div className="spotlight-empty">
-                <span>No creative highlights published yet.</span>
-              </div>
-            )}
-          </div>
-        </section>
+
 
         <section>
           <div className="wrap">
