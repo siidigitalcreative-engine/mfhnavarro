@@ -19,6 +19,8 @@ export default function AdminPage() {
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [uploadingId, setUploadingId] = useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState<Record<string, { name: string; progress: number; status: "uploading" | "done" | "error" }[]>>({});
+  const [heroUploading, setHeroUploading] = useState(false);
+  const [heroUploadProgress, setHeroUploadProgress] = useState<{ name: string; progress: number; status: "uploading" | "done" | "error" }[]>([]);
   const [uploadingClientId, setUploadingClientId] = useState<string | null>(null);
   const [uploadingLayerId, setUploadingLayerId] = useState<string | null>(null);
   const [layerProgress, setLayerProgress] = useState<Record<string, number>>({});
@@ -105,7 +107,6 @@ export default function AdminPage() {
             url: blob.url,
             type: mediaTypeFromFile(file),
             name: file.name,
-            description: "",
           };
 
           setContent((current) => {
@@ -138,6 +139,85 @@ export default function AdminPage() {
     } finally {
       setUploadingId(null);
     }
+  }
+
+  async function uploadHeroImages(files: FileList | File[]) {
+    if (!content) return;
+
+    const selected = Array.from(files).filter((file) => file.type.startsWith("image/"));
+    if (!selected.length) {
+      setStatus("error");
+      return;
+    }
+
+    const currentHero = content.heroMedia ?? [];
+    const remaining = 2 - currentHero.length;
+    if (remaining <= 0) return;
+
+    const validFiles = selected.slice(0, remaining);
+    setHeroUploading(true);
+    setHeroUploadProgress(validFiles.map((file) => ({
+      name: file.name,
+      progress: 0,
+      status: "uploading" as const,
+    })));
+
+    try {
+      for (let index = 0; index < validFiles.length; index++) {
+        const file = validFiles[index];
+        try {
+          const blob = await upload(`hero-${Date.now()}-${file.name}`, file, {
+            access: "public",
+            handleUploadUrl: "/api/upload",
+            multipart: true,
+            onUploadProgress(event) {
+              setHeroUploadProgress((current) => current.map((item, itemIndex) =>
+                itemIndex === index ? { ...item, progress: Math.round(event.percentage) } : item
+              ));
+            },
+          });
+
+          const media: MediaItem = {
+            id: newId(),
+            url: blob.url,
+            type: "image",
+            name: file.name,
+          };
+
+          setContent((current) => current ? {
+            ...current,
+            heroMedia: [...(current.heroMedia ?? []), media],
+          } : current);
+
+          setHeroUploadProgress((current) => current.map((item, itemIndex) =>
+            itemIndex === index ? { ...item, progress: 100, status: "done" as const } : item
+          ));
+        } catch (error) {
+          console.error(`Hero image upload failed for ${file.name}`, error);
+          setHeroUploadProgress((current) => current.map((item, itemIndex) =>
+            itemIndex === index ? { ...item, status: "error" as const } : item
+          ));
+          setStatus("error");
+        }
+      }
+    } finally {
+      setHeroUploading(false);
+    }
+  }
+
+  function moveHeroImage(mediaId: string, direction: -1 | 1) {
+    if (!content) return;
+    const media = [...(content.heroMedia ?? [])];
+    const index = media.findIndex((item) => item.id === mediaId);
+    const nextIndex = index + direction;
+    if (index < 0 || nextIndex < 0 || nextIndex >= media.length) return;
+    [media[index], media[nextIndex]] = [media[nextIndex], media[index]];
+    update("heroMedia", media);
+  }
+
+  function removeHeroImage(mediaId: string) {
+    if (!content) return;
+    update("heroMedia", (content.heroMedia ?? []).filter((item) => item.id !== mediaId));
   }
 
   async function uploadClientLogo(clientId: string, file: File | undefined) {
@@ -196,7 +276,7 @@ export default function AdminPage() {
     const layer: WorkLayer = {
       id: newId(),
       type,
-      ...(type === "text" ? { text: "Section title" } : { layout: "full", description: "" }),
+      ...(type === "text" ? { text: "Section title" } : { layout: "full" }),
     };
     update("work", content.work.map((w) => w.id === workId ? { ...w, layers: [...(w.layers ?? []), layer] } : w));
   }
@@ -317,7 +397,6 @@ export default function AdminPage() {
             url: blob.url,
             type: mediaTypeFromFile(file),
             name: file.name,
-            description: "",
           };
 
           setContent((current) => current ? {
@@ -378,6 +457,73 @@ export default function AdminPage() {
         <div className="admin-section-head"><h2>Hero</h2><span>01</span></div>
         <label>Headline</label><textarea value={content.heroHeadline} onChange={(e) => update("heroHeadline", e.target.value)} />
         <label>Lede</label><textarea value={content.heroLede} onChange={(e) => update("heroLede", e.target.value)} />
+
+        <div className="hero-images-admin">
+          <div>
+            <label>Hero images</label>
+            <p className="admin-help">Upload up to 2 images. These appear directly below the headline and lede on the homepage.</p>
+          </div>
+
+          <div
+            className={`upload-zone ${heroUploading ? "is-uploading" : ""}`}
+            onDragOver={(e) => e.preventDefault()}
+            onDrop={(e) => {
+              e.preventDefault();
+              if (!heroUploading) void uploadHeroImages(e.dataTransfer.files);
+            }}
+          >
+            <input
+              id="hero-images-upload"
+              className="file-input"
+              type="file"
+              accept="image/*"
+              multiple
+              disabled={heroUploading || (content.heroMedia?.length ?? 0) >= 2}
+              onChange={(e) => {
+                void uploadHeroImages(e.target.files ?? []);
+                e.currentTarget.value = "";
+              }}
+            />
+            <label className="upload-label" htmlFor="hero-images-upload">
+              <span className="upload-icon">＋</span>
+              <span>
+                <strong>{heroUploading ? "Uploading hero images…" : "Add hero images"}</strong>
+                <small>{content.heroMedia?.length ?? 0} / 2 uploaded · select up to 2 images</small>
+              </span>
+            </label>
+          </div>
+
+          {!!heroUploadProgress.length && (
+            <div className="upload-progress-list">
+              {heroUploadProgress.map((item, index) => (
+                <div className="upload-progress-item" key={`${item.name}-${index}`}>
+                  <div className="upload-progress-top" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, width: "100%" }}>
+                    <span style={{ minWidth: 0, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{item.name}</span>
+                    <span className={item.status === "error" ? "upload-progress-error" : "upload-progress-percent"}>{item.status === "error" ? "Failed" : `${item.progress}%`}</span>
+                  </div>
+                  <div className="upload-progress-track"><div className={`upload-progress-bar ${item.status === "error" ? "is-error" : ""}`} style={{ width: `${item.progress}%` }} /></div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {!!content.heroMedia?.length && (
+            <div className="hero-media-admin-grid">
+              {content.heroMedia.map((media, index) => (
+                <div className="hero-media-admin-card" key={media.id}>
+                  <div className="hero-media-admin-number">{String(index + 1).padStart(2, "0")}</div>
+                  <div className="hero-media-admin-preview"><img src={media.url} alt={media.name ?? `Hero image ${index + 1}`} /></div>
+                  <div className="hero-media-admin-actions">
+                    <button className="icon-btn" disabled={index === 0} onClick={() => moveHeroImage(media.id, -1)}>←</button>
+                    <button className="icon-btn" disabled={index === content.heroMedia!.length - 1} onClick={() => moveHeroImage(media.id, 1)}>→</button>
+                    <button className="icon-btn danger" onClick={() => removeHeroImage(media.id)}>×</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
         <label>Now note</label><textarea value={content.nowNote} onChange={(e) => update("nowNote", e.target.value)} />
         <label>Tools (comma separated)</label>
         <input value={content.tools.join(", ")} onChange={(e) => update("tools", e.target.value.split(",").map((t) => t.trim()).filter(Boolean))} />
@@ -431,7 +577,6 @@ export default function AdminPage() {
                   <button className="icon-btn" disabled={mediaIndex === item.media!.length - 1} onClick={() => moveMedia(item.id, media.id, 1)}>→</button>
                   <button className="icon-btn danger" onClick={() => removeMedia(item.id, media.id)}>×</button>
                 </div></div>
-                <textarea className="media-description-input" placeholder="Short description for this image or video" value={media.description ?? ""} onChange={(e) => update("work", content.work.map((w) => w.id === item.id ? { ...w, media: (w.media ?? []).map((m) => m.id === media.id ? { ...m, description: e.target.value } : m) } : w))} />
               </div>)}
             </div>}
             <div className="landing-builder">
@@ -479,7 +624,6 @@ export default function AdminPage() {
                       ) : (
                         <div className="landing-layer-empty">No {layer.type} selected yet.</div>
                       )}
-                      <textarea className="media-description-input" placeholder="Short description for this image or video" value={layer.description ?? ""} onChange={(e) => updateLayer(item.id, layer.id, { description: e.target.value })} />
                       <div className="layer-upload-row">
                         <label className="btn btn-ghost layer-upload-btn" htmlFor={`layer-${layer.id}`}>{uploadingLayerId === layer.id ? `Uploading ${layerProgress[layer.id] ?? 0}%` : layer.url ? `Replace ${layer.type}` : `Upload ${layer.type}`}</label>
                         <input id={`layer-${layer.id}`} className="file-input" type="file" accept={layer.type === "video" ? "video/*,.mp4,.mov,.m4v,.webm" : "image/*"} onChange={(e) => { void uploadLayerFile(item.id, layer.id, e.target.files?.[0]); e.currentTarget.value = ""; }} />
@@ -522,7 +666,7 @@ export default function AdminPage() {
 
       <section className="admin-section">
         <div className="admin-section-head">
-          <div><div className="admin-kicker">PORTFOLIO</div><h2>Spotlights</h2></div>
+          <div><div className="admin-kicker">PORTFOLIO</div><h2>Creative Spotlights</h2></div>
           <button
             className="btn btn-ghost"
             onClick={() => update("spotlights", [
@@ -540,9 +684,8 @@ export default function AdminPage() {
             <div className="admin-card spotlight-admin-card" key={spotlight.id}>
               <div className="admin-card-top"><span className="admin-index">{String(index + 1).padStart(2, "0")}</span><span>{spotlight.media.length} pieces</span></div>
               <input placeholder="Spotlight name, e.g. Logo Design" value={spotlight.name} onChange={(e) => updateSpotlight(spotlight.id, { name: e.target.value })} />
-              <textarea placeholder="Short description for the spotlight card" value={spotlight.desc} onChange={(e) => updateSpotlight(spotlight.id, { desc: e.target.value })} />
+              <textarea placeholder="Short description" value={spotlight.desc} onChange={(e) => updateSpotlight(spotlight.id, { desc: e.target.value })} />
               <input placeholder="Page URL slug, e.g. logo-design" value={spotlight.slug ?? ""} onChange={(e) => updateSpotlight(spotlight.id, { slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]+/g, "-") })} />
-
 
               <div
                 className={`upload-zone ${spotlightUploadingId === spotlight.id ? "is-uploading" : ""}`}
@@ -588,22 +731,6 @@ export default function AdminPage() {
                           <button className="icon-btn danger" onClick={() => removeSpotlightMedia(spotlight.id, media.id)}>×</button>
                         </div>
                       </div>
-                      <textarea className="media-description-input" placeholder="Short description for this image or video" value={media.description ?? ""} onChange={(e) => updateSpotlight(spotlight.id, { media: spotlight.media.map((item) => item.id === media.id ? { ...item, description: e.target.value } : item) })} />
-                      {media.type === "video" && (
-                        <VideoThumbnailPicker
-                          src={media.url}
-                          currentThumbnail={media.thumbnailUrl}
-                          workId={spotlight.id}
-                          layerId={media.id}
-                          onThumbnailSaved={(url) =>
-                            updateSpotlight(spotlight.id, {
-                              media: spotlight.media.map((item) =>
-                                item.id === media.id ? { ...item, thumbnailUrl: url } : item
-                              ),
-                            })
-                          }
-                        />
-                      )}
                     </div>
                   ))}
                 </div>
