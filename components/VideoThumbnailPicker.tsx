@@ -17,21 +17,50 @@ export default function VideoThumbnailPicker({
   onThumbnailSaved: (url: string) => void;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [time, setTime] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [preview, setPreview] = useState<string | undefined>(currentThumbnail);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
+  const timeState = useState(0);
+  const time = timeState.at(0) ?? 0;
+  const setTime = timeState.at(1)!;
+  const durationState = useState(0);
+  const duration = durationState.at(0) ?? 0;
+  const setDuration = durationState.at(1)!;
+  const previewState = useState<string | undefined>(currentThumbnail);
+  const preview = previewState.at(0);
+  const setPreview = previewState.at(1)!;
+  const savingState = useState(false);
+  const saving = savingState.at(0) ?? false;
+  const setSaving = savingState.at(1)!;
+  const errorState = useState("");
+  const error = errorState.at(0) ?? "";
+  const setError = errorState.at(1)!;
 
   useEffect(() => {
     setPreview(currentThumbnail);
-  }, [currentThumbnail]);
+  }, Array.of(currentThumbnail));
 
-  function handleLoadedMetadata() {
+  function updateDuration() {
     const video = videoRef.current;
     if (!video) return;
-    setDuration(Number.isFinite(video.duration) ? video.duration : 0);
-    setTime(0);
+    const nextDuration = Number.isFinite(video.duration) ? video.duration : 0;
+    if (nextDuration > 0) {
+      setDuration(nextDuration);
+      setTime(Math.min(video.currentTime || 0, nextDuration));
+    }
+  }
+
+  function handleLoadedMetadata() {
+    updateDuration();
+  }
+
+  function handleDurationChange() {
+    updateDuration();
+  }
+
+  function handleLoadedData() {
+    updateDuration();
+  }
+
+  function handleCanPlay() {
+    updateDuration();
   }
 
   function handleTimeUpdate() {
@@ -70,7 +99,7 @@ export default function VideoThumbnailPicker({
       if (!blob) throw new Error("Could not create thumbnail.");
 
       const file = new File(
-        [blob],
+        Array.of(blob),
         `thumbnail-${workId}-${layerId}-${Math.round(time * 1000)}.jpg`,
         { type: "image/jpeg" }
       );
@@ -151,6 +180,9 @@ export default function VideoThumbnailPicker({
         preload="metadata"
         crossOrigin="anonymous"
         onLoadedMetadata={handleLoadedMetadata}
+        onDurationChange={handleDurationChange}
+        onLoadedData={handleLoadedData}
+        onCanPlay={handleCanPlay}
         onTimeUpdate={handleTimeUpdate}
         style={{
           display: "block",
@@ -163,8 +195,7 @@ export default function VideoThumbnailPicker({
         }}
       />
 
-      {duration > 0 && (
-        <div style={{ marginTop: 12 }}>
+      <div style={{ marginTop: 12 }}>
           <div
             style={{
               display: "flex",
@@ -182,15 +213,20 @@ export default function VideoThumbnailPicker({
           <input
             type="range"
             min={0}
-            max={duration}
+            max={duration > 0 ? duration : 1}
             step={0.01}
-            value={time}
+            value={duration > 0 ? Math.min(time, duration) : 0}
             onChange={(event) => seek(Number(event.target.value))}
-            style={{ width: "100%" }}
+            style={{ width: "100%", opacity: duration > 0 ? 1 : 0.35 }}
             aria-label="Choose video thumbnail frame"
+            disabled={duration === 0}
           />
+          {duration === 0 && (
+            <div style={{ marginTop: 7, fontSize: 10, opacity: 0.5 }}>
+              Loading video timeline…
+            </div>
+          )}
         </div>
-      )}
 
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 12 }}>
         <button
