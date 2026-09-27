@@ -70,6 +70,7 @@ export default async function Home() {
               </div>
               <span>by discipline</span>
             </div>
+            <p className="spotlight-intro">A curated collection of work grouped by discipline — explore the range of what I create beyond individual projects.</p>
             {content.spotlights?.length ? (
               <div className="spotlight-list">
                 {content.spotlights.map((spotlight, index) => (
@@ -83,7 +84,7 @@ export default async function Home() {
                       <span className="spotlight-row-name">{spotlight.name || "Untitled spotlight"}</span>
                       {spotlight.desc ? <span className="spotlight-row-desc">{spotlight.desc}</span> : null}
                     </span>
-                    <span className="spotlight-row-arrow" aria-hidden="true">↗</span>
+                    <span className="spotlight-row-action" aria-hidden="true">EXPLORE <span>→</span></span>
                   </Link>
                 ))}
               </div>
