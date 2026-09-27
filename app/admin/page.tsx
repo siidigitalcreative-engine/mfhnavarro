@@ -3,7 +3,7 @@
 import { upload } from "@vercel/blob/client";
 import { DragEvent, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import type { SiteContent, WorkItem, Testimonial, MediaItem, ClientItem, WorkLayer } from "@/lib/types";
+import type { SiteContent, WorkItem, Testimonial, MediaItem, ClientItem, WorkLayer, CreativeSpotlight } from "@/lib/types";
 import VideoThumbnailPicker from "@/components/VideoThumbnailPicker";
 
 function newId() {
@@ -22,6 +22,8 @@ export default function AdminPage() {
   const [uploadingClientId, setUploadingClientId] = useState<string | null>(null);
   const [uploadingLayerId, setUploadingLayerId] = useState<string | null>(null);
   const [layerProgress, setLayerProgress] = useState<Record<string, number>>({});
+  const [spotlightUploadingId, setSpotlightUploadingId] = useState<string | null>(null);
+  const [spotlightUploadProgress, setSpotlightUploadProgress] = useState<Record<string, { name: string; progress: number; status: "uploading" | "done" | "error" }[]>>({});
   const router = useRouter();
 
   useEffect(() => {
@@ -239,6 +241,114 @@ export default function AdminPage() {
     }
   }
 
+  function updateSpotlight(id: string, patch: Partial<CreativeSpotlight>) {
+    if (!content) return;
+    update("spotlights", (content.spotlights ?? []).map((spotlight) =>
+      spotlight.id === id ? { ...spotlight, ...patch } : spotlight
+    ));
+  }
+
+  function removeSpotlightMedia(spotlightId: string, mediaId: string) {
+    if (!content) return;
+    update("spotlights", (content.spotlights ?? []).map((spotlight) =>
+      spotlight.id === spotlightId
+        ? { ...spotlight, media: spotlight.media.filter((media) => media.id !== mediaId) }
+        : spotlight
+    ));
+  }
+
+  function moveSpotlightMedia(spotlightId: string, mediaId: string, direction: -1 | 1) {
+    if (!content) return;
+    update("spotlights", (content.spotlights ?? []).map((spotlight) => {
+      if (spotlight.id !== spotlightId) return spotlight;
+      const media = [...spotlight.media];
+      const index = media.findIndex((item) => item.id === mediaId);
+      const nextIndex = index + direction;
+      if (index < 0 || nextIndex < 0 || nextIndex >= media.length) return spotlight;
+      [media[index], media[nextIndex]] = [media[nextIndex], media[index]];
+      return { ...spotlight, media };
+    }));
+  }
+
+  async function uploadSpotlightFiles(spotlightId: string, files: FileList | File[]) {
+    const selected = Array.from(files);
+    if (!selected.length) return;
+
+    const validFiles = selected.filter((file) =>
+      file.type.startsWith("image/") || file.type.startsWith("video/")
+    );
+
+    if (!validFiles.length) {
+      setStatus("error");
+      return;
+    }
+
+    setSpotlightUploadingId(spotlightId);
+    setSpotlightUploadProgress((current) => ({
+      ...current,
+      [spotlightId]: validFiles.map((file) => ({
+        name: file.name,
+        progress: 0,
+        status: "uploading" as const,
+      })),
+    }));
+
+    try {
+      for (let index = 0; index < validFiles.length; index++) {
+        const file = validFiles[index];
+        try {
+          const blob = await upload(`spotlight-${spotlightId}-${Date.now()}-${file.name}`, file, {
+            access: "public",
+            handleUploadUrl: "/api/upload",
+            multipart: true,
+            onUploadProgress(event) {
+              setSpotlightUploadProgress((current) => ({
+                ...current,
+                [spotlightId]: (current[spotlightId] ?? []).map((item, itemIndex) =>
+                  itemIndex === index ? { ...item, progress: Math.round(event.percentage) } : item
+                ),
+              }));
+            },
+          });
+
+          const media: MediaItem = {
+            id: newId(),
+            url: blob.url,
+            type: mediaTypeFromFile(file),
+            name: file.name,
+          };
+
+          setContent((current) => current ? {
+            ...current,
+            spotlights: (current.spotlights ?? []).map((spotlight) =>
+              spotlight.id === spotlightId
+                ? { ...spotlight, media: [...spotlight.media, media] }
+                : spotlight
+            ),
+          } : current);
+
+          setSpotlightUploadProgress((current) => ({
+            ...current,
+            [spotlightId]: (current[spotlightId] ?? []).map((item, itemIndex) =>
+              itemIndex === index ? { ...item, progress: 100, status: "done" as const } : item
+            ),
+          }));
+        } catch (error) {
+          console.error(`Spotlight upload failed for ${file.name}`, error);
+          setSpotlightUploadProgress((current) => ({
+            ...current,
+            [spotlightId]: (current[spotlightId] ?? []).map((item, itemIndex) =>
+              itemIndex === index ? { ...item, status: "error" as const } : item
+            ),
+          }));
+          setStatus("error");
+        }
+      }
+    } finally {
+      setSpotlightUploadingId(null);
+    }
+  }
+
   function updateClient(id: string, patch: Partial<ClientItem>) {
     if (!content) return;
     update("clients", content.clients.map((client) => client.id === id ? { ...client, ...patch } : client));
@@ -403,6 +513,85 @@ export default function AdminPage() {
             <button className="btn btn-ghost danger-button" onClick={() => update("work", content.work.filter((w) => w.id !== item.id))}>Remove project</button>
           </div>
         ))}
+      </section>
+
+
+      <section className="admin-section">
+        <div className="admin-section-head">
+          <div><div className="admin-kicker">PORTFOLIO</div><h2>Creative Spotlights</h2></div>
+          <button
+            className="btn btn-ghost"
+            onClick={() => update("spotlights", [
+              ...(content.spotlights ?? []),
+              { id: newId(), name: "", desc: "", slug: "", media: [] },
+            ])}
+          >
+            + Add spotlight
+          </button>
+        </div>
+        <p className="admin-help">Create discipline-based collections separate from Selected Work. Each spotlight gets its own public page and can contain a compiled set of images and videos.</p>
+
+        <div className="spotlight-admin-list">
+          {(content.spotlights ?? []).map((spotlight, index) => (
+            <div className="admin-card spotlight-admin-card" key={spotlight.id}>
+              <div className="admin-card-top"><span className="admin-index">{String(index + 1).padStart(2, "0")}</span><span>{spotlight.media.length} pieces</span></div>
+              <input placeholder="Spotlight name, e.g. Logo Design" value={spotlight.name} onChange={(e) => updateSpotlight(spotlight.id, { name: e.target.value })} />
+              <textarea placeholder="Short description" value={spotlight.desc} onChange={(e) => updateSpotlight(spotlight.id, { desc: e.target.value })} />
+              <input placeholder="Page URL slug, e.g. logo-design" value={spotlight.slug ?? ""} onChange={(e) => updateSpotlight(spotlight.id, { slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]+/g, "-") })} />
+
+              <div
+                className={`upload-zone ${spotlightUploadingId === spotlight.id ? "is-uploading" : ""}`}
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  if (spotlightUploadingId !== spotlight.id) void uploadSpotlightFiles(spotlight.id, e.dataTransfer.files);
+                }}
+              >
+                <input id={`spotlight-upload-${spotlight.id}`} className="file-input" type="file" accept="image/*,video/*,.mp4,.mov,.m4v,.webm" multiple onChange={(e) => { void uploadSpotlightFiles(spotlight.id, e.target.files ?? []); e.currentTarget.value = ""; }} />
+                <label className="upload-label" htmlFor={`spotlight-upload-${spotlight.id}`}>
+                  <span className="upload-icon">＋</span>
+                  <span><strong>{spotlightUploadingId === spotlight.id ? "Uploading spotlight media…" : "Add compiled work"}</strong><small>Select multiple images/videos or drag them here</small></span>
+                </label>
+              </div>
+
+              {!!spotlightUploadProgress[spotlight.id]?.length && (
+                <div className="upload-progress-list">
+                  {spotlightUploadProgress[spotlight.id].map((uploadItem, uploadIndex) => (
+                    <div className="upload-progress-item" key={`${uploadItem.name}-${uploadIndex}`}>
+                      <div className="upload-progress-top" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, width: "100%" }}>
+                        <span style={{ minWidth: 0, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{uploadItem.name}</span>
+                        <span style={{ flex: "0 0 auto", whiteSpace: "nowrap", fontVariantNumeric: "tabular-nums" }} className={uploadItem.status === "error" ? "upload-progress-error" : "upload-progress-percent"}>{uploadItem.status === "error" ? "Failed" : `${uploadItem.progress}%`}</span>
+                      </div>
+                      <div className="upload-progress-track"><div className={`upload-progress-bar ${uploadItem.status === "error" ? "is-error" : ""}`} style={{ width: `${uploadItem.progress}%` }} /></div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {!!spotlight.media.length && (
+                <div className="spotlight-admin-media-grid">
+                  {spotlight.media.map((media, mediaIndex) => (
+                    <div className="admin-media-card" key={media.id}>
+                      <div className="admin-media-preview">
+                        {media.type === "video" ? <video src={media.url} controls /> : <img src={media.url} alt={media.name ?? spotlight.name} />}
+                      </div>
+                      <div className="admin-media-meta">
+                        <span>{String(mediaIndex + 1).padStart(2, "0")} / {media.type}</span>
+                        <div className="admin-media-actions">
+                          <button className="icon-btn" disabled={mediaIndex === 0} onClick={() => moveSpotlightMedia(spotlight.id, media.id, -1)}>←</button>
+                          <button className="icon-btn" disabled={mediaIndex === spotlight.media.length - 1} onClick={() => moveSpotlightMedia(spotlight.id, media.id, 1)}>→</button>
+                          <button className="icon-btn danger" onClick={() => removeSpotlightMedia(spotlight.id, media.id)}>×</button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <button className="btn btn-ghost danger-button" onClick={() => update("spotlights", (content.spotlights ?? []).filter((item) => item.id !== spotlight.id))}>Remove spotlight</button>
+            </div>
+          ))}
+        </div>
       </section>
 
       <section className="admin-section">
