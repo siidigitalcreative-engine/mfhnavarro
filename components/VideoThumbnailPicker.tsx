@@ -17,25 +17,15 @@ export default function VideoThumbnailPicker({
   onThumbnailSaved: (url: string) => void;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const timeState = useState(0);
-  const time = timeState.at(0) ?? 0;
-  const setTime = timeState.at(1)!;
-  const durationState = useState(0);
-  const duration = durationState.at(0) ?? 0;
-  const setDuration = durationState.at(1)!;
-  const previewState = useState<string | undefined>(currentThumbnail);
-  const preview = previewState.at(0);
-  const setPreview = previewState.at(1)!;
-  const savingState = useState(false);
-  const saving = savingState.at(0) ?? false;
-  const setSaving = savingState.at(1)!;
-  const errorState = useState("");
-  const error = errorState.at(0) ?? "";
-  const setError = errorState.at(1)!;
+  const [time, setTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [preview, setPreview] = useState<string | undefined>(currentThumbnail);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     setPreview(currentThumbnail);
-  }, Array.of(currentThumbnail));
+  }, [currentThumbnail]);
 
   function updateDuration() {
     const video = videoRef.current;
@@ -99,7 +89,7 @@ export default function VideoThumbnailPicker({
       if (!blob) throw new Error("Could not create thumbnail.");
 
       const file = new File(
-        Array.of(blob),
+        [blob],
         `thumbnail-${workId}-${layerId}-${Math.round(time * 1000)}.jpg`,
         { type: "image/jpeg" }
       );
