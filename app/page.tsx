@@ -1,9 +1,10 @@
+import Link from "next/link";
 import { getContent } from "@/lib/content";
 import type { MediaItem } from "@/lib/types";
 
 function Media({ media, alt, className = "" }: { media: MediaItem; alt: string; className?: string }) {
   return media.type === "video" ? (
-    <video className={className} src={media.url} muted loop playsInline autoPlay controls={false} aria-label={alt} />
+    <video className={className} src={media.url} poster={media.thumbnailUrl} muted loop playsInline autoPlay controls={false} aria-label={alt} />
   ) : (
     <img className={className} src={media.url} alt={alt} />
   );
@@ -11,7 +12,6 @@ function Media({ media, alt, className = "" }: { media: MediaItem; alt: string; 
 
 export default async function Home() {
   const content = await getContent();
-  const heroMedia = (content.heroMedia ?? []).slice(0, 2);
 
   return (
     <>
@@ -31,34 +31,20 @@ export default async function Home() {
       <main id="top">
         <section className="hero">
           <div className="wrap hero-grid">
-            <div className="hero-copy">
+            <div>
               <div className="eyebrow">MULTIMEDIA DESIGNER</div>
               <h1>{content.heroHeadline}</h1>
               <p className="lede">{content.heroLede}</p>
-
-              <div className="hero-image-showcase" aria-label="Hero images">
-                {[0, 1].map((index) => {
-                  const media = heroMedia[index];
-                  return (
-                    <div className={`hero-image-slot hero-image-slot-${index + 1}`} key={media?.id ?? `placeholder-${index}`}>
-                      {media ? (
-                        <Media media={media} alt={media.name || `Hero image ${index + 1}`} className="hero-image" />
-                      ) : (
-                        <div className="hero-image-placeholder" aria-hidden="true">
-                          <span>IMAGE {String(index + 1).padStart(2, "0")}</span>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
+              <div className="hero-images" aria-label="Featured work">
+                <div className="hero-image-slot">
+                  {content.heroImages?.[0] ? <img src={content.heroImages[0]} alt="Featured work 1" /> : <div className="hero-image-placeholder" aria-hidden="true" />}
+                </div>
+                <div className="hero-image-slot hero-image-slot-offset">
+                  {content.heroImages?.[1] ? <img src={content.heroImages[1]} alt="Featured work 2" /> : <div className="hero-image-placeholder" aria-hidden="true" />}
+                </div>
               </div>
-
-              <div className="cta-row">
-                <a className="btn" href="#work">View selected work <span>↗</span></a>
-                <span className="socials"><a href="#">Instagram</a> · <a href="#">LinkedIn</a></span>
-              </div>
+              <div className="cta-row"><a className="btn" href="#work">View selected work <span>↗</span></a><span className="socials"><a href="#">Instagram</a> · <a href="#">LinkedIn</a></span></div>
             </div>
-
             <div className="stack-card">
               <div className="k">// working with</div>
               <div className="tools">{content.tools.map((tool) => <span className="chip" key={tool}>{tool}</span>)}</div>
@@ -82,6 +68,42 @@ export default async function Home() {
           </div>
         </section>
 
+
+        <section id="spotlights" className="spotlight-section">
+          <div className="wrap">
+            <div className="head">
+              <div>
+                <div className="eyebrow">SPOTLIGHTS</div>
+                <h2>Spotlights</h2>
+              </div>
+              <span>by discipline</span>
+            </div>
+            <p className="spotlight-intro">A curated collection of work grouped by discipline — explore the range of what I create beyond individual projects.</p>
+            {content.spotlights?.length ? (
+              <div className="spotlight-list">
+                {content.spotlights.map((spotlight, index) => (
+                  <Link
+                    className="spotlight-row"
+                    key={spotlight.id}
+                    href={`/spotlight/${spotlight.slug || spotlight.id}`}
+                  >
+                    <span className="spotlight-row-number">{String(index + 1).padStart(2, "0")}</span>
+                    <span className="spotlight-row-main">
+                      <span className="spotlight-row-name">{spotlight.name || "Untitled spotlight"}</span>
+                      {spotlight.desc ? <span className="spotlight-row-desc">{spotlight.desc}</span> : null}
+                    </span>
+                    <span className="spotlight-row-action" aria-hidden="true">EXPLORE <span>→</span></span>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <div className="spotlight-empty">
+                <span>No spotlights published yet.</span>
+              </div>
+            )}
+          </div>
+        </section>
+
         <section id="work" className="work-section">
           <div className="wrap">
             <div className="head"><div><div className="eyebrow">SELECTED WORK</div><h2>Selected work</h2></div><span>2023 — 2026</span></div>
@@ -90,7 +112,7 @@ export default async function Home() {
                 const media = item.media ?? [];
                 const primary = media[0];
                 return (
-                  <article className="work-card" key={item.id}>
+                  <Link className="work-card" key={item.id} href={`/work/${item.slug || item.id}`}>
                     <div className="work-visual">
                       {primary ? <Media media={primary} alt={item.name} className="work-primary" /> : <div className="work-placeholder"><span>MF</span></div>}
                       <div className="work-number">{String(index + 1).padStart(2, "0")}</div>
@@ -106,12 +128,16 @@ export default async function Home() {
                         {media.length > 5 && <span className="more-media">+{media.length - 5}</span>}
                       </div>
                     )}
-                  </article>
+                  </Link>
                 );
               })}
             </div>
           </div>
         </section>
+
+
+
+
 
         <section>
           <div className="wrap">
