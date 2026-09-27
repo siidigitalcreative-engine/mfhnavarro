@@ -83,8 +83,8 @@ export default async function Home() {
                     <span className="spotlight-row-main">
                       <span className="spotlight-row-name">{spotlight.name || "Untitled spotlight"}</span>
                       {spotlight.desc ? <span className="spotlight-row-desc">{spotlight.desc}</span> : null}
+                      <span className="spotlight-row-action" aria-hidden="true">EXPLORE <span>→</span></span>
                     </span>
-                    <span className="spotlight-row-action" aria-hidden="true">EXPLORE <span>→</span></span>
                   </Link>
                 ))}
               </div>
