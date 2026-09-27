@@ -60,6 +60,7 @@ export type SiteIdentity = {
 };
 
 export type SiteContent = {
+  heroMedia?: MediaItem[];
   heroHeadline: string;
   heroLede: string;
   nowNote: string;
