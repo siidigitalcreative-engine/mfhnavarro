@@ -518,7 +518,7 @@ export default function AdminPage() {
 
       <section className="admin-section">
         <div className="admin-section-head">
-          <div><div className="admin-kicker">PORTFOLIO</div><h2>Creative Spotlights</h2></div>
+          <div><div className="admin-kicker">PORTFOLIO</div><h2>Spotlights</h2></div>
           <button
             className="btn btn-ghost"
             onClick={() => update("spotlights", [
@@ -536,8 +536,9 @@ export default function AdminPage() {
             <div className="admin-card spotlight-admin-card" key={spotlight.id}>
               <div className="admin-card-top"><span className="admin-index">{String(index + 1).padStart(2, "0")}</span><span>{spotlight.media.length} pieces</span></div>
               <input placeholder="Spotlight name, e.g. Logo Design" value={spotlight.name} onChange={(e) => updateSpotlight(spotlight.id, { name: e.target.value })} />
-              <textarea placeholder="Short description" value={spotlight.desc} onChange={(e) => updateSpotlight(spotlight.id, { desc: e.target.value })} />
+              <textarea placeholder="Short description for the spotlight card" value={spotlight.desc} onChange={(e) => updateSpotlight(spotlight.id, { desc: e.target.value })} />
               <input placeholder="Page URL slug, e.g. logo-design" value={spotlight.slug ?? ""} onChange={(e) => updateSpotlight(spotlight.id, { slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]+/g, "-") })} />
+
 
               <div
                 className={`upload-zone ${spotlightUploadingId === spotlight.id ? "is-uploading" : ""}`}
@@ -583,6 +584,21 @@ export default function AdminPage() {
                           <button className="icon-btn danger" onClick={() => removeSpotlightMedia(spotlight.id, media.id)}>×</button>
                         </div>
                       </div>
+                      {media.type === "video" && (
+                        <VideoThumbnailPicker
+                          src={media.url}
+                          currentThumbnail={media.thumbnailUrl}
+                          workId={spotlight.id}
+                          layerId={media.id}
+                          onThumbnailSaved={(url) =>
+                            updateSpotlight(spotlight.id, {
+                              media: spotlight.media.map((item) =>
+                                item.id === media.id ? { ...item, thumbnailUrl: url } : item
+                              ),
+                            })
+                          }
+                        />
+                      )}
                     </div>
                   ))}
                 </div>
