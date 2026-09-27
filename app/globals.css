@@ -1154,7 +1154,7 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
 .spotlight-row {
   position: relative;
   display: grid;
-  grid-template-columns: 64px minmax(0, 1fr) auto;
+  grid-template-columns: 64px minmax(0, 1fr);
   align-items: center;
   gap: 24px;
   min-height: 118px;
@@ -1194,6 +1194,7 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
   min-width: 0;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 6px;
 }
 .spotlight-row-name {
@@ -1209,11 +1210,11 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
   line-height: 1.5;
 }
 .spotlight-row-action {
-  justify-self: end;
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 9px 0;
+  margin-top: 10px;
+  padding: 0;
   font-family: var(--mono);
   font-size: 9px;
   line-height: 1;
@@ -1251,7 +1252,7 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
     line-height: 1.6;
   }
   .spotlight-row {
-    grid-template-columns: 34px minmax(0, 1fr) auto;
+    grid-template-columns: 34px minmax(0, 1fr);
     gap: 12px;
     min-height: 96px;
     padding: 20px 0;
@@ -1268,9 +1269,70 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
   }
   .spotlight-row-action {
     gap: 7px;
+    margin-top: 8px;
     font-size: 8px;
   }
   .spotlight-row-action span {
     font-size: 15px;
+  }
+}
+
+
+/* =========================================================
+   SPOTLIGHT PAGE — SAME MEDIA SPACING RHYTHM AS SELECTED WORK
+   Small spacing: 48px desktop / 24px mobile.
+   Same outer media margins and card treatment.
+   ========================================================= */
+.spotlight-page-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+}
+
+.spotlight-page-media {
+  width: min(calc(100% - 64px), 1180px);
+  margin: 0 auto 48px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  background: transparent;
+}
+
+.spotlight-page-media img,
+.spotlight-page-media video,
+.spotlight-page-media .custom-video-player,
+.spotlight-page-media .landing-image-lightbox-trigger {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  margin: 0;
+}
+
+.spotlight-page-media .landing-image-lightbox-trigger {
+  border-radius: 0;
+}
+
+.spotlight-page-media .landing-image-lightbox-trigger img {
+  width: 100%;
+  height: auto;
+  margin: 0;
+}
+
+.spotlight-page-media:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 760px) {
+  .spotlight-page-media {
+    width: calc(100% - 40px);
+    margin-bottom: 24px;
+    border-radius: 10px;
+  }
+
+  .spotlight-page-media .landing-image-lightbox-trigger img {
+    border-radius: 0;
   }
 }
