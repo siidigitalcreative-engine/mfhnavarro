@@ -1523,57 +1523,44 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
     font-size: 9px;
   }
 }
+
 /* =========================================================
-   FINAL SPOTLIGHT MEDIA MARGIN — MATCH SELECTED WORK
+   FINAL — SELECTED WORK CLICKABLE + SPOTLIGHT CARD CORNERS
    ========================================================= */
 
-.spotlight-page-gallery {
-  display: flex !important;
-  flex-direction: column !important;
-  width: 100% !important;
-  max-width: none !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
+/* Selected Work cards are full clickable links. */
+.work-grid > .work-card {
+  display: block;
+  width: 100%;
+  color: inherit;
+  text-decoration: none !important;
+  cursor: pointer;
 }
 
-.spotlight-page-gallery > .spotlight-page-media-card {
-  display: block !important;
-  width: min(calc(100% - 64px), 1180px) !important;
-  max-width: 1180px !important;
-  margin: 0 auto 48px !important;
-  padding: 0 !important;
+.work-grid > .work-card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 6px;
 }
 
-.spotlight-page-gallery > .spotlight-page-media-card:last-child {
-  margin-bottom: 0 !important;
+.work-grid > .work-card * {
+  text-decoration: none !important;
 }
 
-.spotlight-page-gallery > .spotlight-page-media-card > .spotlight-page-media {
-  width: 100% !important;
-  max-width: 100% !important;
-  margin: 0 !important;
+/* Spotlight media cards use the same corner treatment as Selected Work. */
+.spotlight-page-media-card > .spotlight-page-media {
+  border-radius: 14px !important;
+  overflow: hidden !important;
 }
 
-.spotlight-page-gallery > .spotlight-page-media-card .landing-image-lightbox-trigger,
-.spotlight-page-gallery > .spotlight-page-media-card .landing-image-lightbox-trigger img,
-.spotlight-page-gallery > .spotlight-page-media-card .custom-video-player,
-.spotlight-page-gallery > .spotlight-page-media-card .custom-video-player > video {
-  width: 100% !important;
-  max-width: 100% !important;
-  margin: 0 !important;
+.spotlight-page-media-card .landing-image-lightbox-trigger,
+.spotlight-page-media-card .landing-image-lightbox-trigger img,
+.spotlight-page-media-card .custom-video-player,
+.spotlight-page-media-card .custom-video-player > video {
+  border-radius: 0 !important;
 }
 
 @media (max-width: 760px) {
-  .spotlight-page-gallery > .spotlight-page-media-card {
-    width: calc(100% - 40px) !important;
-    max-width: none !important;
-    margin: 0 auto 24px !important;
-  }
-
-  .spotlight-page-gallery > .spotlight-page-media-card:last-child {
-    margin-bottom: 0 !important;
+  .spotlight-page-media-card > .spotlight-page-media {
+    border-radius: 10px !important;
   }
 }
-
