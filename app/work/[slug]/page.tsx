@@ -73,6 +73,7 @@ function Layer({
           initialIndex={lightboxIndex}
         />
       )}
+      {layer.description ? <p className="landing-media-description">{layer.description}</p> : null}
     </section>
   );
 }
@@ -254,6 +255,7 @@ export default async function WorkLandingPage({
         type: media.type,
         url: media.url,
         name: media.name,
+        description: media.description,
         layout: "full" as const,
       }));
 
