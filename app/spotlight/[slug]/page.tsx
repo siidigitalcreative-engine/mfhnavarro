@@ -96,8 +96,8 @@ export default async function SpotlightPage({
         </div>
       </header>
 
-      <section className="spotlight-intro wrap">
-        <div className="eyebrow">CREATIVE HIGHLIGHTS</div>
+      <section className="spotlight-intro spotlight-page-intro wrap">
+        <div className="eyebrow">SPOTLIGHTS</div>
 
         <div className="spotlight-intro-grid">
           <div>
