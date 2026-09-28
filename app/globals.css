@@ -1740,3 +1740,53 @@ IMPORTANT:
 - Desktop video width is capped at 1000px instead of stretching to the full ~1200px landing-media width.
 - Images are not changed.
 - The existing custom play button/controls are not changed.
+PROJECT LOCATION: app/globals.css
+
+This is a separate Spotlight-page layout change. It does NOT include or depend on the previous video-sizing fix.
+
+Add this at the END of app/globals.css:
+
+/* =========================================================
+   SPOTLIGHT DETAIL — TWO-COLUMN MEDIA GRID
+   Desktop: image/video cards in 2 columns.
+   Mobile: returns to 1 column.
+   ========================================================= */
+
+@media (min-width: 761px) {
+  .spotlight-page-gallery {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 32px !important;
+    align-items: start !important;
+  }
+
+  .spotlight-page-gallery > .spotlight-page-media-card {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+
+  .spotlight-page-gallery > .spotlight-page-media-card > .spotlight-page-media {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+
+  .spotlight-page-gallery > .spotlight-page-media-card:last-child {
+    margin-bottom: 0 !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .spotlight-page-gallery {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+
+  .spotlight-page-gallery > .spotlight-page-media-card {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+}
