@@ -70,6 +70,7 @@ export type SiteContent = {
   clients: ClientItem[];
   aboutParagraphs: string[];
   email: string;
+  linkedinUrl?: string;
   identity?: SiteIdentity;
   spotlights?: CreativeSpotlight[];
 };
@@ -134,6 +135,7 @@ export const DEFAULT_CONTENT: SiteContent = {
     "Outside client work, I mentor junior designers and keep a running archive of visual references, one scoped project at a time.",
   ],
   email: "hello@mfnavarro.dev",
+  linkedinUrl: "",
   identity: {
     showLogo: false,
     logoUrl: "",
