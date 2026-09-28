@@ -1631,8 +1631,7 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
       "hero-lede hero-images"
       "hero-cta hero-images"
       "hero-stack hero-images";
-    column-gap: 56px;
-    row-gap: 0;
+    gap: 56px;
     align-items: start;
   }
 
@@ -1647,6 +1646,7 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
 
   .hero-copy > h1 {
     grid-area: hero-headline;
+    margin-top: 20px;
   }
 
   .hero-copy > .lede {
@@ -1662,13 +1662,13 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
   .hero-copy > .cta-row {
     grid-area: hero-cta;
     align-self: start;
-    margin-top: 8px;
+    margin-top: 36px;
   }
 
   .hero-grid > .stack-card {
     grid-area: hero-stack;
     align-self: start;
-    margin-top: 0;
+    margin-top: 36px;
   }
 }
 
