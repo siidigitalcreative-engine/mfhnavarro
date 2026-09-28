@@ -1680,75 +1680,10 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
     display: block;
   }
 }
-PROJECT LOCATION: app/globals.css
-
-Replace/add the following rules at the END of app/globals.css so they override the existing landing-page video sizing:
-
-/* ---------------------------------------------------------
-   WORK LANDING VIDEO SIZE
-   Keep desktop videos contained and visually balanced.
-   Preserve the video's native aspect ratio — never crop it.
-   --------------------------------------------------------- */
-
-@media (min-width: 841px) {
-  .landing-media-layer:has(.custom-video-player) {
-    width: min(calc(100% - 48px), 1000px) !important;
-    max-width: 1000px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-  }
-
-  .landing-media-layer:has(.custom-video-player) .custom-video-player {
-    width: 100% !important;
-    height: auto !important;
-    max-width: 100% !important;
-    aspect-ratio: auto !important;
-  }
-
-  .landing-media-layer:has(.custom-video-player) .custom-video-player > video {
-    display: block !important;
-    width: 100% !important;
-    height: auto !important;
-    max-width: 100% !important;
-    min-height: 0 !important;
-    aspect-ratio: auto !important;
-    object-fit: contain !important;
-    object-position: center !important;
-  }
-}
-
-/* Mobile keeps the video fluid and full-width. */
-@media (max-width: 840px) {
-  .landing-media-layer:has(.custom-video-player) {
-    width: calc(100% - 32px) !important;
-    max-width: none !important;
-  }
-
-  .landing-media-layer:has(.custom-video-player) .custom-video-player,
-  .landing-media-layer:has(.custom-video-player) .custom-video-player > video {
-    width: 100% !important;
-    height: auto !important;
-    max-width: 100% !important;
-    aspect-ratio: auto !important;
-    object-fit: contain !important;
-  }
-}
-
-IMPORTANT:
-- This does not crop the video.
-- The video's original aspect ratio is preserved.
-- Desktop video width is capped at 1000px instead of stretching to the full ~1200px landing-media width.
-- Images are not changed.
-- The existing custom play button/controls are not changed.
-PROJECT LOCATION: app/globals.css
-
-This is a separate Spotlight-page layout change. It does NOT include or depend on the previous video-sizing fix.
-
-Add this at the END of app/globals.css:
 
 /* =========================================================
    SPOTLIGHT DETAIL — TWO-COLUMN MEDIA GRID
-   Desktop: image/video cards in 2 columns.
+   Desktop: every image/video card is 2 columns.
    Mobile: returns to 1 column.
    ========================================================= */
 
@@ -1763,7 +1698,9 @@ Add this at the END of app/globals.css:
   .spotlight-page-gallery > .spotlight-page-media-card {
     width: 100% !important;
     max-width: none !important;
-    margin: 0 !important;
+    margin: 0 0 48px !important;
+    padding: 0 !important;
+    min-width: 0 !important;
   }
 
   .spotlight-page-gallery > .spotlight-page-media-card > .spotlight-page-media {
@@ -1772,8 +1709,11 @@ Add this at the END of app/globals.css:
     margin: 0 !important;
   }
 
-  .spotlight-page-gallery > .spotlight-page-media-card:last-child {
-    margin-bottom: 0 !important;
+  .spotlight-page-gallery > .spotlight-page-media-card .spotlight-media-description {
+    width: 100% !important;
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
   }
 }
 
@@ -1787,6 +1727,19 @@ Add this at the END of app/globals.css:
   .spotlight-page-gallery > .spotlight-page-media-card {
     width: 100% !important;
     max-width: none !important;
-    margin: 0 !important;
+    margin: 0 0 24px !important;
+  }
+
+  .spotlight-page-gallery > .spotlight-page-media-card > .spotlight-page-media {
+    width: calc(100% - 40px) !important;
+    max-width: none !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .spotlight-page-gallery > .spotlight-page-media-card .spotlight-media-description {
+    width: calc(100% - 40px) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
   }
 }
