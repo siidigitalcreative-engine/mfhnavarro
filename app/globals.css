@@ -449,6 +449,15 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
 }
 
 @media (max-width: 760px) {
+  .landing-text-divider + .landing-media-layer,
+  .landing-text-divider + .landing-media-group,
+  .landing-text-divider + .landing-media-unified,
+  .landing-media-layer + .landing-text-divider,
+  .landing-media-group + .landing-text-divider,
+  .landing-media-unified + .landing-text-divider {
+    margin-top: 24px !important;
+  }
+
   .landing-text-divider-inner {
     padding: 34px 20px !important;
   }
@@ -814,7 +823,13 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
 .landing-text-divider + .landing-media-layer,
 .landing-text-divider + .landing-media-group,
 .landing-text-divider + .landing-media-unified {
-  margin-top: 0 !important;
+  margin-top: 32px !important;
+}
+
+.landing-media-layer + .landing-text-divider,
+.landing-media-group + .landing-text-divider,
+.landing-media-unified + .landing-text-divider {
+  margin-top: 32px !important;
 }
 
 @media (max-width: 760px) {
