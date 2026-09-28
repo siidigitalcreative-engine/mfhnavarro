@@ -1,3 +1,8 @@
+PROJECT LOCATION: app/page.tsx
+
+Fix: Normalize the CMS LinkedIn URL before rendering it.
+If the admin enters www.linkedin.com/in/mfhnavarro or linkedin.com/in/mfhnavarro, the site automatically prepends https://. Existing http:// and https:// URLs are preserved.
+
 import Link from "next/link";
 import { getContent } from "@/lib/content";
 import type { MediaItem } from "@/lib/types";
@@ -13,6 +18,11 @@ function Media({ media, alt, className = "" }: { media: MediaItem; alt: string; 
 export default async function Home() {
   const content = await getContent();
   const heroMedia = (content.heroMedia ?? []).slice(0, 2);
+  const linkedinUrl = content.linkedinUrl?.trim()
+    ? /^https?:\/\//i.test(content.linkedinUrl.trim())
+      ? content.linkedinUrl.trim()
+      : `https://${content.linkedinUrl.trim()}`
+    : "";
 
   return (
     <>
@@ -56,7 +66,7 @@ export default async function Home() {
 
               <div className="cta-row">
                 <a className="btn" href="#work">View selected work <span>↗</span></a>
-                {content.linkedinUrl ? <span className="socials"><a href={content.linkedinUrl} target="_blank" rel="noreferrer">LinkedIn</a></span> : null}
+                {content.linkedinUrl ? <span className="socials"><a href={linkedinUrl} target="_blank" rel="noreferrer">LinkedIn</a></span> : null}
               </div>
             </div>
 
@@ -128,29 +138,23 @@ export default async function Home() {
                 const media = item.media ?? [];
                 const primary = media[0];
                 return (
-                  <Link
-                    className="work-card-link"
-                    key={item.id}
-                    href={`/work/${item.slug || item.id}`}
-                  >
-                    <article className="work-card">
-                      <div className="work-visual">
-                        {primary ? <Media media={primary} alt={item.name} className="work-primary" /> : <div className="work-placeholder"><span>MF</span></div>}
-                        <div className="work-number">{String(index + 1).padStart(2, "0")}</div>
-                        {media.length > 1 && <div className="work-count">{media.length} media</div>}
+                  <article className="work-card" key={item.id}>
+                    <div className="work-visual">
+                      {primary ? <Media media={primary} alt={item.name} className="work-primary" /> : <div className="work-placeholder"><span>MF</span></div>}
+                      <div className="work-number">{String(index + 1).padStart(2, "0")}</div>
+                      {media.length > 1 && <div className="work-count">{media.length} media</div>}
+                    </div>
+                    <div className="work-info">
+                      <div><h3>{item.name}</h3><p>{item.desc}</p></div>
+                      <span className="tag">{item.tag}</span>
+                    </div>
+                    {media.length > 1 && (
+                      <div className="work-strip">
+                        {media.slice(1, 5).map((m) => <Media key={m.id} media={m} alt={`${item.name} preview`} className="work-strip-media" />)}
+                        {media.length > 5 && <span className="more-media">+{media.length - 5}</span>}
                       </div>
-                      <div className="work-info">
-                        <div><h3>{item.name}</h3><p>{item.desc}</p></div>
-                        <span className="tag">{item.tag}</span>
-                      </div>
-                      {media.length > 1 && (
-                        <div className="work-strip">
-                          {media.slice(1, 5).map((m) => <Media key={m.id} media={m} alt={`${item.name} preview`} className="work-strip-media" />)}
-                          {media.length > 5 && <span className="more-media">+{media.length - 5}</span>}
-                        </div>
-                      )}
-                    </article>
-                  </Link>
+                    )}
+                  </article>
                 );
               })}
             </div>
@@ -179,7 +183,7 @@ export default async function Home() {
         </section>
       </main>
 
-      <footer id="contact"><div className="wrap"><div className="eyebrow">START A CONVERSATION</div><h2>Have a project in mind?</h2><div className="row"><a className="email" href={`mailto:${content.email}`}>{content.email} <span>↗</span></a>{content.linkedinUrl ? <span className="socials"><a href={content.linkedinUrl} target="_blank" rel="noreferrer">LinkedIn</a></span> : null}</div><div className="meta"><span>MF Navarro — Multimedia Designer</span><span>© 2026</span></div></div></footer>
+      <footer id="contact"><div className="wrap"><div className="eyebrow">START A CONVERSATION</div><h2>Have a project in mind?</h2><div className="row"><a className="email" href={`mailto:${content.email}`}>{content.email} <span>↗</span></a>{content.linkedinUrl ? <span className="socials"><a href={linkedinUrl} target="_blank" rel="noreferrer">LinkedIn</a></span> : null}</div><div className="meta"><span>MF Navarro — Multimedia Designer</span><span>© 2026</span></div></div></footer>
     </>
   );
 }
