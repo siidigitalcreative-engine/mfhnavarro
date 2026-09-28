@@ -1620,3 +1620,22 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
     margin-right: auto !important;
   }
 }
+/* =========================================================
+   SPOTLIGHT DETAIL — MATCH SELECTED WORK TOP/BOTTOM SPACING
+   Same spacing as .landing-intro:
+   desktop: 90px top / 70px bottom
+   mobile: 60px top / 48px bottom
+   ========================================================= */
+
+.spotlight-page > .spotlight-page-intro {
+  padding-top: 90px !important;
+  padding-bottom: 70px !important;
+}
+
+@media (max-width: 760px) {
+  .spotlight-page > .spotlight-page-intro {
+    padding-top: 60px !important;
+    padding-bottom: 48px !important;
+  }
+}
+
