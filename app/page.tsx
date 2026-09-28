@@ -56,7 +56,7 @@ export default async function Home() {
 
               <div className="cta-row">
                 <a className="btn" href="#work">View selected work <span>↗</span></a>
-                <span className="socials"><a href="#">Instagram</a> · <a href="#">LinkedIn</a></span>
+                {content.linkedinUrl ? <span className="socials"><a href={content.linkedinUrl} target="_blank" rel="noreferrer">LinkedIn</a></span> : null}
               </div>
             </div>
 
@@ -128,11 +128,7 @@ export default async function Home() {
                 const media = item.media ?? [];
                 const primary = media[0];
                 return (
-                  <Link
-                    className="work-card"
-                    key={item.id}
-                    href={`/work/${item.slug || item.id}`}
-                  >
+                  <article className="work-card" key={item.id}>
                     <div className="work-visual">
                       {primary ? <Media media={primary} alt={item.name} className="work-primary" /> : <div className="work-placeholder"><span>MF</span></div>}
                       <div className="work-number">{String(index + 1).padStart(2, "0")}</div>
@@ -148,7 +144,7 @@ export default async function Home() {
                         {media.length > 5 && <span className="more-media">+{media.length - 5}</span>}
                       </div>
                     )}
-                  </Link>
+                  </article>
                 );
               })}
             </div>
@@ -177,7 +173,7 @@ export default async function Home() {
         </section>
       </main>
 
-      <footer id="contact"><div className="wrap"><div className="eyebrow">START A CONVERSATION</div><h2>Have a project in mind?</h2><div className="row"><a className="email" href={`mailto:${content.email}`}>{content.email} <span>↗</span></a><span className="socials"><a href="#">Instagram</a> · <a href="#">LinkedIn</a></span></div><div className="meta"><span>MF Navarro — Digital Creative Manager</span><span>© 2026</span></div></div></footer>
+      <footer id="contact"><div className="wrap"><div className="eyebrow">START A CONVERSATION</div><h2>Have a project in mind?</h2><div className="row"><a className="email" href={`mailto:${content.email}`}>{content.email} <span>↗</span></a>{content.linkedinUrl ? <span className="socials"><a href={content.linkedinUrl} target="_blank" rel="noreferrer">LinkedIn</a></span> : null}</div><div className="meta"><span>MF Navarro — Multimedia Designer</span><span>© 2026</span></div></div></footer>
     </>
   );
 }
