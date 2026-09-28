@@ -1461,3 +1461,143 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
     margin-top: 0 !important;
   }
 }
+
+
+/* =========================================================
+   SPOTLIGHTS — HOMEPAGE ROW RESTORE
+   Keep each spotlight as a clean three-column row:
+   number / title + description / explore.
+   ========================================================= */
+
+.spotlight-section .spotlight-list {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  margin-top: 48px !important;
+  border-top: 1px solid var(--line) !important;
+}
+
+.spotlight-section .spotlight-row {
+  display: grid !important;
+  grid-template-columns: 48px minmax(0, 1fr) auto !important;
+  align-items: start !important;
+  gap: 20px !important;
+  width: 100% !important;
+  padding: 22px 0 !important;
+  border-bottom: 1px solid var(--line) !important;
+  color: var(--ink) !important;
+  text-decoration: none !important;
+}
+
+.spotlight-section .spotlight-row:hover {
+  color: var(--ink) !important;
+  text-decoration: none !important;
+}
+
+.spotlight-section .spotlight-row-number {
+  display: block !important;
+  font-family: var(--mono) !important;
+  font-size: 10px !important;
+  line-height: 1.4 !important;
+  color: var(--ink-faint) !important;
+  letter-spacing: .08em !important;
+  padding-top: 4px !important;
+}
+
+.spotlight-section .spotlight-row-main {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  min-width: 0 !important;
+  gap: 5px !important;
+}
+
+.spotlight-section .spotlight-row-name {
+  display: block !important;
+  font-family: var(--sans) !important;
+  font-size: 20px !important;
+  line-height: 1.2 !important;
+  font-weight: 500 !important;
+  letter-spacing: -.02em !important;
+  color: var(--ink) !important;
+  text-decoration: none !important;
+}
+
+.spotlight-section .spotlight-row-desc {
+  display: block !important;
+  max-width: 60ch !important;
+  color: var(--ink-dim) !important;
+  font-family: var(--sans) !important;
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+  text-decoration: none !important;
+}
+
+.spotlight-section .spotlight-row-action {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  align-self: start !important;
+  padding-top: 4px !important;
+  font-family: var(--mono) !important;
+  font-size: 9px !important;
+  line-height: 1.4 !important;
+  color: var(--ink-faint) !important;
+  letter-spacing: .08em !important;
+  white-space: nowrap !important;
+  text-decoration: none !important;
+}
+
+.spotlight-section .spotlight-row-action span {
+  font-family: var(--sans) !important;
+  font-size: 14px !important;
+  line-height: 1 !important;
+}
+
+.spotlight-section .spotlight-row:hover .spotlight-row-name,
+.spotlight-section .spotlight-row:hover .spotlight-row-desc,
+.spotlight-section .spotlight-row:hover .spotlight-row-action {
+  text-decoration: none !important;
+}
+
+@media (max-width: 760px) {
+  .spotlight-section .spotlight-list {
+    margin-top: 32px !important;
+  }
+
+  .spotlight-section .spotlight-row {
+    grid-template-columns: 32px minmax(0, 1fr) !important;
+    gap: 12px !important;
+    padding: 20px 0 !important;
+  }
+
+  .spotlight-section .spotlight-row-number {
+    grid-column: 1 !important;
+    grid-row: 1 / span 2 !important;
+    font-size: 9px !important;
+    padding-top: 3px !important;
+  }
+
+  .spotlight-section .spotlight-row-main {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    gap: 5px !important;
+  }
+
+  .spotlight-section .spotlight-row-name {
+    font-size: 18px !important;
+  }
+
+  .spotlight-section .spotlight-row-desc {
+    font-size: 13px !important;
+  }
+
+  .spotlight-section .spotlight-row-action {
+    grid-column: 2 !important;
+    grid-row: 2 !important;
+    justify-self: start !important;
+    padding-top: 2px !important;
+    margin-top: 5px !important;
+    font-size: 9px !important;
+  }
+}
