@@ -128,23 +128,29 @@ export default async function Home() {
                 const media = item.media ?? [];
                 const primary = media[0];
                 return (
-                  <article className="work-card" key={item.id}>
-                    <div className="work-visual">
-                      {primary ? <Media media={primary} alt={item.name} className="work-primary" /> : <div className="work-placeholder"><span>MF</span></div>}
-                      <div className="work-number">{String(index + 1).padStart(2, "0")}</div>
-                      {media.length > 1 && <div className="work-count">{media.length} media</div>}
-                    </div>
-                    <div className="work-info">
-                      <div><h3>{item.name}</h3><p>{item.desc}</p></div>
-                      <span className="tag">{item.tag}</span>
-                    </div>
-                    {media.length > 1 && (
-                      <div className="work-strip">
-                        {media.slice(1, 5).map((m) => <Media key={m.id} media={m} alt={`${item.name} preview`} className="work-strip-media" />)}
-                        {media.length > 5 && <span className="more-media">+{media.length - 5}</span>}
+                  <Link
+                    className="work-card-link"
+                    key={item.id}
+                    href={`/work/${item.slug || item.id}`}
+                  >
+                    <article className="work-card">
+                      <div className="work-visual">
+                        {primary ? <Media media={primary} alt={item.name} className="work-primary" /> : <div className="work-placeholder"><span>MF</span></div>}
+                        <div className="work-number">{String(index + 1).padStart(2, "0")}</div>
+                        {media.length > 1 && <div className="work-count">{media.length} media</div>}
                       </div>
-                    )}
-                  </article>
+                      <div className="work-info">
+                        <div><h3>{item.name}</h3><p>{item.desc}</p></div>
+                        <span className="tag">{item.tag}</span>
+                      </div>
+                      {media.length > 1 && (
+                        <div className="work-strip">
+                          {media.slice(1, 5).map((m) => <Media key={m.id} media={m} alt={`${item.name} preview`} className="work-strip-media" />)}
+                          {media.length > 5 && <span className="more-media">+{media.length - 5}</span>}
+                        </div>
+                      )}
+                    </article>
+                  </Link>
                 );
               })}
             </div>
