@@ -15,8 +15,21 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "MF Navarro — Digital Creative Manager",
-  description: "MF Navarro — Digital Creative Manager. Multimedia design and creative direction for brands and products.",
+  title: "MF Navarro — Multimedia Designer",
+  description:
+    "Multimedia Designer creating brand identities, marketing content, motion graphics, e-commerce, photo and video, and visual experiences for brands and products.",
+  openGraph: {
+    title: "MF Navarro — Multimedia Designer",
+    description:
+      "Multimedia Designer creating brand identities, marketing content, motion graphics, e-commerce, photo and video, and visual experiences for brands and products.",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "MF Navarro — Multimedia Designer",
+    description:
+      "Multimedia Designer creating brand identities, marketing content, motion graphics, e-commerce, photo and video, and visual experiences for brands and products.",
+  },
   icons: { icon: "data:," },
 };
 
