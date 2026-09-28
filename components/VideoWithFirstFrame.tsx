@@ -100,12 +100,37 @@ export default function VideoWithFirstFrame({ src, label = "Project video", post
       setPlaying(false);
       setCurrentTime(Number.isFinite(video.duration) ? video.duration : 0);
     };
+
+    const onWaiting = () => {
+      // If the user was already playing, resume automatically after a
+      // temporary network/buffer stall instead of leaving the video stopped.
+      if (!video.paused && !video.ended) {
+        void video.play().catch(() => undefined);
+      }
+    };
+
+    const onStalled = () => {
+      if (!video.paused && !video.ended) {
+        void video.play().catch(() => undefined);
+      }
+    };
+
+    const onCanPlay = () => {
+      if (!video.paused && !video.ended) {
+        void video.play().catch(() => undefined);
+      }
+    };
+
     video.addEventListener("play", onPlay);
     video.addEventListener("pause", onPause);
     video.addEventListener("timeupdate", onTimeUpdate);
     video.addEventListener("loadedmetadata", onLoadedMetadata);
     video.addEventListener("durationchange", onDurationChange);
     video.addEventListener("ended", onEnded);
+    video.addEventListener("waiting", onWaiting);
+    video.addEventListener("stalled", onStalled);
+    video.addEventListener("canplay", onCanPlay);
+
     return () => {
       video.removeEventListener("play", onPlay);
       video.removeEventListener("pause", onPause);
@@ -113,6 +138,9 @@ export default function VideoWithFirstFrame({ src, label = "Project video", post
       video.removeEventListener("loadedmetadata", onLoadedMetadata);
       video.removeEventListener("durationchange", onDurationChange);
       video.removeEventListener("ended", onEnded);
+      video.removeEventListener("waiting", onWaiting);
+      video.removeEventListener("stalled", onStalled);
+      video.removeEventListener("canplay", onCanPlay);
     };
   }, [src]);
 
