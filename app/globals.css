@@ -1601,3 +1601,19 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
     font-size: 9px !important;
   }
 }
+
+
+/* =========================================================
+   SPOTLIGHT DETAIL — SPACE AFTER LAST MEDIA
+   Match the Selected Work page's bottom rhythm.
+   ========================================================= */
+
+.spotlight-page-gallery > .spotlight-page-media-card:last-child {
+  margin-bottom: 64px !important;
+}
+
+@media (max-width: 760px) {
+  .spotlight-page-gallery > .spotlight-page-media-card:last-child {
+    margin-bottom: 48px !important;
+  }
+}
