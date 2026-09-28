@@ -1,8 +1,3 @@
-PROJECT LOCATION: app/page.tsx
-
-Fix: Normalize the CMS LinkedIn URL before rendering it.
-If the admin enters www.linkedin.com/in/mfhnavarro or linkedin.com/in/mfhnavarro, the site automatically prepends https://. Existing http:// and https:// URLs are preserved.
-
 import Link from "next/link";
 import { getContent } from "@/lib/content";
 import type { MediaItem } from "@/lib/types";
