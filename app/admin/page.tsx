@@ -764,7 +764,22 @@ export default function AdminPage() {
         {content.aboutParagraphs.map((p, i) => <textarea key={i} value={p} onChange={(e) => { const next = [...content.aboutParagraphs]; next[i] = e.target.value; update("aboutParagraphs", next); }} />)}
         <button className="btn btn-ghost" onClick={() => update("aboutParagraphs", [...content.aboutParagraphs, ""])}>+ Add paragraph</button>
       </section>
-      <section className="admin-section"><h2>Contact email</h2><input value={content.email} onChange={(e) => update("email", e.target.value)} /></section>
+      <section className="admin-section">
+        <h2>Social links</h2>
+        <label>LinkedIn URL</label>
+        <input
+          type="url"
+          placeholder="https://www.linkedin.com/in/your-profile"
+          value={content.linkedinUrl ?? ""}
+          onChange={(e) => update("linkedinUrl", e.target.value)}
+        />
+        <p className="admin-help">Optional. If left blank, LinkedIn will not appear on the homepage.</p>
+      </section>
+
+      <section className="admin-section">
+        <h2>Contact email</h2>
+        <input value={content.email} onChange={(e) => update("email", e.target.value)} />
+      </section>
     </div>
   );
 }
