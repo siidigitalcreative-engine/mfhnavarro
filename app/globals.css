@@ -1564,3 +1564,59 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
     border-radius: 10px !important;
   }
 }
+/* SPOTLIGHT MEDIA — SAME OUTER MARGIN AS SELECTED WORK */
+
+.spotlight-page-gallery > .spotlight-page-media-card {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 0 48px !important;
+  padding: 0 !important;
+}
+
+.spotlight-page-gallery > .spotlight-page-media-card > .spotlight-page-media {
+  display: block !important;
+  width: min(calc(100% - 64px), 1180px) !important;
+  max-width: 1180px !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+
+.spotlight-page-gallery > .spotlight-page-media-card > .spotlight-page-media .landing-image-lightbox-trigger,
+.spotlight-page-gallery > .spotlight-page-media-card > .spotlight-page-media .landing-image-lightbox-trigger img,
+.spotlight-page-gallery > .spotlight-page-media-card > .spotlight-page-media .custom-video-player,
+.spotlight-page-gallery > .spotlight-page-media-card > .spotlight-page-media .custom-video-player > video {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+}
+
+.spotlight-page-gallery > .spotlight-page-media-card:last-child {
+  margin-bottom: 0 !important;
+}
+
+@media (max-width: 760px) {
+  .spotlight-page-gallery > .spotlight-page-media-card {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 0 24px !important;
+  }
+
+  .spotlight-page-gallery > .spotlight-page-media-card > .spotlight-page-media {
+    width: calc(100% - 40px) !important;
+    max-width: none !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    border-radius: 14px !important;
+  }
+
+  .spotlight-page-gallery > .spotlight-page-media-card .spotlight-media-description {
+    width: calc(100% - 40px) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
