@@ -1797,3 +1797,11 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
     margin-bottom: 24px !important;
   }
 }
+
+
+@media (max-width: 640px) {
+  section {
+    padding-top: 48px;
+    padding-bottom: 48px;
+  }
+}
