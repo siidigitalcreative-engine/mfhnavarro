@@ -60,7 +60,7 @@ export default async function Home() {
               </div>
 
               <div className="cta-row">
-                <a className="btn" href="#work">View selected work <span>↗</span></a>
+                <a className="btn" href="#work">View selected work <span>â</span></a>
                 {content.linkedinUrl ? <span className="socials"><a href={linkedinUrl} target="_blank" rel="noreferrer">LinkedIn</a></span> : null}
               </div>
             </div>
@@ -98,7 +98,7 @@ export default async function Home() {
               <span>by discipline</span>
             </div>
 
-            <p className="spotlight-intro">A curated collection of work grouped by discipline — explore the range of what I create beyond individual projects.</p>
+            <p className="spotlight-intro">A curated collection of work grouped by discipline â explore the range of what I create beyond individual projects.</p>
 
             {content.spotlights?.length ? (
               <div className="spotlight-list">
@@ -112,8 +112,23 @@ export default async function Home() {
                     <span className="spotlight-row-main">
                       <span className="spotlight-row-name">{spotlight.name || "Untitled spotlight"}</span>
                       {spotlight.desc ? <span className="spotlight-row-desc">{spotlight.desc}</span> : null}
+                      {(() => {
+                        const thumbnails = (spotlight.media ?? []).filter((media) => media.type === "image" || media.thumbnailUrl).slice(0, 4);
+                        return thumbnails.length ? (
+                          <span className="spotlight-row-thumbnails">
+                            {thumbnails.map((media) => (
+                              <img
+                                key={media.id}
+                                className="spotlight-row-thumbnail"
+                                src={media.thumbnailUrl || media.url}
+                                alt=""
+                              />
+                            ))}
+                          </span>
+                        ) : null;
+                      })()}
                     </span>
-                    <span className="spotlight-row-action" aria-hidden="true">EXPLORE <span>→</span></span>
+                    <span className="spotlight-row-action" aria-hidden="true">EXPLORE <span>â</span></span>
                   </Link>
                 ))}
               </div>
@@ -127,7 +142,7 @@ export default async function Home() {
 
         <section id="work" className="work-section">
           <div className="wrap">
-            <div className="head"><div><div className="eyebrow">SELECTED WORK</div><h2>Selected work</h2></div><span>2023 — 2026</span></div>
+            <div className="head"><div><div className="eyebrow">SELECTED WORK</div><h2>Selected work</h2></div><span>2023 â 2026</span></div>
             <div className="work-grid">
               {content.work.map((item, index) => {
                 const media = item.media ?? [];
@@ -165,7 +180,7 @@ export default async function Home() {
         <section>
           <div className="wrap">
             <div className="head"><div><div className="eyebrow">WORDS</div><h2>What people say</h2></div><span>testimonials</span></div>
-            <div className="testi-grid">{content.testimonials.map((t) => <div className="testi" key={t.id}><div className="quote-mark">“</div><p>{t.quote}</p><div className="who">{t.who}</div></div>)}</div>
+            <div className="testi-grid">{content.testimonials.map((t) => <div className="testi" key={t.id}><div className="quote-mark">â</div><p>{t.quote}</p><div className="who">{t.who}</div></div>)}</div>
           </div>
         </section>
 
@@ -184,7 +199,7 @@ export default async function Home() {
         </section>
       </main>
 
-      <footer id="contact"><div className="wrap"><div className="eyebrow">START A CONVERSATION</div><h2>Have a project in mind?</h2><div className="row"><a className="email" href={`mailto:${content.email}`}>{content.email} <span>↗</span></a>{content.linkedinUrl ? <span className="socials"><a href={linkedinUrl} target="_blank" rel="noreferrer">LinkedIn</a></span> : null}</div><div className="meta"><span>MF Navarro — Multimedia Designer</span><span>© 2026</span></div></div></footer>
+      <footer id="contact"><div className="wrap"><div className="eyebrow">START A CONVERSATION</div><h2>Have a project in mind?</h2><div className="row"><a className="email" href={`mailto:${content.email}`}>{content.email} <span>â</span></a>{content.linkedinUrl ? <span className="socials"><a href={linkedinUrl} target="_blank" rel="noreferrer">LinkedIn</a></span> : null}</div><div className="meta"><span>MF Navarro â Multimedia Designer</span><span>Â© 2026</span></div></div></footer>
     </>
   );
 }
