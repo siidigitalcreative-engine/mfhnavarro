@@ -1840,3 +1840,88 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
     border-radius: 7px;
   }
 }
+/* =========================================================
+   FINAL SELECTED WORK — CONSISTENT DIVIDER SPACING
+   Media ↔ Text Divider = one controlled 32px rhythm
+   ========================================================= */
+
+/* The divider itself does not create extra outside spacing. */
+.landing-text-divider {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* -----------------------------------------
+   MEDIA → DIVIDER
+   ----------------------------------------- */
+
+.landing-media-layer + .landing-text-divider,
+.landing-media-group + .landing-text-divider,
+.landing-media-unified + .landing-text-divider {
+  margin-top: 32px !important;
+}
+
+/* Remove the last media item's own spacing when
+   the entire media group is immediately followed
+   by a divider. */
+.landing-media-group:has(+ .landing-text-divider)
+  .landing-media-grid-row:last-child {
+  margin-bottom: 0 !important;
+}
+
+.landing-media-group:has(+ .landing-text-divider)
+  > .landing-media-layer:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* Unified media groups should also end cleanly. */
+.landing-media-unified:has(+ .landing-text-divider) {
+  margin-bottom: 0 !important;
+}
+
+
+/* -----------------------------------------
+   DIVIDER → MEDIA
+   ----------------------------------------- */
+
+.landing-text-divider + .landing-media-layer,
+.landing-text-divider + .landing-media-group,
+.landing-text-divider + .landing-media-unified {
+  margin-top: 32px !important;
+}
+
+
+/* -----------------------------------------
+   MOBILE
+   ----------------------------------------- */
+
+@media (max-width: 760px) {
+
+  .landing-media-layer + .landing-text-divider,
+  .landing-media-group + .landing-text-divider,
+  .landing-media-unified + .landing-text-divider {
+    margin-top: 24px !important;
+  }
+
+  .landing-text-divider + .landing-media-layer,
+  .landing-text-divider + .landing-media-group,
+  .landing-text-divider + .landing-media-unified {
+    margin-top: 24px !important;
+  }
+
+  /* Prevent the final row from adding another
+     24px on top of the divider spacing. */
+  .landing-media-group:has(+ .landing-text-divider)
+    .landing-media-grid-row:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  .landing-media-group:has(+ .landing-text-divider)
+    > .landing-media-layer:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  .landing-media-unified:has(+ .landing-text-divider) {
+    margin-bottom: 0 !important;
+  }
+}
