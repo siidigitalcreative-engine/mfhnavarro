@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  useEffect,
-  useRef,
-  useState,
-  type CSSProperties,
-} from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 
 type VideoWithFirstFrameProps = {
   src: string;
@@ -16,10 +11,7 @@ type VideoWithFirstFrameProps = {
 function PlayIcon() {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path
-        d="M8 5.5v13L18.5 12 8 5.5Z"
-        fill="currentColor"
-      />
+      <path d="M8 5.5v13L18.5 12 8 5.5Z" fill="currentColor" />
     </svg>
   );
 }
@@ -27,10 +19,7 @@ function PlayIcon() {
 function PauseIcon() {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path
-        d="M7 5h4v14H7zM13 5h4v14h-4z"
-        fill="currentColor"
-      />
+      <path d="M7 5h4v14H7zM13 5h4v14h-4z" fill="currentColor" />
     </svg>
   );
 }
@@ -38,11 +27,7 @@ function PauseIcon() {
 function VolumeIcon({ muted }: { muted: boolean }) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path
-        d="M4 9v6h4l5 4V5L8 9H4Z"
-        fill="currentColor"
-      />
-
+      <path d="M4 9v6h4l5 4V5L8 9H4Z" fill="currentColor" />
       {muted ? (
         <path
           d="m17 9 4 4m0-4-4 4"
@@ -103,80 +88,21 @@ export default function VideoWithFirstFrame({
   label = "Project video",
   poster,
 }: VideoWithFirstFrameProps) {
-  const wrapperRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const loadingPromiseRef = useRef<Promise<void> | null>(null);
+  const loadedRef = useRef(false);
 
-  const [videoLoaded, setVideoLoaded] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
 
-  /*
-   * Load the actual MP4 only when this video is close to
-   * entering the viewport. This is especially important
-   * for Spotlight pages containing multiple videos.
-   */
-  useEffect(() => {
-    const wrapper = wrapperRef.current;
-
-    if (!wrapper) return;
-
-    if (!("IntersectionObserver" in window)) {
-      setVideoLoaded(true);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0];
-
-        if (entry?.isIntersecting) {
-          setVideoLoaded(true);
-          observer.disconnect();
-        }
-      },
-      {
-        rootMargin: "600px 0px",
-        threshold: 0,
-      }
-    );
-
-    observer.observe(wrapper);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
-
-  /*
-   * Once the video is allowed to load, assign the src directly
-   * to the video element. The poster remains visible while the
-   * browser fetches the actual MP4.
-   */
   useEffect(() => {
     const video = videoRef.current;
-
-    if (!video || !videoLoaded) return;
-
-    if (video.src !== src) {
-      video.src = src;
-      video.load();
-    }
-  }, [src, videoLoaded]);
-
-  useEffect(() => {
-    const video = videoRef.current;
-
     if (!video) return;
 
-    const handlePlay = () => {
-      setPlaying(true);
-    };
-
-    const handlePause = () => {
-      setPlaying(false);
-    };
+    const handlePlay = () => setPlaying(true);
+    const handlePause = () => setPlaying(false);
 
     const handleTimeUpdate = () => {
       setCurrentTime(video.currentTime);
@@ -213,47 +139,88 @@ export default function VideoWithFirstFrame({
     };
   }, []);
 
-  const ensureLoaded = () => {
-    if (!videoLoaded) {
-      setVideoLoaded(true);
+  /*
+   * The video keeps its src from the beginning, but preload is "none".
+   * This means the browser can display the poster without downloading
+   * the actual video until the visitor asks to play it.
+   *
+   * Once playback is requested, we call load() exactly once and wait
+   * until the browser has enough data to begin playback.
+   */
+  const loadVideoOnce = (): Promise<void> => {
+    const video = videoRef.current;
+
+    if (!video) {
+      return Promise.reject(new Error("Video element unavailable"));
     }
+
+    if (loadedRef.current || video.readyState >= 3) {
+      loadedRef.current = true;
+      return Promise.resolve();
+    }
+
+    if (loadingPromiseRef.current) {
+      return loadingPromiseRef.current;
+    }
+
+    loadingPromiseRef.current = new Promise<void>((resolve, reject) => {
+      let finished = false;
+
+      const cleanup = () => {
+        video.removeEventListener("canplay", handleCanPlay);
+        video.removeEventListener("error", handleError);
+      };
+
+      const handleCanPlay = () => {
+        if (finished) return;
+
+        finished = true;
+        loadedRef.current = true;
+        cleanup();
+        resolve();
+      };
+
+      const handleError = () => {
+        if (finished) return;
+
+        finished = true;
+        cleanup();
+        loadingPromiseRef.current = null;
+        reject(new Error("Unable to load video"));
+      };
+
+      video.addEventListener("canplay", handleCanPlay, { once: true });
+      video.addEventListener("error", handleError, { once: true });
+
+      video.preload = "auto";
+      video.load();
+
+      /*
+       * If the browser already has enough data after load(),
+       * don't wait unnecessarily for another event.
+       */
+      if (video.readyState >= 3) {
+        handleCanPlay();
+      }
+    });
+
+    return loadingPromiseRef.current;
   };
 
   const playVideo = async () => {
     const video = videoRef.current;
-
     if (!video) return;
 
-    ensureLoaded();
-
-    /*
-     * If the video has not been assigned its source yet,
-     * wait for the next render/effect to assign it.
-     */
-    if (!video.src || video.readyState === 0) {
-      setVideoLoaded(true);
-
-      window.setTimeout(() => {
-        const currentVideo = videoRef.current;
-
-        if (!currentVideo) return;
-
-        void currentVideo.play().catch(() => undefined);
-      }, 0);
-
-      return;
-    }
-
     try {
+      await loadVideoOnce();
       await video.play();
     } catch {
-      // Ignore browser playback rejection.
+      // Ignore browser/network playback errors.
     }
   };
 
   const togglePlay = () => {
     const video = videoRef.current;
-
     if (!video) return;
 
     if (video.paused) {
@@ -265,7 +232,6 @@ export default function VideoWithFirstFrame({
 
   const toggleMute = () => {
     const video = videoRef.current;
-
     if (!video) return;
 
     video.muted = !video.muted;
@@ -274,13 +240,7 @@ export default function VideoWithFirstFrame({
 
   const seek = (value: number) => {
     const video = videoRef.current;
-
     if (!video || !Number.isFinite(value)) return;
-
-    /*
-     * Seeking also makes sure the video source has been loaded.
-     */
-    ensureLoaded();
 
     video.currentTime = value;
     setCurrentTime(value);
@@ -288,7 +248,6 @@ export default function VideoWithFirstFrame({
 
   const toggleFullscreen = async () => {
     const video = videoRef.current;
-
     if (!video) return;
 
     try {
@@ -303,10 +262,7 @@ export default function VideoWithFirstFrame({
 
       if (wrapper?.requestFullscreen) {
         await wrapper.requestFullscreen();
-        return;
-      }
-
-      if ("webkitEnterFullscreen" in video) {
+      } else if ("webkitEnterFullscreen" in video) {
         (
           video as HTMLVideoElement & {
             webkitEnterFullscreen?: () => void;
@@ -320,21 +276,16 @@ export default function VideoWithFirstFrame({
 
   const progress =
     duration > 0
-      ? Math.min(
-          100,
-          Math.max(0, (currentTime / duration) * 100)
-        )
+      ? Math.min(100, Math.max(0, (currentTime / duration) * 100))
       : 0;
 
   return (
     <div
-      ref={wrapperRef}
-      className={`custom-video-player${
-        playing ? " is-playing" : ""
-      }`}
+      className={`custom-video-player${playing ? " is-playing" : ""}`}
     >
       <video
         ref={videoRef}
+        src={src}
         poster={poster}
         playsInline
         preload="none"
