@@ -46,7 +46,6 @@ function formatTime(value: number) {
 
 export default function VideoWithFirstFrame({ src, label = "Project video", poster }: VideoWithFirstFrameProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [generatedPoster, setGeneratedPoster] = useState<string>();
   const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -54,66 +53,12 @@ export default function VideoWithFirstFrame({ src, label = "Project video", post
   const playIntentRef = useRef(false);
 
   useEffect(() => {
-    if (poster) return;
-    const video = videoRef.current;
-    if (!video) return;
-    let cancelled = false;
-
-    const capture = () => {
-      if (cancelled || !video.videoWidth || !video.videoHeight) return;
-      try {
-        const canvas = document.createElement("canvas");
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        const ctx = canvas.getContext("2d");
-        if (!ctx) return;
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        const dataUrl = canvas.toDataURL("image/jpeg", 0.88);
-        if (!cancelled) setGeneratedPoster(dataUrl);
-      } catch {
-        // Cross-origin video sources may block canvas export. Playback remains available.
-      }
-    };
-
-    const onLoadedData = () => {
-      video.currentTime = 0;
-      if (video.readyState >= 2) capture();
-    };
-
-    if (video.readyState >= 2) onLoadedData();
-    else video.addEventListener("loadeddata", onLoadedData, { once: true });
-
-    return () => {
-      cancelled = true;
-      video.removeEventListener("loadeddata", onLoadedData);
-    };
-  }, [poster, src]);
-
-  useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
     video.preload = "metadata";
+    video.load();
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          video.preload = "auto";
-          video.load();
-          observer.disconnect();
-        }
-      },
-      { rootMargin: "600px 0px" }
-    );
-
-    observer.observe(video);
-
-    return () => observer.disconnect();
-  }, [src]);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
     const onPlay = () => setPlaying(true);
     const onPause = () => setPlaying(false);
     const onTimeUpdate = () => setCurrentTime(video.currentTime);
@@ -131,19 +76,15 @@ export default function VideoWithFirstFrame({ src, label = "Project video", post
       }
     };
 
-    const onWaiting = resumeIfWanted;
-    const onStalled = resumeIfWanted;
-    const onCanPlay = resumeIfWanted;
-
     video.addEventListener("play", onPlay);
     video.addEventListener("pause", onPause);
     video.addEventListener("timeupdate", onTimeUpdate);
     video.addEventListener("loadedmetadata", onLoadedMetadata);
     video.addEventListener("durationchange", onDurationChange);
     video.addEventListener("ended", onEnded);
-    video.addEventListener("waiting", onWaiting);
-    video.addEventListener("stalled", onStalled);
-    video.addEventListener("canplay", onCanPlay);
+    video.addEventListener("waiting", resumeIfWanted);
+    video.addEventListener("stalled", resumeIfWanted);
+    video.addEventListener("canplay", resumeIfWanted);
 
     return () => {
       video.removeEventListener("play", onPlay);
@@ -152,20 +93,30 @@ export default function VideoWithFirstFrame({ src, label = "Project video", post
       video.removeEventListener("loadedmetadata", onLoadedMetadata);
       video.removeEventListener("durationchange", onDurationChange);
       video.removeEventListener("ended", onEnded);
-      video.removeEventListener("waiting", onWaiting);
-      video.removeEventListener("stalled", onStalled);
-      video.removeEventListener("canplay", onCanPlay);
+      video.removeEventListener("waiting", resumeIfWanted);
+      video.removeEventListener("stalled", resumeIfWanted);
+      video.removeEventListener("canplay", resumeIfWanted);
     };
   }, [src]);
+
+  const preparePlayback = () => {
+    const video = videoRef.current;
+    if (!video || !video.paused) return;
+
+    playIntentRef.current = true;
+    video.preload = "auto";
+
+    if (video.readyState === 0) {
+      video.load();
+    }
+  };
 
   const togglePlay = () => {
     const video = videoRef.current;
     if (!video) return;
 
     if (video.paused) {
-      playIntentRef.current = true;
-      video.preload = "auto";
-      if (video.readyState < 2) video.load();
+      preparePlayback();
       void video.play().catch(() => undefined);
     } else {
       playIntentRef.current = false;
@@ -201,9 +152,7 @@ export default function VideoWithFirstFrame({ src, label = "Project video", post
       } else if ("webkitEnterFullscreen" in video) {
         (video as HTMLVideoElement & { webkitEnterFullscreen?: () => void }).webkitEnterFullscreen?.();
       }
-    } catch {
-      // Fullscreen can be blocked by the browser.
-    }
+    } catch {}
   };
 
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
@@ -213,13 +162,21 @@ export default function VideoWithFirstFrame({ src, label = "Project video", post
       <video
         ref={videoRef}
         src={src}
-        poster={poster ?? generatedPoster}
+        poster={poster}
         playsInline
         preload="metadata"
+        loading="lazy"
         aria-label={label}
+        onPointerDown={preparePlayback}
         onClick={togglePlay}
       />
-      <button type="button" className="custom-video-play" onClick={togglePlay} aria-label={playing ? "Pause video" : "Play video"}>
+      <button
+        type="button"
+        className="custom-video-play"
+        onPointerDown={preparePlayback}
+        onClick={togglePlay}
+        aria-label={playing ? "Pause video" : "Play video"}
+      >
         {playing ? <PauseIcon /> : <PlayIcon />}
       </button>
       <div className="custom-video-controls">
