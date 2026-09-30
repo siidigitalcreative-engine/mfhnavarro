@@ -1,8 +1,3 @@
-
-Combined fix:
-1. Restores clickable Selected Work cards using /work/{slug} with id fallback.
-2. Normalizes the CMS LinkedIn URL by adding https:// when the admin enters a URL without a protocol.
-
 import Link from "next/link";
 import { getContent } from "@/lib/content";
 import type { MediaItem } from "@/lib/types";
