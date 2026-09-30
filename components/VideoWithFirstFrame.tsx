@@ -165,7 +165,6 @@ export default function VideoWithFirstFrame({ src, label = "Project video", post
         poster={poster}
         playsInline
         preload="metadata"
-        loading="lazy"
         aria-label={label}
         onPointerDown={preparePlayback}
         onClick={togglePlay}
