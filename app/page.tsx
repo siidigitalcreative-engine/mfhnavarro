@@ -60,7 +60,7 @@ export default async function Home() {
               </div>
 
               <div className="cta-row">
-                <a className="btn" href="#work">View selected work</a>
+                <a className="btn" href="#work">View selected work &#8594;</a>
                 {content.linkedinUrl ? <span className="socials"><a href={linkedinUrl} target="_blank" rel="noreferrer">LinkedIn</a></span> : null}
               </div>
             </div>
@@ -98,7 +98,7 @@ export default async function Home() {
               <span>by discipline</span>
             </div>
 
-            <p className="spotlight-intro">A curated collection of work grouped by discipline - explore the range of what I create beyond individual projects.</p>
+            <p className="spotlight-intro">A curated collection of work grouped by discipline &#8212; explore the range of what I create beyond individual projects.</p>
 
             {content.spotlights?.length ? (
               <div className="spotlight-list">
@@ -128,7 +128,7 @@ export default async function Home() {
                         ) : null;
                       })()}
                     </span>
-                    <span className="spotlight-row-action" aria-hidden="true">EXPLORE</span>
+                    <span className="spotlight-row-action" aria-hidden="true">EXPLORE <span>&#8594;</span></span>
                   </Link>
                 ))}
               </div>
@@ -142,7 +142,7 @@ export default async function Home() {
 
         <section id="work" className="work-section">
           <div className="wrap">
-            <div className="head"><div><div className="eyebrow">SELECTED WORK</div><h2>Selected work</h2></div><span>2023 - 2026</span></div>
+            <div className="head"><div><div className="eyebrow">SELECTED WORK</div><h2>Selected work</h2></div><span>2023 &#8212; 2026</span></div>
             <div className="work-grid">
               {content.work.map((item, index) => {
                 const media = item.media ?? [];
@@ -199,7 +199,7 @@ export default async function Home() {
         </section>
       </main>
 
-      <footer id="contact"><div className="wrap"><div className="eyebrow">START A CONVERSATION</div><h2>Have a project in mind?</h2><div className="row"><a className="email" href={`mailto:${content.email}`}>{content.email}</a>{content.linkedinUrl ? <span className="socials"><a href={linkedinUrl} target="_blank" rel="noreferrer">LinkedIn</a></span> : null}</div><div className="meta"><span>MF Navarro - Multimedia Designer</span><span>&#169; 2026</span></div></div></footer>
+      <footer id="contact"><div className="wrap"><div className="eyebrow">START A CONVERSATION</div><h2>Have a project in mind?</h2><div className="row"><a className="email" href={`mailto:${content.email}`}>{content.email}</a>{content.linkedinUrl ? <span className="socials"><a href={linkedinUrl} target="_blank" rel="noreferrer">LinkedIn</a></span> : null}</div><div className="meta"><span>MF Navarro &#8212; Multimedia Designer</span><span>&#169; 2026</span></div></div></footer>
     </>
   );
 }
