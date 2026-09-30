@@ -51,6 +51,7 @@ export default function VideoWithFirstFrame({ src, label = "Project video", post
   const [muted, setMuted] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const playIntentRef = useRef(false);
 
   useEffect(() => {
     if (poster) return;
@@ -91,35 +92,48 @@ export default function VideoWithFirstFrame({ src, label = "Project video", post
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
+
+    video.preload = "metadata";
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          video.preload = "auto";
+          video.load();
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "600px 0px" }
+    );
+
+    observer.observe(video);
+
+    return () => observer.disconnect();
+  }, [src]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
     const onPlay = () => setPlaying(true);
     const onPause = () => setPlaying(false);
     const onTimeUpdate = () => setCurrentTime(video.currentTime);
     const onLoadedMetadata = () => setDuration(Number.isFinite(video.duration) ? video.duration : 0);
     const onDurationChange = () => setDuration(Number.isFinite(video.duration) ? video.duration : 0);
     const onEnded = () => {
+      playIntentRef.current = false;
       setPlaying(false);
       setCurrentTime(Number.isFinite(video.duration) ? video.duration : 0);
     };
 
-    const onWaiting = () => {
-      // If the user was already playing, resume automatically after a
-      // temporary network/buffer stall instead of leaving the video stopped.
-      if (!video.paused && !video.ended) {
+    const resumeIfWanted = () => {
+      if (playIntentRef.current && !video.ended) {
         void video.play().catch(() => undefined);
       }
     };
 
-    const onStalled = () => {
-      if (!video.paused && !video.ended) {
-        void video.play().catch(() => undefined);
-      }
-    };
-
-    const onCanPlay = () => {
-      if (!video.paused && !video.ended) {
-        void video.play().catch(() => undefined);
-      }
-    };
+    const onWaiting = resumeIfWanted;
+    const onStalled = resumeIfWanted;
+    const onCanPlay = resumeIfWanted;
 
     video.addEventListener("play", onPlay);
     video.addEventListener("pause", onPause);
@@ -147,8 +161,16 @@ export default function VideoWithFirstFrame({ src, label = "Project video", post
   const togglePlay = () => {
     const video = videoRef.current;
     if (!video) return;
-    if (video.paused) void video.play().catch(() => undefined);
-    else video.pause();
+
+    if (video.paused) {
+      playIntentRef.current = true;
+      video.preload = "auto";
+      if (video.readyState < 2) video.load();
+      void video.play().catch(() => undefined);
+    } else {
+      playIntentRef.current = false;
+      video.pause();
+    }
   };
 
   const toggleMute = () => {
@@ -193,7 +215,7 @@ export default function VideoWithFirstFrame({ src, label = "Project video", post
         src={src}
         poster={poster ?? generatedPoster}
         playsInline
-        preload="auto"
+        preload="metadata"
         aria-label={label}
         onClick={togglePlay}
       />
