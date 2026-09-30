@@ -60,7 +60,7 @@ export default async function Home() {
               </div>
 
               <div className="cta-row">
-                <a className="btn" href="#work">View selected work &#8594;</a>
+                <a className="btn" href="#work">View Spotlights &#8594;</a>
                 {content.linkedinUrl ? <span className="socials"><a href={linkedinUrl} target="_blank" rel="noreferrer">LinkedIn</a></span> : null}
               </div>
             </div>
