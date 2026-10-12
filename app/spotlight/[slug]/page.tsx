@@ -71,6 +71,10 @@ export default async function SpotlightPage({
     <main className="spotlight-page">
       <style>{`
         @media (max-width: 760px) {
+          .spotlight-page-intro .spotlight-intro-grid h1 {
+            line-height: 1.05;
+          }
+
           .spotlight-page-intro .spotlight-intro-grid > div + p {
             margin-top: 24px;
           }
