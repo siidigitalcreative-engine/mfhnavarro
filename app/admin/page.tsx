@@ -41,6 +41,26 @@ export default function AdminPage() {
     setContent((c) => (c ? { ...c, [key]: value } : c));
   }
 
+  function moveWork(workId: string, direction: -1 | 1) {
+    const items = [...content.work];
+    const index = items.findIndex((item) => item.id === workId);
+    const nextIndex = index + direction;
+    if (index < 0 || nextIndex < 0 || nextIndex >= items.length) return;
+
+    [items[index], items[nextIndex]] = [items[nextIndex], items[index]];
+    update("work", items);
+  }
+
+  function moveSpotlight(spotlightId: string, direction: -1 | 1) {
+    const items = [...(content.spotlights ?? [])];
+    const index = items.findIndex((item) => item.id === spotlightId);
+    const nextIndex = index + direction;
+    if (index < 0 || nextIndex < 0 || nextIndex >= items.length) return;
+
+    [items[index], items[nextIndex]] = [items[nextIndex], items[index]];
+    update("spotlights", items);
+  }
+
   async function handleSave() {
     setStatus("saving");
     try {
@@ -538,7 +558,14 @@ export default function AdminPage() {
 
         {content.work.map((item, index) => (
           <div className="admin-card" key={item.id}>
-            <div className="admin-card-top"><span className="admin-index">{String(index + 1).padStart(2, "0")}</span><span>{item.media?.length ?? 0} media</span></div>
+            <div className="admin-card-top">
+              <span className="admin-index">{String(index + 1).padStart(2, "0")}</span>
+              <span>{item.media?.length ?? 0} media</span>
+              <div className="admin-media-actions" aria-label={`Reorder ${item.name || "project"}`}>
+                <button className="icon-btn" type="button" aria-label={`Move ${item.name || "project"} up`} title="Move project up" disabled={index === 0} onClick={() => moveWork(item.id, -1)}>↑</button>
+                <button className="icon-btn" type="button" aria-label={`Move ${item.name || "project"} down`} title="Move project down" disabled={index === content.work.length - 1} onClick={() => moveWork(item.id, 1)}>↓</button>
+              </div>
+            </div>
             <input placeholder="Project name" value={item.name} onChange={(e) => updateWork(item.id, { name: e.target.value })} />
             <textarea placeholder="Description" value={item.desc} onChange={(e) => updateWork(item.id, { desc: e.target.value })} />
             <input placeholder="Tag, e.g. Brand · Motion" value={item.tag} onChange={(e) => updateWork(item.id, { tag: e.target.value })} />
@@ -682,7 +709,14 @@ export default function AdminPage() {
         <div className="spotlight-admin-list">
           {(content.spotlights ?? []).map((spotlight, index) => (
             <div className="admin-card spotlight-admin-card" key={spotlight.id}>
-              <div className="admin-card-top"><span className="admin-index">{String(index + 1).padStart(2, "0")}</span><span>{spotlight.media.length} pieces</span></div>
+              <div className="admin-card-top">
+                <span className="admin-index">{String(index + 1).padStart(2, "0")}</span>
+                <span>{spotlight.media.length} pieces</span>
+                <div className="admin-media-actions" aria-label={`Reorder ${spotlight.name || "spotlight"}`}>
+                  <button className="icon-btn" type="button" aria-label={`Move ${spotlight.name || "spotlight"} up`} title="Move spotlight up" disabled={index === 0} onClick={() => moveSpotlight(spotlight.id, -1)}>↑</button>
+                  <button className="icon-btn" type="button" aria-label={`Move ${spotlight.name || "spotlight"} down`} title="Move spotlight down" disabled={index === (content.spotlights ?? []).length - 1} onClick={() => moveSpotlight(spotlight.id, 1)}>↓</button>
+                </div>
+              </div>
               <input placeholder="Spotlight name, e.g. Logo Design" value={spotlight.name} onChange={(e) => updateSpotlight(spotlight.id, { name: e.target.value })} />
               <textarea placeholder="Short description" value={spotlight.desc} onChange={(e) => updateSpotlight(spotlight.id, { desc: e.target.value })} />
               <input placeholder="Page URL slug, e.g. logo-design" value={spotlight.slug ?? ""} onChange={(e) => updateSpotlight(spotlight.id, { slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]+/g, "-") })} />
