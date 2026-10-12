@@ -105,7 +105,9 @@ export default async function SpotlightPage({
               {String(spotlightIndex).padStart(2, "0")}
             </div>
 
-            <h1>{spotlight.name}</h1>
+            <h1 className="spotlight-page-title" style={{ lineHeight: 1.05 }}>
+              {spotlight.name}
+            </h1>
           </div>
 
           {spotlight.desc ? (
