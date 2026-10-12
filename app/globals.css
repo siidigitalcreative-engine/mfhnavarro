@@ -1925,3 +1925,24 @@ footer{border-top:1px solid var(--line);padding:100px 0 36px}footer h2{font-size
     margin-bottom: 0 !important;
   }
 }
+
+
+/* =========================================================
+   FINAL FIX — FULL-WIDTH MOBILE IMAGE LIGHTBOX
+   Keeps the original image ratio and existing controls.
+   ========================================================= */
+@media (max-width: 760px) {
+  .landing-image-lightbox-stage {
+    padding: 72px 12px !important;
+  }
+
+  .landing-image-lightbox-image {
+    display: block !important;
+    width: calc(100vw - 24px) !important;
+    max-width: calc(100vw - 24px) !important;
+    height: auto !important;
+    max-height: calc(100dvh - 144px) !important;
+    object-fit: contain !important;
+    margin: 0 auto !important;
+  }
+}
