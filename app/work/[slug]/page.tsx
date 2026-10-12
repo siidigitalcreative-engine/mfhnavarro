@@ -302,6 +302,17 @@ export default async function WorkLandingPage({
 
           <p>{project.desc}</p>
         </div>
+
+        {((project as typeof project & { software?: string[] }).software ?? []).filter(Boolean).length > 0 ? (
+          <section className="landing-software" aria-label="Software and tools used" style={{ marginTop: 32 }}>
+            <h2 className="landing-software-title" style={{ fontSize: 12, letterSpacing: "0.16em", color: "var(--muted, #92929a)", margin: "0 0 12px" }}>SOFTWARE &amp; TOOLS</h2>
+            <div className="landing-software-list" style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+              {((project as typeof project & { software?: string[] }).software ?? []).filter(Boolean).map((tool, index) => (
+                <span className="landing-software-item" key={`${tool}-${index}`} style={{ border: "1px solid var(--line, #333338)", borderRadius: 6, padding: "7px 11px", fontSize: 13 }}>{tool}</span>
+              ))}
+            </div>
+          </section>
+        ) : null}
       </section>
 
       <div className="landing-layers-public">
