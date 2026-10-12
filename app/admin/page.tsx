@@ -578,6 +578,15 @@ export default function AdminPage() {
             <textarea placeholder="Description" value={item.desc} onChange={(e) => updateWork(item.id, { desc: e.target.value })} />
             <input placeholder="Tag, e.g. Brand · Motion" value={item.tag} onChange={(e) => updateWork(item.id, { tag: e.target.value })} />
             <input placeholder="Landing page URL slug, e.g. purple-tree" value={item.slug ?? ""} onChange={(e) => updateWork(item.id, { slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]+/g, "-") })} />
+            <label className="admin-field-label" htmlFor={`software-${item.id}`}>Software &amp; tools used</label>
+            <input
+              id={`software-${item.id}`}
+              placeholder="e.g. Photoshop, Figma, Canva"
+              value={((item as WorkItem & { software?: string[] }).software ?? []).join(", ")}
+              onChange={(e) => updateWork(item.id, {
+                software: e.target.value.split(",").map((tool) => tool.trim()).filter(Boolean),
+              } as Partial<WorkItem>)}
+            />
 
             <div className={`upload-zone ${uploadingId === item.id ? "is-uploading" : ""}`} onDragOver={(e) => e.preventDefault()} onDrop={(e) => handleDrop(e, item.id)}>
               <input id={`upload-${item.id}`} className="file-input" type="file" accept="image/*,video/*,.mp4,.mov,.m4v,.webm" multiple onChange={(e) => { void uploadFiles(item.id, e.target.files ?? []); e.currentTarget.value = ""; }} />
