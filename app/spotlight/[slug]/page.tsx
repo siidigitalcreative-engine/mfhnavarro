@@ -69,6 +69,14 @@ export default async function SpotlightPage({
 
   return (
     <main className="spotlight-page">
+      <style>{`
+        @media (max-width: 760px) {
+          .spotlight-page-intro .spotlight-intro-grid > div + p {
+            margin-top: 24px;
+          }
+        }
+      `}</style>
+
       <header className="landing-nav">
         <div className="wrap landing-nav-inner">
           <Link
@@ -105,9 +113,7 @@ export default async function SpotlightPage({
               {String(spotlightIndex).padStart(2, "0")}
             </div>
 
-            <h1 className="spotlight-page-title" style={{ lineHeight: 1.05 }}>
-              {spotlight.name}
-            </h1>
+            <h1>{spotlight.name}</h1>
           </div>
 
           {spotlight.desc ? (
