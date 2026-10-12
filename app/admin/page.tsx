@@ -42,23 +42,31 @@ export default function AdminPage() {
   }
 
   function moveWork(workId: string, direction: -1 | 1) {
-    const items = [...content.work];
-    const index = items.findIndex((item) => item.id === workId);
-    const nextIndex = index + direction;
-    if (index < 0 || nextIndex < 0 || nextIndex >= items.length) return;
+    setContent((current) => {
+      if (!current) return current;
 
-    [items[index], items[nextIndex]] = [items[nextIndex], items[index]];
-    update("work", items);
+      const items = [...current.work];
+      const index = items.findIndex((item) => item.id === workId);
+      const nextIndex = index + direction;
+      if (index < 0 || nextIndex < 0 || nextIndex >= items.length) return current;
+
+      [items[index], items[nextIndex]] = [items[nextIndex], items[index]];
+      return { ...current, work: items };
+    });
   }
 
   function moveSpotlight(spotlightId: string, direction: -1 | 1) {
-    const items = [...(content.spotlights ?? [])];
-    const index = items.findIndex((item) => item.id === spotlightId);
-    const nextIndex = index + direction;
-    if (index < 0 || nextIndex < 0 || nextIndex >= items.length) return;
+    setContent((current) => {
+      if (!current) return current;
 
-    [items[index], items[nextIndex]] = [items[nextIndex], items[index]];
-    update("spotlights", items);
+      const items = [...(current.spotlights ?? [])];
+      const index = items.findIndex((item) => item.id === spotlightId);
+      const nextIndex = index + direction;
+      if (index < 0 || nextIndex < 0 || nextIndex >= items.length) return current;
+
+      [items[index], items[nextIndex]] = [items[nextIndex], items[index]];
+      return { ...current, spotlights: items };
+    });
   }
 
   async function handleSave() {
